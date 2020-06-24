@@ -128,6 +128,59 @@ div.col-2 > h6 {
   position: relative;
 }
 
+/* header */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333333;
+  padding: 0px 10px;
+}
+
+.header-right-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-block {
+  margin-right: 100px;
+}
+
+.header-outline-button {
+  color:#24997F;
+  border-color: #c4c4c4;
+  font-size: 20px;
+  width: 140px;
+  height: 45px;
+  padding: 0;
+}
+
+.header-container {
+  display: flex;
+}
+
+.header-outline-button:hover {
+  background-color: #24997F;
+  border-color: #24997F;
+  color: #c4c4c4;
+}
+
+.header-student-name {
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0;
+}
+
+.header-hamburger-icon {
+  margin: 0;
+}
+.header-search-deco {
+  width: 80px;
+  border-bottom: 1px solid #24997F;
+  height: 20px;
+}
+
 /* General */
 .theme-green {
   color: #24997F;

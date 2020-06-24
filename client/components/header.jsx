@@ -4,17 +4,22 @@ import { Link } from 'react-router-dom';
 
 export default function Header(props) {
   return (
-    <header className="header-container background">
-      <Link to="/">
-        <h3>Back to Main Page</h3>
-      </Link>
-      <Button className="green" outline color="success">New Note</Button>
-      <p className="green">Search</p>
-      <form>
-        <label htmlFor="search" className="green">Search Notes</label>
-        <input type="text" id="search" name="search" className="background" placeholder="Search for tag..." />
-      </form>
-      <h3 className="green" id="student-name">Sherlock</h3>
+    <header className="header-container">
+      <div className="header-left-container">
+        <Link to="/">
+          <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i>
+        </Link>
+      </div>
+      <div className="header-center-container">
+        <Button outline color="success" className="header-outline-button">New Note</Button>
+      </div>
+      <div className="header-right-container">
+        <div className="search-block">
+          <h5>Search</h5>
+          <div className="header-search-deco"></div>
+        </div>
+        <p className="theme-green header-student-name">Sherlock</p>
+      </div>
     </header>
   );
 }

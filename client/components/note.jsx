@@ -9,6 +9,7 @@ export default function NoteListItem(props) {
         <Link to="/notes/{note.noteId}">
           <h3>{note.noteName}</h3>
         </Link>
+        <p>{note.noteContent}</p>
       </div>
     </div>
   );

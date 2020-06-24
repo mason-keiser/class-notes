@@ -55,6 +55,30 @@ app.get('/api/notes', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/notes', (req, res, next) => {
+  if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
+     !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
+    return res.status(400).json({ error: 'all notes must have complete data' });
+  }
+
+  const noteSQL = `
+  insert into "notes" ("notebookId", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode")
+  values ($1, $2, $3, $4, $5, $6)
+  returning *`;
+
+  const noteValues = [
+    req.body.notebookId,
+    req.body.noteTitle,
+    req.body.noteContent,
+    req.body.noteDifficulty,
+    req.body.noteResource,
+    req.body.noteCode
+  ];
+  db.query(noteSQL, noteValues)
+    .then(response => res.status(201).json(response.rows[0]))
+    .catch(err => next(err));
+});
+
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

@@ -1,5 +1,5 @@
 import React from 'react';
-// import NoteListItem from './note';
+import NoteListItem from './note';
 
 export default class NoteList extends React.Component {
   constructor(props) {
@@ -19,5 +19,23 @@ export default class NoteList extends React.Component {
         });
       })
       .catch(err => console.error('Fetch failed:', err));
+  }
+
+  componentDidMount() {
+    this.getNotes();
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.notes.map(note => {
+          return (
+            <NoteListItem
+              key={note.noteId}
+              note={note}/>
+          );
+        })}
+      </div>
+    );
   }
 }

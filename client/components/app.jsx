@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import MainPage from './main-page';
-import Header from './header';
+import Notebook from './notebook';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -28,9 +28,9 @@ export default class App extends React.Component {
 
     return (
       <Router>
-        <Header />
         <Switch>
           <Route path="/" exact component={MainPage}/>
+          <Route path="/notebook" exact component={Notebook}/>
         </Switch>
       </Router>
     );

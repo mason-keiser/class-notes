@@ -1,11 +1,16 @@
 import React from 'react';
+import { Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 export default function Header(props) {
   return (
-    <header className="header-container background col-12">
-      <p>Back to Homepage</p>
-      <button className="new-note-button green grey font-weight-bold"><p>New Note</p></button>
-      <p>Search Bar</p>
+    <header className="header-container background">
+      <Link to="/">
+        <h3>Back to Main Page</h3>
+      </Link>
+      <Button className="green" outline color="success">New Note</Button>
+      <p className="green">Search</p>
+      <h3 className="green" id="student-name">Sherlock</h3>
     </header>
   );
 }

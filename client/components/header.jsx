@@ -10,6 +10,10 @@ export default function Header(props) {
       </Link>
       <Button className="green" outline color="success">New Note</Button>
       <p className="green">Search</p>
+      <form>
+        <label htmlFor="search" className="green">Search Notes</label>
+        <input type="text" id="search" name="search" className="background" placeholder="Search for tag..." />
+      </form>
       <h3 className="green" id="student-name">Sherlock</h3>
     </header>
   );

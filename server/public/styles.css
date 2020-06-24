@@ -1,0 +1,133 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Palanquin', sans-serif;
+}
+
+/* Main Page */
+.search-deco {
+  width: 80px;
+  border-bottom: 1px solid #24997F;
+}
+
+.search-block {
+  display: flex;
+  justify-content: center;
+  color: #24997F;
+}
+
+.search-block > h5 {
+  margin: 0 10px 0 0;
+  font-size: 18px;
+}
+
+.notebooks-link > h3 {
+  color: #24997F;
+  font-size: 24px;
+  line-height: 30px;
+  margin-bottom: 20px;
+}
+
+.outline-button {
+  color:#24997F;
+  border-color: #c4c4c4;
+  font-size: 20px;
+  width: 140px;
+  height: 45px;
+  padding: 0;
+  margin-bottom: 80px;
+}
+
+.outline-button:hover {
+  background-color: #24997F;
+  border-color: #24997F;
+  color: #c4c4c4;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 65px;
+  color: #24997F;
+  letter-spacing: 0.15em;
+}
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20vh;
+}
+
+.main-page-left {
+  height: 25%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #24997F;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  position: absolute;
+  left:0;
+  top: calc((100vh - 20% - 45px)/2)
+}
+
+div.main-page-left > a {
+  color: #24997F;
+}
+
+
+.main-page-right {
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  color:#24997F;
+  writing-mode: vertical-rl;
+  position: absolute;
+  right:0;
+  top: calc((100vh - 45px - 10%)/2)
+}
+
+.main-page-footer {
+  height: 45px;
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  display: flex;
+}
+
+div.title-block > a:hover, div.main-page-left > a:hover {
+  color: #c4c4c4;
+  text-decoration: none;
+}
+
+div.main-page-left > h5:hover, div.search-block:hover, div.main-page-right:hover {
+  cursor: pointer;
+}
+
+.main-page-footer > div:first-child {
+  background-color: #24997F;
+  color: #3F3F3D;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.col-2 > h6 {
+  margin: 0;
+}
+
+.main-page-footer > div:nth-child(2) {
+  background-color: #3F3F3D;
+}
+
+.main-page-container {
+  height: 100vh;
+  padding: 30px 30px 0 30px;
+  background-color: #333333;
+  position: relative;
+}
+
+/* General */
+.theme-green {
+  color: #24997F;
+}

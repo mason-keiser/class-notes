@@ -1,10 +1,10 @@
 import React from 'react';
+import NoteList from './note-list';
 
 export default class Notebook extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notes: []
-    };
+  render() {
+    return (
+      <NoteList />
+    );
   }
 }

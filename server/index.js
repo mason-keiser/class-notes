@@ -79,6 +79,32 @@ app.post('/api/notes', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/api/notes/:noteId', (req, res, next) => {
+  const { noteId } = req.params;
+  const noteIdInt = parseInt(req.params.noteId);
+  if (!Number.isInteger(noteIdInt) || noteIdInt <= 0) {
+    return res.status(400).json({ error: '"noteId" must be a positive integer' });
+  }
+  const sql = `
+  DELETE FROM "notes"
+  WHERE       "noteId" = $1
+  RETURNING *
+  `;
+  const id = [noteId];
+  db.query(sql, id)
+    .then(result => {
+      const returnedNote = result.rows[0];
+      if (!returnedNote) {
+        return res.status(404).json({ error: `Cannot find note with "noteId" ${noteId}` });
+      } else {
+        return res.status(204).json({ returnedNote: `Successfully deleted ${noteId}` });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+});
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import MainPage from './main-page';
+import Header from './header';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -24,8 +25,10 @@ export default class App extends React.Component {
   //     ? <h1>Testing connections...</h1>
   //     : <h1>{ this.state.message.toUpperCase() }</h1>;
   // }
+
     return (
       <Router>
+        <Header />
         <Switch>
           <Route path="/" exact component={MainPage}/>
         </Switch>

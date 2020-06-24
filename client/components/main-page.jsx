@@ -11,8 +11,8 @@ export default function MainPage() {
           <div className="search-deco"></div>
         </div>
         <div className="title-block">
-          <Link to="/notebooks" className="notebooks-link">
-            <h3>Notebooks</h3>
+          <Link to="/notebook" className="notebooks-link">
+            <h3>Notebook</h3>
           </Link>
           <Button outline color="success" className="outline-button">New Note</Button>
           <h1 className="title">CODE NOTES</h1>

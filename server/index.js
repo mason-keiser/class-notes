@@ -19,6 +19,7 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
+
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
   SELECT *
@@ -40,6 +41,17 @@ app.get('/api/notes/:noteId', (req, res, next) => {
     })
     .catch(err => next(err))
 })
+
+app.get('/api/notes', (req, res, next) => {
+  const sql = `
+  select "noteId" , "noteTitle", "noteContent"
+  from "notes";
+  `;
+  db.query(sql)
+    .then(result => res.status(200).json(result.rows))
+    .catch(err => next(err));
+});
+
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

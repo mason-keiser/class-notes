@@ -19,6 +19,28 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/notes/:noteId', (req, res, next) => {
+  const sql = `
+  SELECT *
+  FROM  "notes"
+  WHERE "noteId" = $1
+  `;
+  const noteId = [req.params.noteId]
+  db.query (sql,noteId)
+    .then(result => {
+      const note = result.rows[0];
+      if (!sql) {
+        next(new ClientError('An unexpected error occurred' ,500))
+      }
+      if (!note) {
+        next(new ClientError(`Cannot find note with "noteId" ${noteId}`, 404))
+      } else {
+        res.json(note);
+      }
+    })
+    .catch(err => next(err))
+})
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });

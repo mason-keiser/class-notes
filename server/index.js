@@ -25,8 +25,12 @@ app.get('/api/notes/:noteId', (req, res, next) => {
   FROM  "notes"
   WHERE "noteId" = $1
   `;
-  const noteId = [req.params.noteId]
-  db.query (sql,noteId)
+  const noteParam = [req.params.noteId]
+  const noteId = parseInt(req.params.noteId)
+  if (!Number.isInteger(noteId) || noteId <= 0) {
+    return res.status(400).json({ error: '"noteId" must be a positive integer' })
+  }
+  db.query (sql,noteParam)
     .then(result => {
       const note = result.rows[0];
       if (!sql) {
@@ -35,7 +39,7 @@ app.get('/api/notes/:noteId', (req, res, next) => {
       if (!note) {
         next(new ClientError(`Cannot find note with "noteId" ${noteId}`, 404))
       } else {
-        res.json(note);
+        return res.status(200).json(note);
       }
     })
     .catch(err => next(err))

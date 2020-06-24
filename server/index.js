@@ -19,6 +19,32 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/notes/:noteId', (req, res, next) => {
+  const sql = `
+  SELECT *
+  FROM  "notes"
+  WHERE "noteId" = $1
+  `;
+  const noteParam = [req.params.noteId]
+  const noteId = parseInt(req.params.noteId)
+  if (!Number.isInteger(noteId) || noteId <= 0) {
+    return res.status(400).json({ error: '"noteId" must be a positive integer' })
+  }
+  db.query (sql,noteParam)
+    .then(result => {
+      const note = result.rows[0];
+      if (!sql) {
+        next(new ClientError('An unexpected error occurred' ,500))
+      }
+      if (!note) {
+        next(new ClientError(`Cannot find note with "noteId" ${noteId}`, 404))
+      } else {
+        return res.status(200).json(note);
+      }
+    })
+    .catch(err => next(err))
+})
+
 app.get('/api/notes', (req, res, next) => {
   const sql = `
   select "noteId" , "noteTitle", "noteContent"
@@ -52,6 +78,7 @@ app.post('/api/notes', (req, res, next) => {
     .then(response => res.status(201).json(response.rows[0]))
     .catch(err => next(err));
 });
+
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

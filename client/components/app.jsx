@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import MainPage from './main-page';
 import Notebook from './notebook';
+import Note from './note';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ export default class App extends React.Component {
         <Switch>
           <Route path="/" exact component={MainPage}/>
           <Route path="/notebook" exact component={Notebook}/>
+          <Route path="/notes" component={Note}/>
         </Switch>
       </Router>
     );

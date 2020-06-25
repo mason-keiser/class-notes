@@ -14,7 +14,7 @@ export default function Header(props) {
         <Button outline color="success" className="header-outline-button">New Note</Button>
       </div>
       <div className="header-right-container">
-        <div className="search-block">
+        <div className="header-search-block">
           <h5>Search</h5>
           <div className="header-search-deco"></div>
         </div>

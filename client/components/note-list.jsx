@@ -1,5 +1,22 @@
 import React from 'react';
-import NoteListItem from './note';
+import { Link } from 'react-router-dom';
+
+function NoteListItem(props) {
+  const noteListItem = props.note;
+  const noteId = noteListItem.noteId;
+  return (
+    <div id={noteListItem.noteId}>
+      <div>
+        <Link to={{
+          pathname: '/notes/' + noteId
+        }}>
+          <h3>{noteListItem.noteTitle}</h3>
+        </Link>
+        <p>{noteListItem.noteContent}</p>
+      </div>
+    </div>
+  );
+}
 
 export default class NoteList extends React.Component {
   constructor(props) {
@@ -28,11 +45,11 @@ export default class NoteList extends React.Component {
   render() {
     return (
       <div>
-        {this.state.notes.map(note => {
+        {this.state.notes.map(noteListItem => {
           return (
             <NoteListItem
-              key={note.noteId}
-              note={note}/>
+              key={noteListItem.noteId}
+              note={noteListItem}/>
           );
         })}
       </div>

@@ -22,11 +22,6 @@ export default class App extends React.Component {
   // }
 
   render() {
-  //   return this.state.isLoading
-  //     ? <h1>Testing connections...</h1>
-  //     : <h1>{ this.state.message.toUpperCase() }</h1>;
-  // }
-
     return (
       <Router>
         <Switch>

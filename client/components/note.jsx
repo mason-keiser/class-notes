@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './header';
+import NoteHeader from './note-header';
 import NoteComponent from './note-component';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 // import { Link } from 'react-router-dom';
@@ -28,7 +28,7 @@ class Note extends React.Component {
       ? 'justify-content-between' : 'justify-content-start';
     return (
       <div className="note-page-container">
-        <Header />
+        <NoteHeader />
         <main className="note-main">
           <div className="note-left-component col-6">
             <div className="d-flex flex-row align-items-center mb-4">

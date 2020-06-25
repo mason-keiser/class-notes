@@ -60,8 +60,8 @@ export default class NoteList extends React.Component {
 
   render() {
     return (
-      <div className="note-list-container col-12 d-flex justify-content-center">
-        <div className="col-10 d-flex flex-wrap card-deck note-list-container-border">
+      <div className="note-list-container d-flex justify-content-center">
+        <div className="d-flex flex-wrap card-deck note-list-container-border">
           <h1 className="col-12 text-center notebook-name mb-5 mt-2">{this.state.notebookName}</h1>
           {this.state.notes.map(noteListItem => {
             return (

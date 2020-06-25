@@ -219,7 +219,7 @@ app.put('/api/notes/:noteId', (req, res, next) => {
 
 });
 
-//SEARCH FOR A NOTE BY PROVIDING THE NOTE TITLE
+// SEARCH FOR A NOTE BY PROVIDING THE NOTE TITLE
 app.get('/api/notes/search/:noteTitle', (req, res, next) => {
   const noteTitle = req.params.noteTitle;
   const sql = `
@@ -242,11 +242,9 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
     });
 });
 
-
-
-//USER CAN VIEW INDIVIDUAL FLASHCARD 
+// USER CAN VIEW INDIVIDUAL FLASHCARD
 app.get('/api/flashcards/:fcId', (req, res, next) => {
-  const fcId = req.params.fcId
+  const fcId = req.params.fcId;
   const fcIdInt = parseInt(req.params.fcId);
   if (!Number.isInteger(fcIdInt) || fcIdInt <= 0) {
     return res.status(400).json({ error: '"fcId" must be a positive integer' });
@@ -257,19 +255,21 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
   JOIN  "fcItem" USING ("fcDeckId")
   WHERE "fcId" = $1
   `;
-  const id = [fcId]
+  const id = [fcId];
   db.query(sql, id)
     .then(result => {
       if (!result.rows[0]) {
-        return res.status(404).json({ error: `Cannot find flashcard with given "fcId" ${fcId}`})
+        return res.status(404).json({ error: `Cannot find flashcard with given "fcId" ${fcId}` });
       } else {
-        return res.status(200).json(result.rows[0])
+        return res.status(200).json(result.rows[0]);
       }
     })
-    .catch(err => res.status(500).json({ error: 'An unexpected error occurred'}))
-})
+    .catch(err => next(err,
+      res.status(500).json({ error: 'An unexpected error occurred' }))
+    );
+});
 
-//USER CAN REVIEW FLASHCARDS
+// USER CAN REVIEW FLASHCARDS
 app.get('/api/flashcards', (req, res, next) => {
   const sql = `
   SELECT *
@@ -278,11 +278,32 @@ app.get('/api/flashcards', (req, res, next) => {
   `;
   db.query(sql)
     .then(result => {
-      return res.status(200).json(result.rows)
-      })
-    .catch(error => res.status(500).json({ error: 'An unexpected error occurred'}))
-}) 
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => next(err,
+      res.status(500).json({ error: 'An unexpected error occurred' }))
+    );
+});
 
+// CREATE A NEW FLASHCARD
+app.post('/api/fcItem', (req, res, next) => {
+  if (!req.body.fcQuestion || !req.body.fcAnswer || !req.body.fcDeckId) {
+    return res.status(400).json({ error: 'Flashcard information is missing, please make sure to enter all required flashcard data when adding it to the deck.' });
+  }
+  const fcSQL = `
+  insert into "fcItem" ("fcQuestion", "fcAnswer", "fcDeckId")
+  values ($1, $2, $3)
+  returning *
+  `;
+  const fcValues = [
+    req.body.fcQuestion,
+    req.body.fcAnswer,
+    parseInt(req.body.fcDeckId)
+  ];
+  db.query(fcSQL, fcValues)
+    .then(response => res.status(201).json(response.rows[0]))
+    .catch(err => next(err));
+});
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

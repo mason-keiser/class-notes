@@ -133,9 +133,6 @@ div.col-2 > h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3F3F3D;
-  padding: 0px 45px;
-  height: 10%;
 }
 
 .header-right-container {
@@ -184,6 +181,74 @@ div.col-2 > h6 {
   border-bottom: 1px solid #24997F;
   height: 20px;
 }
+
+/* note-list */
+
+.note-list-container {
+  background-color: #333333;
+  height: 100%;
+}
+
+.note-list-container-border {
+  border: 1.5px solid #3F3F3D;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  max-height: 90.4vh;
+  overflow-y: auto;
+}
+
+.note-list-item {
+  background-color: #333333;
+}
+
+.note-list-item-body {
+  background-color: #333333;
+}
+
+.note-list-item-content {
+  color: #FFFFFF;
+  margin: 22px;
+  padding: 10px;
+}
+
+.note-list-item-title {
+  color: #24997F;
+  background-color: #3F3F3D;
+  font-size: 40px;
+  padding: 23px;
+}
+
+.note-list-item-content {
+  font-size: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar,
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track {
+    width: 8px;
+    border: none;
+}
+
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-corner,
+::-webkit-resizer {
+    display: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #24997F;
+}
+
+::-webkit-scrollbar-track {
+    background-image: url("https://i.imgur.com/6nrZNRF.png");
+    background-color: #333333;
+    background-repeat: repeat-y;
+    background-size: contain;
+}
+
 
 /* General */
 .theme-green {

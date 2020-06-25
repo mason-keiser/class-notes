@@ -45,6 +45,23 @@ app.get('/api/notes/:noteId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/notebooks/:notebookId', (req, res, next) => {
+  const notebookId = parseInt(req.params.notebookId);
+  if (!Number.isInteger(notebookId) || notebookId <= 0) {
+    return res.status(400).json({ error: 'notebookId must be a positive integer' });
+  }
+
+  const sql = `
+  select *
+  from "notes"
+  join "notebooks" using ("notebookId")
+  where "notebookId" = $1;`;
+
+  db.query(sql, [notebookId])
+    .then(result => res.status(200).json(result.rows))
+    .catch(err => next(err));
+});
+
 app.get('/api/notes', (req, res, next) => {
   const sql = `
   select "noteId" , "noteTitle", "noteContent"
@@ -86,10 +103,10 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
     return res.status(400).json({ error: '"noteId" must be a positive integer' });
   }
   const sql = `
-  DELETE FROM "notes"
-  WHERE       "noteId" = $1
-  RETURNING *
-  `;
+    DELETE FROM "notes"
+    WHERE       "noteId" = $1
+    RETURNING *
+    `;
   const id = [noteId];
   db.query(sql, id)
     .then(result => {

@@ -13,11 +13,36 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
+// HTTP REQUEST TO CHECK THAT BACKEND IS CONNECTED
+
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 });
+
+
+// GET GENERAL INFORMATION ABOUT A STUDENT AND ALL NOTEBOOKS OWNED BY THE STUDENT
+// BY PROVIDING A STUDENT ID
+
+app.get('/api/students/:studentId', (req, res, next) => {
+  const studentId = parseInt(req.params.studentId);
+  if (!Number.isInteger(studentId) || studentId <= 0) {
+    return res.status(400).json({ error: 'studentId must be a positive integer' });
+  }
+  const sql = `
+  select *
+  from "students"
+  join "notebooks" using ("studentId")
+  where "studentId" = $1;`;
+
+  db.query(sql, [studentId])
+    .then(result => res.json(result.rows))
+    .catch(err => next(err));
+
+});
+
+// GET ALL INFORMATION ABOUT A NOTE BY PROVIDING A NOTE ID
 
 
 app.get('/api/notes/:noteId', (req, res, next) => {
@@ -46,6 +71,8 @@ app.get('/api/notes/:noteId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET INFORMATION ABOUT ALL NOTES WITHIN A NOTEBOOK BY PROVIDING A NOTEBOOK ID
+
 app.get('/api/notebooks/:notebookId', (req, res, next) => {
   const notebookId = parseInt(req.params.notebookId);
   if (!Number.isInteger(notebookId) || notebookId <= 0) {
@@ -63,6 +90,8 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET INFORMATION ABOUT ALL NOTES FOR ALL STUDENTS WITHIN THE NOTES TABLE
+
 app.get('/api/notes', (req, res, next) => {
   const sql = `
   select "noteId" , "noteTitle", "noteContent"
@@ -72,6 +101,8 @@ app.get('/api/notes', (req, res, next) => {
     .then(result => res.status(200).json(result.rows))
     .catch(err => next(err));
 });
+
+// CREATE A NEW NOTE
 
 app.post('/api/notes', (req, res, next) => {
   if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
@@ -96,6 +127,8 @@ app.post('/api/notes', (req, res, next) => {
     .then(response => res.status(201).json(response.rows[0]))
     .catch(err => next(err));
 });
+
+// DELETE A NOTE BY PROVIDING A NOTE ID
 
 app.delete('/api/notes/:noteId', (req, res, next) => {
   const { noteId } = req.params;
@@ -123,6 +156,8 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
       res.status(500).json({ error: 'An unexpected error occurred.' });
     });
 });
+
+// UPDATE A NOTE BY PROVIDING A NOTE ID
 
 app.put('/api/notes/:noteId', (req, res, next) => {
 

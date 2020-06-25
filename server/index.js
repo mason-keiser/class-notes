@@ -21,7 +21,6 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
-
 // GET GENERAL INFORMATION ABOUT A STUDENT AND ALL NOTEBOOKS OWNED BY THE STUDENT
 // BY PROVIDING A STUDENT ID
 
@@ -37,13 +36,28 @@ app.get('/api/students/:studentId', (req, res, next) => {
   where "studentId" = $1;`;
 
   db.query(sql, [studentId])
-    .then(result => res.json(result.rows))
+    .then(result => {
+      const studentInfo = {
+        firstName: '',
+        lastName: '',
+        studentId: studentId,
+        notebooks: []
+      };
+      studentInfo.firstName = result.rows[0].firstName;
+      studentInfo.lastName = result.rows[0].lastName;
+      result.rows.map(notebookInfo => {
+        studentInfo.notebooks.push({
+          notebookId: notebookInfo.notebookId,
+          notebookName: notebookInfo.notebookName
+        });
+      });
+      res.status(200).json(studentInfo);
+    })
     .catch(err => next(err));
 
 });
 
 // GET ALL INFORMATION ABOUT A NOTE BY PROVIDING A NOTE ID
-
 
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
@@ -206,13 +220,13 @@ app.put('/api/notes/:noteId', (req, res, next) => {
 });
 
 app.get('/api/notes/search/:noteTitle', (req, res, next) => {
-  const noteTitle = req.params.noteTitle
+  const noteTitle = req.params.noteTitle;
   const sql = `
   SELECT "noteTitle", "noteId", "noteDifficulty", "createdAt", "noteContent"
   FROM  "notes"
   WHERE to_tsvector("noteTitle") @@ to_tsquery($1)
   `;
-  const title = [noteTitle]
+  const title = [noteTitle];
   db.query(sql, title)
     .then(result => {
       if (!result.rows[0]) {
@@ -225,7 +239,7 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
       console.error(err);
       res.status(500).json({ error: 'An unexpected error occurred.' });
     });
-})
+});
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

@@ -57,7 +57,7 @@ app.get('/api/notes', (req, res, next) => {
 
 app.post('/api/notes', (req, res, next) => {
   if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
-     !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
+    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
 
@@ -104,6 +104,7 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
       console.error(err);
       res.status(500).json({ error: 'An unexpected error occurred.' });
     });
+});
 
 app.put('/api/notes/:noteId', (req, res, next) => {
 

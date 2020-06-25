@@ -19,6 +19,7 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
+
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
   SELECT *
@@ -168,6 +169,28 @@ app.put('/api/notes/:noteId', (req, res, next) => {
     .catch(err => next(err));
 
 });
+
+app.get('/api/notes/search/:noteTitle', (req, res, next) => {
+  const noteTitle = req.params.noteTitle
+  const sql = `
+  SELECT "noteTitle", "noteId", "noteDifficulty", "createdAt", "noteContent"
+  FROM  "notes"
+  WHERE to_tsvector("noteTitle") @@ to_tsquery($1)
+  `;
+  const title = [noteTitle]
+  db.query(sql, title)
+    .then(result => {
+      if (!result.rows[0]) {
+        return res.status(404).json({ error: `Cannot find note with "noteTitle ${noteTitle}` });
+      } else {
+        return res.status(200).json(result.rows);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+})
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

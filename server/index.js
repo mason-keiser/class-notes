@@ -173,7 +173,7 @@ app.put('/api/notes/:noteId', (req, res, next) => {
 app.get('/api/notes/search/:noteTitle', (req, res, next) => {
   const noteTitle = req.params.noteTitle
   const sql = `
-  SELECT "noteTitle", "noteContent", "noteDifficulty"
+  SELECT "noteTitle", "noteId", "noteDifficulty", "createdAt", "noteContent"
   FROM  "notes"
   WHERE to_tsvector("noteTitle") @@ to_tsquery($1)
   `;

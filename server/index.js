@@ -36,7 +36,23 @@ app.get('/api/students/:studentId', (req, res, next) => {
   where "studentId" = $1;`;
 
   db.query(sql, [studentId])
-    .then(result => res.json(result.rows))
+    .then(result => {
+      const studentInfo = {
+        firstName: '',
+        lastName: '',
+        studentId: studentId,
+        notebooks: []
+      };
+      studentInfo.firstName = result.rows[0].firstName;
+      studentInfo.lastName = result.rows[0].lastName;
+      result.rows.map(notebookInfo => {
+        studentInfo.notebooks.push({
+          notebookId: notebookInfo.notebookId,
+          notebookName: notebookInfo.notebookName
+        });
+      });
+      res.status(200).json(studentInfo);
+    })
     .catch(err => next(err));
 
 });
@@ -226,6 +242,8 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
     });
 });
 
+
+
 //USER CAN REVIEW FLASHCARDS
 app.get('/api/flashcards', (req, res, next) => {
   const sql = `
@@ -239,6 +257,7 @@ app.get('/api/flashcards', (req, res, next) => {
       })
     .catch(error => res.status(500).json({ error: 'An unexpected error occurred'}))
 }) 
+
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

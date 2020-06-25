@@ -73,13 +73,34 @@ app.get('/api/notes/:noteId', (req, res, next) => {
   db.query(sql, noteParam)
     .then(result => {
       const note = result.rows[0];
+
       if (!sql) {
         next(new ClientError('An unexpected error occurred', 500));
       }
       if (!note) {
         next(new ClientError(`Cannot find note with "noteId" ${noteId}`, 404));
       } else {
-        return res.status(200).json(note);
+        const tagSQL = `
+        select "tagRelations"."itemId" , "tagRelations"."type", "tagTable"."tagName"
+        from "tagRelations"
+        join "tagTable" using ("tagId")
+        where "tagRelations"."itemId" = $1
+        and "tagRelations"."type" = 'note';
+        `;
+        db.query(tagSQL, noteParam)
+          .then(result => {
+            const data = result.rows;
+
+            const tagsArray = [];
+            data.map(tag => tagsArray.push(tag.tagName));
+            return tagsArray;
+          })
+          .then(tagsArray => {
+            note.tags = tagsArray;
+            res.status(200).json(note);
+          })
+          .catch(err => next(err));
+
       }
     })
     .catch(err => next(err));
@@ -159,6 +180,7 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
   db.query(sql, id)
     .then(result => {
       const returnedNote = result.rows[0];
+
       if (!returnedNote) {
         return res.status(404).json({ error: `Cannot find note with "noteId" ${noteId}` });
       } else {
@@ -219,7 +241,7 @@ app.put('/api/notes/:noteId', (req, res, next) => {
 
 });
 
-//SEARCH FOR A NOTE BY PROVIDING THE NOTE TITLE
+// SEARCH FOR A NOTE BY PROVIDING THE NOTE TITLE
 app.get('/api/notes/search/:noteTitle', (req, res, next) => {
   const noteTitle = req.params.noteTitle;
   const sql = `
@@ -241,8 +263,6 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
       res.status(500).json({ error: 'An unexpected error occurred.' });
     });
 });
-
-
 
 //USER CAN VIEW INDIVIDUAL FLASHCARD 
 app.get('/api/flashcards/:fcId', (req, res, next) => {
@@ -270,6 +290,7 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
 })
 
 //USER CAN REVIEW FLASHCARDS
+
 app.get('/api/flashcards', (req, res, next) => {
   const sql = `
   SELECT *
@@ -278,11 +299,13 @@ app.get('/api/flashcards', (req, res, next) => {
   `;
   db.query(sql)
     .then(result => {
-      return res.status(200).json(result.rows)
-      })
-    .catch(error => res.status(500).json({ error: 'An unexpected error occurred'}))
-}) 
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => next(err,
+      res.status(500).json({ error: 'An unexpected error occurred' }))
+    );
 
+});
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

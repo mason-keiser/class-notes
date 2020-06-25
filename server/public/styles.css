@@ -194,8 +194,13 @@ div.col-2 > h6 {
   border-radius: 5px;
   margin: 10px;
   padding: 10px;
-  max-height: 90.4vh;
+  max-height: 93vh;
   overflow-y: auto;
+}
+
+.notebook-name {
+  font-size: 30px;
+  color: #24997F
 }
 
 .note-list-item {

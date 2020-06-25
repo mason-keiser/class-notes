@@ -24,9 +24,11 @@ export default class NoteList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      notes: []
+      notes: [],
+      notebookName: []
     };
     this.getNotes = this.getNotes.bind(this);
+    this.getNotebookName = this.getNotebookName.bind(this);
   }
 
   getNotes() {
@@ -37,22 +39,35 @@ export default class NoteList extends React.Component {
           notes: notesData
         });
       })
-      .catch(err => console.error('Fetch failed:', err));
+      .catch(err => console.error('getNotes() fetch failed:', err));
+  }
+
+  getNotebookName() {
+    fetch('api/notebooks/1')
+      .then(response => response.json())
+      .then(notebookData => {
+        this.setState({
+          notebookName: notebookData[0].notebookName
+        });
+      })
+      .catch(err => console.error('getNotebookName() fetch failed:', err));
   }
 
   componentDidMount() {
     this.getNotes();
+    this.getNotebookName();
   }
 
   render() {
     return (
       <div className="note-list-container col-12 d-flex justify-content-center">
-        <div className="col-10 d-flex flex-wrap card-deck m-0 note-list-container-border">
+        <div className="col-10 d-flex flex-wrap card-deck note-list-container-border">
+          <h1 className="col-12 text-center notebook-name mb-5 mt-2">{this.state.notebookName}</h1>
           {this.state.notes.map(noteListItem => {
             return (
               <NoteListItem
                 key={noteListItem.noteId}
-                note={noteListItem}/>
+                note={noteListItem} />
             );
           })}
         </div>

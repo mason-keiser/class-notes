@@ -45,19 +45,38 @@ app.get('/api/notes/:noteId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/notes', (req, res, next) => {
+app.get('/api/notebooks/:notebookId', (req, res, next) => {
+  const notebookId = parseInt(req.params.notebookId);
+  if (!Number.isInteger(notebookId) || notebookId <= 0) {
+    return res.status(400).json({ error: 'notebookId must be a positive integer' });
+  }
+
   const sql = `
-  select "noteId" , "noteTitle", "noteContent"
-  from "notes";
-  `;
-  db.query(sql)
+  select *
+  from "notes"
+  join "notebooks" using ("notebookId")
+  where "notebookId" = $1;`;
+
+  db.query(sql, [notebookId])
     .then(result => res.status(200).json(result.rows))
     .catch(err => next(err));
 });
 
+// MAY NEED BELOW CODE LATER? BUT THE GET REQUEST ABOVE IS MORE SUFFICIENT
+
+// app.get('/api/notes', (req, res, next) => {
+//   const sql = `
+//   select "noteId" , "noteTitle", "noteContent"
+//   from "notes";
+//   `;
+//   db.query(sql)
+//     .then(result => res.status(200).json(result.rows))
+//     .catch(err => next(err));
+// });
+
 app.post('/api/notes', (req, res, next) => {
   if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
-     !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
+    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
 
@@ -86,10 +105,10 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
     return res.status(400).json({ error: '"noteId" must be a positive integer' });
   }
   const sql = `
-  DELETE FROM "notes"
-  WHERE       "noteId" = $1
-  RETURNING *
-  `;
+    DELETE FROM "notes"
+    WHERE       "noteId" = $1
+    RETURNING *
+    `;
   const id = [noteId];
   db.query(sql, id)
     .then(result => {
@@ -104,6 +123,7 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
       console.error(err);
       res.status(500).json({ error: 'An unexpected error occurred.' });
     });
+});
 
 app.put('/api/notes/:noteId', (req, res, next) => {
 

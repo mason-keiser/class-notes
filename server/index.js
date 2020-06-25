@@ -228,6 +228,31 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
     });
 })
 
+//USER CAN VIEW INDIVIDUAL FLASHCARD 
+app.get('/api/flashcards/:fcDeckId', (req, res, next) => {
+  const deckId = req.params.fcDeckId
+  const deckIdInt = parseInt(req.params.fcDeckId);
+  if (!Number.isInteger(deckIdInt) || deckIdInt <= 0) {
+    return res.status(400).json({ error: '"deckId" must be a positive integer' });
+  }
+  const sql = `
+  SELECT *
+  FROM  "fcDeck"
+  JOIN  "fcItem" USING ("fcDeckId")
+  WHERE "fcDeckId" = $1
+  `;
+  const id = [deckId]
+  db.query(sql, id)
+    .then(result => {
+      if (!result.rows[0]) {
+        return res.status(404).json({ error: `Cannot find flashcard with given "deckId" ${deckId}`})
+      } else {
+        return res.status(200).json(result.rows[0])
+      }
+    })
+    .catch(err => res.status(500).json({ error: 'An unexpected error occurred'}))
+})
+
 //USER CAN REVIEW FLASHCARDS
 app.get('/api/flashcards', (req, res, next) => {
   const sql = `

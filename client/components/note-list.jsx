@@ -5,14 +5,16 @@ function NoteListItem(props) {
   const noteListItem = props.note;
   const noteId = noteListItem.noteId;
   return (
-    <div id={noteListItem.noteId}>
-      <div>
-        <Link to={{
-          pathname: '/notes/' + noteId
-        }}>
-          <h3>{noteListItem.noteTitle}</h3>
-        </Link>
-        <p>{noteListItem.noteContent}</p>
+    <div className="my-y pb-3 col-4 note-list-item" id={noteId}>
+      <div className="card h-100">
+        <div className="card-body m-0 p-0 note-list-item-body rounded-0 h-100">
+          <Link to={{
+            pathname: '/notes' + noteId
+          }}>
+            <p className="card-title text-left note-list-item-title">{noteListItem.noteTitle}</p>
+            <p className="card-text text-left note-list-item-content h-100 mb-3">{noteListItem.noteContent}</p>
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -44,14 +46,16 @@ export default class NoteList extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.state.notes.map(noteListItem => {
-          return (
-            <NoteListItem
-              key={noteListItem.noteId}
-              note={noteListItem}/>
-          );
-        })}
+      <div className="note-list-container col-12 d-flex justify-content-center">
+        <div className="col-10 d-flex flex-wrap card-deck m-0 note-list-container-border">
+          {this.state.notes.map(noteListItem => {
+            return (
+              <NoteListItem
+                key={noteListItem.noteId}
+                note={noteListItem}/>
+            );
+          })}
+        </div>
       </div>
     );
   }

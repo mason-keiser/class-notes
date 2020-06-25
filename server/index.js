@@ -87,17 +87,20 @@ app.get('/api/notes/:noteId', (req, res, next) => {
         where "tagRelations"."itemId" = $1
         and "tagRelations"."type" = 'note';
         `;
-        const tagsArray = db.query(tagSQL, noteParam)
+        db.query(tagSQL, noteParam)
           .then(result => {
+            const data = result.rows;
+
             const tagsArray = [];
-            result.rows.map(tag => tagsArray.push(tag.tagName));
-            console.log(note);
+            data.map(tag => tagsArray.push(tag.tagName));
             return tagsArray;
           })
+          .then(tagsArray => {
+            note.tags = tagsArray;
+            res.status(200).json(note);
+          })
           .catch(err => next(err));
-        console.log(note);
-        console.log(tagsArray);
-        return res.status(200).json(note);
+
       }
     })
     .catch(err => next(err));
@@ -272,7 +275,10 @@ app.get('/api/flashcards', (req, res, next) => {
     .then(result => {
       return res.status(200).json(result.rows);
     })
-    .catch(error => res.status(500).json({ error: 'An unexpected error occurred' }));
+    .catch(err => next(err,
+      res.status(500).json({ error: 'An unexpected error occurred' }))
+    );
+
 });
 
 app.use('/api', (req, res, next) => {

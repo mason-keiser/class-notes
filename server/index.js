@@ -229,23 +229,23 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
 })
 
 //USER CAN VIEW INDIVIDUAL FLASHCARD 
-app.get('/api/flashcards/:fcDeckId', (req, res, next) => {
-  const deckId = req.params.fcDeckId
-  const deckIdInt = parseInt(req.params.fcDeckId);
-  if (!Number.isInteger(deckIdInt) || deckIdInt <= 0) {
-    return res.status(400).json({ error: '"deckId" must be a positive integer' });
+app.get('/api/flashcards/:fcId', (req, res, next) => {
+  const fcId = req.params.fcId
+  const fcIdInt = parseInt(req.params.fcId);
+  if (!Number.isInteger(fcIdInt) || fcIdInt <= 0) {
+    return res.status(400).json({ error: '"fcId" must be a positive integer' });
   }
   const sql = `
   SELECT *
   FROM  "fcDeck"
   JOIN  "fcItem" USING ("fcDeckId")
-  WHERE "fcDeckId" = $1
+  WHERE "fcId" = $1
   `;
-  const id = [deckId]
+  const id = [fcId]
   db.query(sql, id)
     .then(result => {
       if (!result.rows[0]) {
-        return res.status(404).json({ error: `Cannot find flashcard with given "deckId" ${deckId}`})
+        return res.status(404).json({ error: `Cannot find flashcard with given "fcId" ${fcId}`})
       } else {
         return res.status(200).json(result.rows[0])
       }

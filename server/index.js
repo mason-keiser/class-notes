@@ -79,7 +79,6 @@ app.post('/api/notes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-
 app.delete('/api/notes/:noteId', (req, res, next) => {
   const { noteId } = req.params;
   const noteIdInt = parseInt(req.params.noteId);

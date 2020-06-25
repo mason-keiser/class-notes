@@ -188,3 +188,15 @@ div.col-2 > h6 {
 .theme-green {
   color: #24997F;
 }
+
+/* note page */
+
+.note-page-container {
+  height: 100vh;
+}
+
+.note-main {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 30px;
+}

@@ -21,7 +21,6 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
-
 // GET GENERAL INFORMATION ABOUT A STUDENT AND ALL NOTEBOOKS OWNED BY THE STUDENT
 // BY PROVIDING A STUDENT ID
 
@@ -43,7 +42,6 @@ app.get('/api/students/:studentId', (req, res, next) => {
 });
 
 // GET ALL INFORMATION ABOUT A NOTE BY PROVIDING A NOTE ID
-
 
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
@@ -206,13 +204,13 @@ app.put('/api/notes/:noteId', (req, res, next) => {
 });
 
 app.get('/api/notes/search/:noteTitle', (req, res, next) => {
-  const noteTitle = req.params.noteTitle
+  const noteTitle = req.params.noteTitle;
   const sql = `
   SELECT "noteTitle", "noteId", "noteDifficulty", "createdAt", "noteContent"
   FROM  "notes"
   WHERE to_tsvector("noteTitle") @@ to_tsquery($1)
   `;
-  const title = [noteTitle]
+  const title = [noteTitle];
   db.query(sql, title)
     .then(result => {
       if (!result.rows[0]) {
@@ -225,7 +223,7 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
       console.error(err);
       res.status(500).json({ error: 'An unexpected error occurred.' });
     });
-})
+});
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

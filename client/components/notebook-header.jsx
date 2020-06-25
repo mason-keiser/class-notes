@@ -2,22 +2,18 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-export default class Header extends React.Component {
+export default class NotebookHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      student: []
-    };
+    this.state = { student: [] };
     this.getStudentData = this.getStudentData.bind(this);
   }
 
   getStudentData() {
-    fetch('api/students/1')
+    fetch('/api/students/1')
       .then(response => response.json())
-      .then(studentData => {
-        this.setState({
-          student: studentData
-        });
+      .then(data => {
+        this.setState({ student: data });
       })
       .catch(err => console.error('getStudentData() fetch failed:', err));
   }
@@ -27,8 +23,8 @@ export default class Header extends React.Component {
   }
 
   render() {
-    const studentData = this.state.student;
-    const studentName = `${studentData.firstName} ${studentData.lastName}`;
+    const studentName = this.state.student.length === 0
+      ? 'Student Name' : this.state.student[0].firstName;
     return (
       <header className="header-container">
         <div className="header-left-container">

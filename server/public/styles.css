@@ -403,18 +403,63 @@ div.col-2 > h6 {
 
 #fccard {
   background-color: #333333;
-  margin-top: 0;
+  margin-top: 5rem;
   margin-bottom: 0;
-  border: 1.5px solid #3F3F3C;
+  border: 1px solid #c4c4c4;
+  width: 500px;
+  height: fit-content;
+  border-radius: 5px;
 }
 
 .fc-list-item {
-  border: 1.5px solid #3F3F3C;
+  border: 1px solid #3F3F3C;
   color: white;
 }
 
 .fc-list-item-content {
+  margin-top: 10px;
   display: flex;
   flex: column;
   color:#24997F;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.study-button {
+  color:#24997F;
+  font-size: 20px;
+  width: 140px;
+  height: 45px;
+  padding: 0;
+  background-color: #333333;
+  margin-left: 11rem;
+  margin-bottom: 2rem;
+  align-self: center;
+}
+
+.study-button:hover {
+  background-color: #24997F;
+  border-color: #24997F;
+  color: #3F3F3C;
+}
+
+#cardTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: baseline;
+  background-color: #3F3F3C;
+  height: fit-content;
+}
+
+.q{
+  margin-top: 10px;
+  font-size: larger;
+}
+
+#deckLength {
+  color:#24997F;
+  width: 9rem;
+  margin-left: 4rem;
 }

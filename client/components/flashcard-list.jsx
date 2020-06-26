@@ -5,17 +5,13 @@ function FcListItem(props) {
     const fcListItem = props.flashcard;
     const fcId = fcListItem.fcId;
     return (
-      
-    
-          <div className="card-body m-0 p-0 note-list-item-body rounded-0 h-50">
+          <div className="">
             <Link to={{ pathname: '/flashcards/' + fcId }}>
-              <p className="card-text text-left fc-list-item-content h-75 ">{fcListItem.fcDeckId}</p>
-              <p className="card-text text-center fc-list-item-content h-75">{fcListItem.fcQuestion}</p>
-              <p className="card-text text-center fc-list-item-content h-75">{fcListItem.fcAnswer}</p>
+              <p className="card-text text-left fc-list-item-content q h-75">{fcListItem.fcQuestion}</p>
+              <p className="card-text text-left fc-list-item-content h-75 mb-4">{fcListItem.fcAnswer}</p>
+              <button color="success" className="fc-list-item-content study-button">Study</button>
             </Link>
           </div>
-       
-
     );
 }
 
@@ -63,7 +59,10 @@ export default class FcList extends React.Component {
           <div className="fc-list-container d-flex justify-content-centers">
             <div className=" d-flex flex-wrap card-deck fc-list-container-border">
               <div id ="fccard">
-                <h1 id='notebookName'className="col-1 text-center notebook-name mb-5 mt-2">{this.state.notebookName}</h1>
+                <div id='cardTitle'>
+                  <h1 id='notebookName'className="col-1 text-center notebook-name mb-5 mt-2">{this.state.notebookName}</h1>
+                  <h4 id='deckLength' className="">{this.state.flashcards.length + ' card(s)'}</h4>
+                </div>
                   {this.state.flashcards.map(fcListItem => {
                     return (
                     <FcListItem

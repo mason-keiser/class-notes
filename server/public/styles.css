@@ -134,7 +134,7 @@ div.col-2 > h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 45px;
+  padding: 5px 45px;
   background-color: #3F3F3D;
 }
 
@@ -275,12 +275,6 @@ div.col-2 > h6 {
 }
 
 /* note page */
-
-.note-page-container {
-  height: 100vh;
-  background-color: #333333;
-}
-
 .note-main {
   display: flex;
   color:#24997F;
@@ -392,6 +386,15 @@ div.col-2 > h6 {
   margin-bottom: 0;
 }
 
+textarea.note-content {
+  height: 40vh;
+  padding: 10px 15px;
+}
+
+.note-page-container {
+  height: 100vh;
+  background-color: #333333;
+
 /* flashcard page */
 .fc-list-container {
   background-color: #333333;
@@ -478,6 +481,7 @@ div.col-2 > h6 {
   color:#24997F;
   width: 9rem;
   margin-left: 4rem;
+
 }
 
 /* Review Flashcards */

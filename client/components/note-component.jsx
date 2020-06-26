@@ -12,8 +12,8 @@ class NoteComponent extends React.Component {
       );
     } else if (this.props.view === 'createNote') {
       return (
-        <div>
-          <Button color="success">Create</Button>
+        <div className="d-flex flex-row align-items-center justify-content-center">
+          <Button className="solid-button">Create</Button>
         </div>
       );
     } else if (this.props.view === 'flashcard') {
@@ -43,16 +43,22 @@ class NoteComponent extends React.Component {
     } else if (this.props.view === 'resource') {
       return (
         <Form>
-          <div className="d-flex flex-row align-items-center justify-content-between mb-5">
-            <FormGroup className="resource">
-              <Label for="resourceName">Resource Name</Label>
-              <Input type="text" name="resourceName" id="resourceName" placeholder="Name" />
-            </FormGroup>
-            <FormGroup className="resource-link">
-              <Label for="resourceLink"></Label>
-              <Input type="text" name="resourceLink" id="resourceLink" placeholder="Name" />
-            </FormGroup>
-          </div>
+          {
+            this.props.resource.map((item, index) => {
+              return (
+                <div key={index} className="d-flex flex-row align-items-center justify-content-between mb-2">
+                  <FormGroup className="resource">
+                    <Label for="resourceName">Resource Name</Label>
+                    <Input type="text" name="resourceName" id="resourceName" placeholder="Name" defaultValue={item.name}/>
+                  </FormGroup>
+                  <FormGroup className="resource-link">
+                    <Label for="resourceLink">Link</Label>
+                    <Input type="text" name="resourceLink" id="resourceLink" placeholder="Name" defaultValue={item.link}/>
+                  </FormGroup>
+                </div>
+              );
+            })
+          }
           <Button className="add-button"><i className="fas fa-plus"></i></Button>
           <Button className="solid-button cancel-btn" onClick={() => this.props.setView('viewNote')}>Cancel</Button>
         </Form>
@@ -61,8 +67,11 @@ class NoteComponent extends React.Component {
       return (
         <>
           <h3>HTML</h3>
+          <p>{this.props.code.html}</p>
           <h3>CSS</h3>
+          <p>{this.props.code.css}</p>
           <h3>JavaScript</h3>
+          <p>{this.props.code.javascript}</p>
         </>
       );
     }

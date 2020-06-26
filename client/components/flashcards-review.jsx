@@ -5,9 +5,26 @@ import { Link } from 'react-router-dom';
 function NextButton(props) {
   return (
     <Button>
-      <Link to="#" className="d-flex flex-row align-items-center flashcard-next-button"
-        onClick={props.goToNextFlashcard}>
-          Next
+      <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
+        onClick={() => {
+          props.goToNextFlashcard();
+          props.setSideToQuestion();
+        }}>
+        Next
+      </Link>
+    </Button>
+  );
+}
+
+function BackButton(props) {
+  return (
+    <Button>
+      <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
+        onClick={() => {
+          props.goToPrevFlashcard();
+          props.setSideToQuestion();
+        }}>
+        Back
       </Link>
     </Button>
   );
@@ -17,8 +34,8 @@ function Indicator(props) {
   return (
     <div className={
       props.index <= props.activeIndex
-        ? 'flashcard-review-indicator-focused'
-        : 'flashcard-review-indicator-unfocused'
+        ? 'flashcards-review-indicator-focused'
+        : 'flashcards-review-indicator-unfocused'
     }
     key={props.index}>
       <i className="fa fa-circle mx-1"></i>
@@ -33,9 +50,12 @@ function Flashcard(props) {
         ? 'd-flex justify-content-center col-12'
         : 'd-none'
     }
+    onClick={props.setSide}
     key={props.index}>
-      <h1 className="flashcard-question">{props.flashcard.fcQuestion}</h1>
-      <h1 className="flashcard-answer">{props.flashcard.fcAnswer}</h1>
+      {props.side === 'question'
+        ? <h1 className="flashcards-review-question">{props.flashcard.fcQuestion}</h1>
+        : <h1 className="flashcards-review-answer">{props.flashcard.fcAnswer}</h1>
+      }
     </div>
   );
 }
@@ -45,9 +65,14 @@ export default class FlashcardsReview extends React.Component {
     super(props);
     this.state = {
       flashcards: [],
+      side: 'question',
       activeIndex: 0
     };
     this.getFlashcards = this.getFlashcards.bind(this);
+    this.goToPrevFlashcard = this.goToPrevFlashcard.bind(this);
+    this.goToNextFlashcard = this.goToNextFlashcard.bind(this);
+    this.shuffleFlashcardArray = this.shuffleFlashcardArray.bind(this);
+    this.setSide = this.setSide.bind(this);
   }
 
   // when possible, pass fcDeckId via props to the fetch endpoint
@@ -66,6 +91,7 @@ export default class FlashcardsReview extends React.Component {
     let index = this.state.activeIndex;
     const length = this.state.flashcards.length;
     if (index === length - 1) {
+      this.shuffleFlashcardArray();
       index = 0;
     } else {
       index++;
@@ -75,8 +101,54 @@ export default class FlashcardsReview extends React.Component {
     });
   }
 
+  goToPrevFlashcard() {
+    let index = this.state.activeIndex;
+    const length = this.state.flashcards.length;
+    if (index < 1) {
+      this.shuffleFlashcardArray();
+      index = length - 1;
+    } else {
+      index--;
+    }
+    this.setState({
+      activeIndex: index
+    });
+  }
+
+  shuffleFlashcardArray() {
+    const shuffledArray = this.state.flashcards;
+    for (let index = shuffledArray.length - 1; index > 0; index--) {
+      const tempIndex = Math.floor(Math.random() * (index + 1));
+      [shuffledArray[index], shuffledArray[tempIndex]] = [shuffledArray[tempIndex], shuffledArray[index]];
+    }
+    this.setState({
+      flashcards: shuffledArray
+    });
+  }
+
+  setSide() {
+    const side = this.state.side;
+    if (side === 'question') {
+      this.setState({
+        side: 'answer'
+      });
+    }
+    if (side === 'answer') {
+      this.setState({
+        side: 'question'
+      });
+    }
+  }
+
+  setSideToQuestion() {
+    this.setState({
+      side: 'question'
+    });
+  }
+
   componentDidMount() {
     this.getFlashcards();
+    this.shuffleFlashcardArray();
   }
 
   render() {
@@ -91,7 +163,9 @@ export default class FlashcardsReview extends React.Component {
               key={index}
               index={index}
               activeIndex={this.state.activeIndex}
-              flashcard={flashcard} />
+              flashcard={flashcard}
+              side={this.state.side}
+              setSide={() => this.setSide()} />
           )}
           {this.state.flashcards.map((flashcard, index) =>
             <Indicator
@@ -99,11 +173,13 @@ export default class FlashcardsReview extends React.Component {
               index={index}
               activeIndex={this.state.activeIndex}
               flashcard={flashcard} />
-          // onClick={event => this.showAnswer()} />
-          // in above line, when flashcard is clicked, if question is showing, show answer.  if answer is showing, show next card
           )}
+          <BackButton
+            goToPrevFlashcard={() => this.goToPrevFlashcard()}
+            setSideToQuestion={() => this.setSideToQuestion()} />
           <NextButton
-            goToNextFlashcard={() => this.goToNextFlashcard()} />
+            goToNextFlashcard={() => this.goToNextFlashcard()}
+            setSideToQuestion={() => this.setSideToQuestion()} />
         </div>
       </div>
     );

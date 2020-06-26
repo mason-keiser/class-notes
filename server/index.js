@@ -126,16 +126,15 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
 });
 
 // GET INFORMATION ABOUT ALL NOTES FOR ALL STUDENTS WITHIN THE NOTES TABLE
-
-app.get('/api/notes', (req, res, next) => {
-  const sql = `
-  select "noteId" , "noteTitle", "noteContent"
-  from "notes";
-  `;
-  db.query(sql)
-    .then(result => res.status(200).json(result.rows))
-    .catch(err => next(err));
-});
+// app.get('/api/notes', (req, res, next) => {
+//   const sql = `
+//   select "noteId" , "noteTitle", "noteContent"
+//   from "notes";
+//   `;
+//   db.query(sql)
+//     .then(result => res.status(200).json(result.rows))
+//     .catch(err => next(err));
+// });
 
 // CREATE A NEW NOTE
 

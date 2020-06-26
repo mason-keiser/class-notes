@@ -207,6 +207,10 @@ div.col-2 > h6 {
   color: #24997F
 }
 
+div.notebook-name > i:hover {
+  cursor: pointer;
+}
+
 .note-list-item {
   background-color: #333333;
 }

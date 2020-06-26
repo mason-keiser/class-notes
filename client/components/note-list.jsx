@@ -1,16 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Form, FormGroup, Input } from 'reactstrap';
 
 function NoteListItem(props) {
   const noteListItem = props.note;
   const noteId = noteListItem.noteId;
   return (
-    <div className="my-y pb-3 col-4 note-list-item" id={noteId}>
+    <div className="my-y pb-3 note-list-item mb-5" id={noteId}>
       <div className="card h-100">
         <div className="card-body m-0 p-0 note-list-item-body rounded-0 h-100">
           <Link to={{ pathname: '/notes/' + noteId }}>
             <p className="card-title text-left note-list-item-title">{noteListItem.noteTitle}</p>
-            <p className="card-text text-left note-list-item-content h-100 mb-3">{noteListItem.noteContent}</p>
+            <p className="card-text text-left note-list-item-content mb-3">{noteListItem.noteContent}</p>
           </Link>
         </div>
       </div>
@@ -46,26 +47,57 @@ export default class NoteList extends React.Component {
   }
 
   render() {
-    const notes = this.state.notes;
-    return (
-      <div className="note-list-container d-flex justify-content-center">
-        <div className="d-flex flex-wrap card-deck note-list-container-border">
-          <div className="col-12 d-flex flex-row align-items-center justify-content-center notebook-name mb-5 mt-2">
-            <h1>{this.state.currentName}</h1>
-            <i className="fas fa-chevron-down ml-5"></i>
+    if (this.state.notes.length) {
+      const notes = this.state.notes;
+      const names = this.props.notebooks;
+      return (
+        <div className="note-list-container d-flex flex-column ">
+          <div className="note-list-container-border">
+            <div className="d-flex flex-row align-items-center justify-content-center mb-5 mt-5">
+              <Form className="col-2">
+                <FormGroup className="mb-0">
+                  <Input type="select" name="notebookName" id="notebookName"
+                    style={{
+                      color: '#24997F',
+                      fontSize: '18px',
+                      fontWeight: 'bold',
+                      border: '1.5px solid #3F3F3D',
+                      backgroundColor: '#333333',
+                      padding: '0 0 0 15px'
+                    }}>
+                    {
+                      names.map(item => {
+                        return (
+                          <option key={item.notebookId}>{item.notebookName}</option>
+                        );
+                      })
+                    }
+                  </Input>
+                </FormGroup>
+              </Form>
+            </div>
+            <div className="col-12 list-container d-flex flex-row flex-wrap justify-content-around ">
+              {
+                notes.map(item => {
+                  return (
+                    <NoteListItem
+                      key={item.noteId}
+                      note={item}
+                      id={item.noteId} />
+                  );
+                })
+              }
+            </div>
+
           </div>
-          {
-            notes.map(item => {
-              return (
-                <NoteListItem
-                  key={item.noteId}
-                  note={item}
-                  id={item.noteId} />
-              );
-            })
-          }
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <>
+          <h3>Loading</h3>
+        </>
+      );
+    }
   }
 }

@@ -12,7 +12,9 @@ export default class NotebookHeader extends React.Component {
           </Link>
         </div>
         <div className="header-center-container">
-          <Button outline color="success" className="header-outline-button">New Note</Button>
+          <Link to="/notes/create">
+            <Button outline color="success" className="header-outline-button">New Note</Button>
+          </Link>
         </div>
         <div className="header-right-container">
           <div className="header-search-block">

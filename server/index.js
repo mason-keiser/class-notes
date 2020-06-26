@@ -145,7 +145,7 @@ app.post('/api/notes', (req, res, next) => {
     !req.body.noteTags) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
-  console.log(req.body.noteTags);
+  const noteTags = req.body.noteTags;
   const noteSQL = `
   insert into "notes" ("notebookId", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode")
   values ($1, $2, $3, $4, $5, $6)
@@ -162,14 +162,44 @@ app.post('/api/notes', (req, res, next) => {
   db.query(noteSQL, noteValues)
     .then(response => {
       const createdNote = response.rows[0];
+      createdNote.tags = [];
       const checkForTagsSQL = `
-      SELECT exists (SELECT 1 FROM "tagTable" WHERE "tagName" = $1 LIMIT 1);`;
-      db.query(checkForTagsSQL, [req.body.noteTags[0]])
+      select "tagId"
+      from "tagTable"
+      where "tagName" = $1;`;
+      db.query(checkForTagsSQL, [noteTags[0]])
         .then(response => {
-          if (response.rows[0].exists) {
-            console.log('its here');
+          if (response.rows[0]) {
+            const insertIntoRelationsSQL = `
+            insert into "tagRelations" ("tagId", "itemId" , "type")
+            values ($1, $2, 'note')
+            returning*;`;
+            db.query(insertIntoRelationsSQL, [response.rows[0].tagId, createdNote.noteId])
+              .then(response => {
+                createdNote.tags.push(response.rows[0]);
+                console.log(createdNote);
+              })
+              .catch(err => next(err));
           } else {
             console.log('it does note exist in the database');
+            console.log(noteTags[0]);
+            const insertNewTagSQL = `
+            insert into "tagTable" ("tagName")
+            values($1)
+            returning*;`;
+            db.query(insertNewTagSQL, [noteTags[0]])
+              .then(response => {
+                const newTagsId = response.rows[0].tagId;
+                const relationsSQL = `
+            insert into "tagRelations" ("tagId", "itemId" , "type")
+            values ($1, $2, 'note')
+            returning*;`;
+                db.query(relationsSQL, [newTagsId, createdNote.noteId])
+                  .then(response => console.log(response.rows))
+                  .catch(err => next(err));
+
+              });
+
           }
 
         })

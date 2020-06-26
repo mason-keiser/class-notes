@@ -17,8 +17,8 @@ function Indicator(props) {
   return (
     <div className={
       props.index <= props.activeIndex
-        ? 'flashcard-indicator-focused'
-        : 'flashcard-indicator-unfocused'
+        ? 'flashcard-review-indicator-focused'
+        : 'flashcard-review-indicator-unfocused'
     }
     key={props.index}>
       <i className="fa fa-circle mx-1"></i>
@@ -34,13 +34,13 @@ function Flashcard(props) {
         : 'd-none'
     }
     key={props.index}>
-      <h1 className="flashcard-question">{props.flashcard.question}</h1>
-      <h1 className="flashcard-answer">{props.flashcard.answer}</h1>
+      <h1 className="flashcard-question">{props.flashcard.fcQuestion}</h1>
+      <h1 className="flashcard-answer">{props.flashcard.fcAnswer}</h1>
     </div>
   );
 }
 
-export default class ReviewFlashcards extends React.Component {
+export default class FlashcardsReview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,7 +52,7 @@ export default class ReviewFlashcards extends React.Component {
 
   // when possible, pass fcDeckId via props to the fetch endpoint
   getFlashcards() {
-    fetch('api/flashcards/1')
+    fetch('api/flashcards')
       .then(response => response.json())
       .then(flashcardsData => {
         this.setState(state => ({

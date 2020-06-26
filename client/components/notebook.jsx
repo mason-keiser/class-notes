@@ -3,11 +3,31 @@ import NoteList from './note-list';
 import NotebookHeader from './notebook-header';
 
 export default class Notebooks extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { student: null };
+  }
+
+  componentDidMount() {
+    fetch('/api/students/1')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ student: data });
+      })
+      .catch(err => console.error('getStudentData() fetch failed:', err));
+  }
+
+  // handleChange(event) {
+  //   this.setState({ currentNotebook: event.target.value });
+  // }
+
   render() {
+    const studentName = this.state.student === null ? 'Student Name' : this.state.student.firstName;
+    const notebooks = this.state.student === null ? 'none' : this.state.student.notebooks;
     return (
       <div>
-        <NotebookHeader />
-        <NoteList />
+        <NotebookHeader studentName={studentName}/>
+        <NoteList notebooks={notebooks}/>
       </div>
     );
   }

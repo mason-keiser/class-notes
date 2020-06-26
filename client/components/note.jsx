@@ -12,7 +12,7 @@ class Note extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`/api/notes/${this.props.noteId}`)
+    fetch(`/api/notes/${this.props.id}`)
       .then(res => res.json())
       .then(data => this.setState({ note: data }))
       .catch(error => console.error(error));

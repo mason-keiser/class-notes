@@ -6,21 +6,7 @@ export default class NoteHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = { student: [] };
-    // this.getStudentData = this.getStudentData.bind(this);
   }
-
-  // getStudentData() {
-  //   fetch('/api/students/1')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       this.setState({ student: data });
-  //     })
-  //     .catch(err => console.error('getStudentData() fetch failed:', err));
-  // }
-
-  // componentDidMount() {
-  //   this.getStudentData();
-  // }
 
   render() {
     return (

@@ -291,7 +291,7 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
     );
 });
 
-// USER CAN REVIEW FLASHCARDS
+// USER CAN VIEW ALL FLASHCARDS
 app.get('/api/flashcards', (req, res, next) => {
   const sql = `
   SELECT *
@@ -299,6 +299,28 @@ app.get('/api/flashcards', (req, res, next) => {
   JOIN "fcItem" USING ("fcDeckId")
   `;
   db.query(sql)
+    .then(result => {
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => next(err,
+      res.status(500).json({ error: 'An unexpected error occurred' }))
+    );
+});
+
+// USER CAN REVIEW FLASHCARDS
+app.get('/api/flashcards-review/:fcDeckId', (req, res, next) => {
+  const fcDeckId = parseInt(req.params.fcDeckId);
+  if (!Number.isInteger(fcDeckId) || fcDeckId <= 0) {
+    return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
+  }
+  const sql = `
+  SELECT *
+  FROM "fcDeck"
+  JOIN "fcItem" USING ("fcDeckId")
+  WHERE "fcDeckId" = $1
+  `;
+  const fcDeckIdValue = [fcDeckId];
+  db.query(sql, fcDeckIdValue)
     .then(result => {
       return res.status(200).json(result.rows);
     })

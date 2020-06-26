@@ -4,29 +4,29 @@ import { Link } from 'react-router-dom';
 
 function NextButton(props) {
   return (
-    <Button>
-      <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
-        onClick={() => {
-          props.goToNextFlashcard();
-          props.setSideToQuestion();
-        }}>
+    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
+      onClick={() => {
+        props.goToNextFlashcard();
+        props.setSideToQuestion();
+      }}>
+      <Button>
         Next
-      </Link>
-    </Button>
+      </Button>
+    </Link>
   );
 }
 
 function BackButton(props) {
   return (
-    <Button>
-      <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
-        onClick={() => {
-          props.goToPrevFlashcard();
-          props.setSideToQuestion();
-        }}>
+    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
+      onClick={() => {
+        props.goToPrevFlashcard();
+        props.setSideToQuestion();
+      }}>
+      <Button>
         Back
-      </Link>
-    </Button>
+      </Button>
+    </Link>
   );
 }
 
@@ -75,9 +75,9 @@ export default class FlashcardsReview extends React.Component {
     this.setSide = this.setSide.bind(this);
   }
 
-  // when possible, pass fcDeckId via props to the fetch endpoint
   getFlashcards() {
-    fetch('api/flashcards')
+    const fcDeckId = this.props.match.params.fcDeckId;
+    fetch(`/api/flashcards-review/${fcDeckId}`)
       .then(response => response.json())
       .then(flashcardsData => {
         this.setState(state => ({

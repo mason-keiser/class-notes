@@ -40,6 +40,32 @@ function Flashcard(props) {
   );
 }
 
+function Modal(props) {
+  let decrementor = 1;
+  if (props.activeIndex === props.length - 1) {
+    decrementor--;
+    if (decrementor === 0) {
+      return (
+        <div className="flashcards-review-modal">
+          <h1>You finished reviewing this deck!  Would you like to start again?</h1>
+          <Button>
+            <Link to="#" className="d-flex flex-row align-items-center flashcard-next-button"
+              onClick={props.goToNextFlashcard}>
+              Yes, start again
+            </Link>
+          </Button>
+          <Button>
+            <Link to="/flashcards" className="d-flex flex-row align-items-center flashcard-out-button">
+              No, take me back to view all decks.
+            </Link>
+          </Button>
+        </div>
+      );
+    }
+  }
+  return null;
+}
+
 export default class FlashcardsReview extends React.Component {
   constructor(props) {
     super(props);
@@ -83,9 +109,16 @@ export default class FlashcardsReview extends React.Component {
     if (this.state.flashcards === null) {
       return null;
     }
+    const length = this.state.flashcards.length;
     return (
       <div className="flashcard-review-container col-12">
         <div className="flashcard-container col-10 offset-1 d-flex align-items-center justify-content-center">
+          <Modal
+            length={length}
+            activeIndex={this.state.activeIndex}
+            goToNextFlashcard={() => this.goToNextFlashcard()}
+          />
+          {/* can i combine the two maps below into one? */}
           {this.state.flashcards.map((flashcard, index) =>
             <Flashcard
               key={index}

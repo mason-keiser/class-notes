@@ -46,7 +46,7 @@ function Modal(props) {
     decrementor--;
     if (decrementor === 0) {
       return (
-        <div className="flashcards-review-modal-overlay position-fixed d-flex justify-content-center align-items-center">
+        <div className="flashcards-review-modal-overlay">
           <div className="flashcards-review-modal-content">
             <h1>You finished reviewing this deck!  Would you like to start again?</h1>
             <Button>
@@ -76,6 +76,8 @@ export default class FlashcardsReview extends React.Component {
       activeIndex: 0
     };
     this.getFlashcards = this.getFlashcards.bind(this);
+    this.goToNextFlashcard = this.goToNextFlashcard.bind(this);
+    this.shuffleFlashcardArray = this.shuffleFlashcardArray.bind(this);
   }
 
   // when possible, pass fcDeckId via props to the fetch endpoint
@@ -94,12 +96,24 @@ export default class FlashcardsReview extends React.Component {
     let index = this.state.activeIndex;
     const length = this.state.flashcards.length;
     if (index === length - 1) {
+      this.shuffleFlashcardArray();
       index = 0;
     } else {
       index++;
     }
     this.setState({
       activeIndex: index
+    });
+  }
+
+  shuffleFlashcardArray() {
+    const shuffledArray = this.state.flashcards;
+    for (let index = shuffledArray.length - 1; index > 0; index--) {
+      const tempIndex = Math.floor(Math.random() * (index + 1));
+      [shuffledArray[index], shuffledArray[tempIndex]] = [shuffledArray[tempIndex], shuffledArray[index]];
+    }
+    this.setState({
+      flashcards: shuffledArray
     });
   }
 

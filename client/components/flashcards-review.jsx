@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import FlashcardsReviewHeader from './flashcards-review-header';
 
 function NextButton(props) {
   return (
@@ -156,32 +157,35 @@ export default class FlashcardsReview extends React.Component {
       return null;
     }
     return (
-      <div className="flashcard-review-container col-12">
-        <div className="flashcard-container col-10 offset-1 d-flex align-items-center justify-content-center">
-          {this.state.flashcards.map((flashcard, index) =>
-            <Flashcard
-              key={index}
-              index={index}
-              activeIndex={this.state.activeIndex}
-              flashcard={flashcard}
-              side={this.state.side}
-              setSide={() => this.setSide()} />
-          )}
-          {this.state.flashcards.map((flashcard, index) =>
-            <Indicator
-              key={index}
-              index={index}
-              activeIndex={this.state.activeIndex}
-              flashcard={flashcard} />
-          )}
-          <BackButton
-            goToPrevFlashcard={() => this.goToPrevFlashcard()}
-            setSideToQuestion={() => this.setSideToQuestion()} />
-          <NextButton
-            goToNextFlashcard={() => this.goToNextFlashcard()}
-            setSideToQuestion={() => this.setSideToQuestion()} />
+      <>
+        <FlashcardsReviewHeader />
+        <div className="flashcard-review-container col-12">
+          <div className="flashcard-container col-10 offset-1 d-flex align-items-center justify-content-center">
+            {this.state.flashcards.map((flashcard, index) =>
+              <Flashcard
+                key={index}
+                index={index}
+                activeIndex={this.state.activeIndex}
+                flashcard={flashcard}
+                side={this.state.side}
+                setSide={() => this.setSide()} />
+            )}
+            {this.state.flashcards.map((flashcard, index) =>
+              <Indicator
+                key={index}
+                index={index}
+                activeIndex={this.state.activeIndex}
+                flashcard={flashcard} />
+            )}
+            <BackButton
+              goToPrevFlashcard={() => this.goToPrevFlashcard()}
+              setSideToQuestion={() => this.setSideToQuestion()} />
+            <NextButton
+              goToNextFlashcard={() => this.goToNextFlashcard()}
+              setSideToQuestion={() => this.setSideToQuestion()} />
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }

@@ -67,7 +67,7 @@ class Note extends React.Component {
                 </FormGroup>
                 <FormGroup>
                   <Label for="noteContent" className="note-font-1">Enter Note:</Label>
-                  <Input style={{ height: '45vh' }} type="textarea" name="noteContent" id="noteContent" defaultValue={note.noteContent}/>
+                  <textarea className="form-control note-content" type="textarea" name="noteContent" id="noteContent" defaultValue={note.noteContent}></textarea>
                 </FormGroup>
               </Form>
             </div>

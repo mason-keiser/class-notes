@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function NextButton(props) {
   return (
     <Button>
-      <Link to="#" className="d-flex flex-row align-items-center flashcard-next-button"
+      <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
         onClick={props.goToNextFlashcard}>
           Next
       </Link>
@@ -17,8 +17,8 @@ function Indicator(props) {
   return (
     <div className={
       props.index <= props.activeIndex
-        ? 'flashcard-review-indicator-focused'
-        : 'flashcard-review-indicator-unfocused'
+        ? 'flashcards-review-indicator-focused'
+        : 'flashcards-review-indicator-unfocused'
     }
     key={props.index}>
       <i className="fa fa-circle mx-1"></i>
@@ -34,8 +34,8 @@ function Flashcard(props) {
         : 'd-none'
     }
     key={props.index}>
-      <h1 className="flashcard-question">{props.flashcard.fcQuestion}</h1>
-      <h1 className="flashcard-answer">{props.flashcard.fcAnswer}</h1>
+      <h1 className="flashcards-review-question">{props.flashcard.fcQuestion}</h1>
+      <h1 className="flashcards-review-answer">{props.flashcard.fcAnswer}</h1>
     </div>
   );
 }
@@ -46,19 +46,21 @@ function Modal(props) {
     decrementor--;
     if (decrementor === 0) {
       return (
-        <div className="flashcards-review-modal">
-          <h1>You finished reviewing this deck!  Would you like to start again?</h1>
-          <Button>
-            <Link to="#" className="d-flex flex-row align-items-center flashcard-next-button"
-              onClick={props.goToNextFlashcard}>
+        <div className="flashcards-review-modal-overlay position-fixed d-flex justify-content-center align-items-center">
+          <div className="flashcards-review-modal-content">
+            <h1>You finished reviewing this deck!  Would you like to start again?</h1>
+            <Button>
+              <Link to="#" className="d-flex flex-row align-items-center flashcard-next-button"
+                onClick={props.goToNextFlashcard}>
               Yes, start again
-            </Link>
-          </Button>
-          <Button>
-            <Link to="/flashcards" className="d-flex flex-row align-items-center flashcard-out-button">
+              </Link>
+            </Button>
+            <Button>
+              <Link to="/flashcards" className="d-flex flex-row align-items-center flashcard-out-button">
               No, take me back to view all decks.
-            </Link>
-          </Button>
+              </Link>
+            </Button>
+          </div>
         </div>
       );
     }
@@ -118,7 +120,6 @@ export default class FlashcardsReview extends React.Component {
             activeIndex={this.state.activeIndex}
             goToNextFlashcard={() => this.goToNextFlashcard()}
           />
-          {/* can i combine the two maps below into one? */}
           {this.state.flashcards.map((flashcard, index) =>
             <Flashcard
               key={index}

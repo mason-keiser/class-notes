@@ -129,6 +129,7 @@ div.col-2 > h6 {
 }
 
 /* header */
+
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -260,6 +261,7 @@ div.col-2 > h6 {
 
 
 /* General */
+
 .theme-green {
   color: #24997F;
 }
@@ -372,4 +374,14 @@ div.col-2 > h6 {
 .note-font-2 {
   font-size: 36px;
   margin-bottom: 0;
+}
+
+/* flashcard page */
+
+.fc-header {
+  background-color: #3F3F3D;
+  height: 2rem;
+}
+.icon{
+  margin-left: 1.1rem;
 }

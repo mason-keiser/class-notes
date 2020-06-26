@@ -32,7 +32,7 @@ export default class NoteList extends React.Component {
   }
 
   getNotes() {
-    fetch('api/notes')
+    fetch('/api/notes')
       .then(response => response.json())
       .then(notesData => {
         this.setState({
@@ -43,7 +43,7 @@ export default class NoteList extends React.Component {
   }
 
   getNotebookName() {
-    fetch('api/notebooks/1')
+    fetch('/api/notebooks/1')
       .then(response => response.json())
       .then(notebookData => {
         this.setState({

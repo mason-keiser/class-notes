@@ -2,19 +2,20 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 function FcListItem(props) {
-    const fcListItem = <props className="fcItem"></props>;
+    const fcListItem = props.flashcard;
     const fcId = fcListItem.fcId;
     return (
-      <div className="my-y pb-3 col-4 fc-list-item" id={fcId}>
-        <div className="card h-100">
-          <div className="card-body m-0 p-0 fc-list-item-body rounded-0 h-50">
+      
+    
+          <div className="card-body m-0 p-0 note-list-item-body rounded-0 h-50">
             <Link to={{ pathname: '/flashcards/' + fcId }}>
-              <p className="card-text text-left fc-list-item-content h-75 mb-3">{fcListItem.fcQuestion}</p>
-              <p className="card-text text-left fc-list-item-content h-75 mb-3">{fcListItem.fcAnswer}</p>
+              <p className="card-text text-left fc-list-item-content h-75 ">{fcListItem.fcDeckId}</p>
+              <p className="card-text text-center fc-list-item-content h-75">{fcListItem.fcQuestion}</p>
+              <p className="card-text text-center fc-list-item-content h-75">{fcListItem.fcAnswer}</p>
             </Link>
           </div>
-        </div>
-      </div>
+       
+
     );
 }
 
@@ -59,24 +60,19 @@ export default class FcList extends React.Component {
 
     render() {
         return (
-          <div>
-          <header className="fc-header">
-            <Link to="/" className="d-flex flex-row align-items-center">
-              <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i>
-            </Link>
-          </header>
-          <div className="note-list-container d-flex justify-content-centers">
-            <div className="d-flex flex-wrap card-deck note-list-container-border">
-              <h1 className=" text-center notebook-name mb-5 mt-2">{this.state.notebookName}</h1>
-              {this.state.flashcards.map(fcListItem => {
-                return (
-                  <FcListItem
-                    key={fcListItem.fcId}
-                    flashcard={fcListItem} />
-                );
-              })}
+          <div className="fc-list-container d-flex justify-content-centers">
+            <div className=" d-flex flex-wrap card-deck fc-list-container-border">
+              <div id ="fccard">
+                <h1 id='notebookName'className="col-1 text-center notebook-name mb-5 mt-2">{this.state.notebookName}</h1>
+                  {this.state.flashcards.map(fcListItem => {
+                    return (
+                    <FcListItem
+                      key={fcListItem.fcId}
+                      flashcard={fcListItem} />
+                  );
+                })}
+              </div>
             </div>
-          </div>
           </div>
         );
       }

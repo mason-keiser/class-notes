@@ -377,11 +377,44 @@ div.col-2 > h6 {
 }
 
 /* flashcard page */
-
-.fc-header {
-  background-color: #3F3F3D;
-  height: 2rem;
+.fc-list-container {
+  background-color: #333333;
+  height: 100vh;
+  padding: 30px 30px
+;
 }
-.icon{
-  margin-left: 1.1rem;
+
+.fc-list-container-border {
+  width: 100%;
+  padding: 0 8%;
+  border: 1.5px solid #3F3F3D;
+  border-radius: 5px;
+  max-height: 93vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#notebook-name {
+  font-size: 30px;
+  color: #24997F;
+  margin-bottom: 0em;
+}
+
+#fccard {
+  background-color: #333333;
+  margin-top: 0;
+  margin-bottom: 0;
+  border: 1.5px solid #3F3F3C;
+}
+
+.fc-list-item {
+  border: 1.5px solid #3F3F3C;
+  color: white;
+}
+
+.fc-list-item-content {
+  display: flex;
+  flex: column;
+  color:#24997F;
 }

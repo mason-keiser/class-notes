@@ -170,32 +170,37 @@ app.post('/api/notes', (req, res, next) => {
       db.query(checkForTagsSQL, [noteTags[0]])
         .then(response => {
           if (response.rows[0]) {
+            console.log(`the tag ${noteTags[0]} exists`);
             const insertIntoRelationsSQL = `
             insert into "tagRelations" ("tagId", "itemId" , "type")
             values ($1, $2, 'note')
             returning*;`;
             db.query(insertIntoRelationsSQL, [response.rows[0].tagId, createdNote.noteId])
               .then(response => {
-                createdNote.tags.push(response.rows[0]);
-                console.log(createdNote);
+                console.log(`the tag ${noteTags[0]} was associated with noteId ${createdNote.noteId}`);
+                createdNote.tags.push(noteTags[0]);
               })
               .catch(err => next(err));
           } else {
-            console.log('it does note exist in the database');
-            console.log(noteTags[0]);
+            console.log(`the tag ${noteTags[0]} does note exist in the database`);
             const insertNewTagSQL = `
             insert into "tagTable" ("tagName")
             values($1)
             returning*;`;
             db.query(insertNewTagSQL, [noteTags[0]])
               .then(response => {
+                console.log(`the tag ${response.rows[0].tagName} was created and added to database`);
                 const newTagsId = response.rows[0].tagId;
                 const relationsSQL = `
             insert into "tagRelations" ("tagId", "itemId" , "type")
             values ($1, $2, 'note')
             returning*;`;
                 db.query(relationsSQL, [newTagsId, createdNote.noteId])
-                  .then(response => console.log(response.rows))
+                  .then(response => {
+                    console.log(`the tag ${noteTags[0]} was associated with ${response.rows[0].noteId}`);
+                    createdNote.tags.push(noteTags[0]);
+                    console.log(createdNote);
+                  })
                   .catch(err => next(err));
 
               });

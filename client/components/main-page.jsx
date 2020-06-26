@@ -14,7 +14,9 @@ export default function MainPage() {
           <Link to="/notebook" className="notebooks-link">
             <h3>Notebook</h3>
           </Link>
-          <Button outline color="success" className="outline-button">New Note</Button>
+          <Link to="/notes/create">
+            <Button outline color="success" className="outline-button">New Note</Button>
+          </Link>
           <h1 className="title">CODE NOTES</h1>
         </div>
         <div className="main-page-left">

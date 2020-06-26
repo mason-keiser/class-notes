@@ -14,6 +14,35 @@ function NextButton(props) {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
+function Indicator(props) {
+  return (
+    <div className={
+      props.index <= props.activeIndex
+        ? 'flashcard-indicator-focused'
+        : 'flashcard-indicator-unfocused'
+    }
+    key={props.index}>
+      <i className="fa fa-circle mx-1"></i>
+    </div>
+  );
+}
+
+// eslint-disable-next-line no-unused-vars
+function Flashcard(props) {
+  return (
+    <div className={
+      props.index === props.activeIndex
+        ? 'd-flex justify-content-center col-12'
+        : 'd-none'
+    }
+    key={props.index}>
+      <h1 className="flashcard-question">{props.flashcard.question}</h1>
+      <h1 className="flashcard-answer">{props.flashcard.answer}</h1>
+    </div>
+  );
+}
+
 export default class ReviewFlashcards extends React.Component {
   constructor(props) {
     super(props);

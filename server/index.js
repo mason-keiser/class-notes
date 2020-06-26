@@ -163,52 +163,56 @@ app.post('/api/notes', (req, res, next) => {
     .then(response => {
       const createdNote = response.rows[0];
       createdNote.tags = [];
-      const checkForTagsSQL = `
+
+      noteTags.map(currentNoteTag => {
+        const checkForTagsSQL = `
       select "tagId"
       from "tagTable"
       where "tagName" = $1;`;
-      db.query(checkForTagsSQL, [noteTags[0]])
-        .then(response => {
-          if (response.rows[0]) {
-            console.log(`the tag ${noteTags[0]} exists`);
-            const insertIntoRelationsSQL = `
+        db.query(checkForTagsSQL, [currentNoteTag])
+          .then(response => {
+            if (response.rows[0]) {
+              console.log(`the tag ${currentNoteTag} exists`);
+              const insertIntoRelationsSQL = `
             insert into "tagRelations" ("tagId", "itemId" , "type")
             values ($1, $2, 'note')
             returning*;`;
-            db.query(insertIntoRelationsSQL, [response.rows[0].tagId, createdNote.noteId])
-              .then(response => {
-                console.log(`the tag ${noteTags[0]} was associated with noteId ${createdNote.noteId}`);
-                createdNote.tags.push(noteTags[0]);
-              })
-              .catch(err => next(err));
-          } else {
-            console.log(`the tag ${noteTags[0]} does note exist in the database`);
-            const insertNewTagSQL = `
+              db.query(insertIntoRelationsSQL, [response.rows[0].tagId, createdNote.noteId])
+                .then(response => {
+                  console.log(`the tag ${currentNoteTag} was associated with noteId ${createdNote.noteId}`);
+                  createdNote.tags.push(currentNoteTag);
+                })
+                .catch(err => next(err));
+            } else {
+              console.log(`the tag ${currentNoteTag} does note exist in the database`);
+              const insertNewTagSQL = `
             insert into "tagTable" ("tagName")
             values($1)
             returning*;`;
-            db.query(insertNewTagSQL, [noteTags[0]])
-              .then(response => {
-                console.log(`the tag ${response.rows[0].tagName} was created and added to database`);
-                const newTagsId = response.rows[0].tagId;
-                const relationsSQL = `
+              db.query(insertNewTagSQL, [currentNoteTag])
+                .then(response => {
+                  console.log(`the tag ${response.rows[0].tagName} was created and added to database`);
+                  const newTagsId = response.rows[0].tagId;
+                  const relationsSQL = `
             insert into "tagRelations" ("tagId", "itemId" , "type")
             values ($1, $2, 'note')
             returning*;`;
-                db.query(relationsSQL, [newTagsId, createdNote.noteId])
-                  .then(response => {
-                    console.log(`the tag ${noteTags[0]} was associated with ${response.rows[0].noteId}`);
-                    createdNote.tags.push(noteTags[0]);
-                    console.log(createdNote);
-                  })
-                  .catch(err => next(err));
+                  db.query(relationsSQL, [newTagsId, createdNote.noteId])
+                    .then(response => {
+                      console.log(`the tag ${currentNoteTag} was associated with ${response.rows[0].noteId}`);
+                      createdNote.tags.push(currentNoteTag);
+                      console.log(createdNote);
+                    })
+                    .catch(err => next(err));
 
-              });
+                });
 
-          }
+            }
 
-        })
-        .catch(err => next(err));
+          })
+          .catch(err => next(err));
+      });
+
       // res.status(201).json(response.rows[0])
     })
     .catch(err => next(err));

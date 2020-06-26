@@ -1,5 +1,18 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
+
+// eslint-disable-next-line no-unused-vars
+function NextButton(props) {
+  return (
+    <Button>
+      <Link to="#" className="d-flex flex-row align-items-center flashcard-next-button"
+        onClick={props.goToNextFlashcard}>
+          Next
+      </Link>
+    </Button>
+  );
+}
 
 export default class ReviewFlashcards extends React.Component {
   constructor(props) {
@@ -7,11 +20,25 @@ export default class ReviewFlashcards extends React.Component {
     this.state = {
       flashcards: []
     };
+    this.getFlashcards = this.getFlashcards.bind(this);
   }
 
+  // when possible, pass fcDeckId via props to the fetch endpoint
   getFlashcards() {
-    fetch('api/fcItem/1');
+    fetch('api/flashcards/1')
+      .then(response => response.json())
+      .then(flashcardsData => {
+        this.setState(state => ({
+          flashcards: flashcardsData
+        }));
+      })
+      .catch(err => console.error('getFlashcards() fetch failed:', err));
   }
+
+  componentDidMount() {
+    this.getFlashcards();
+  }
+
 }
 
 // export default class NoteList extends React.Component {

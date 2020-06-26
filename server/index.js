@@ -308,7 +308,7 @@ app.get('/api/flashcards', (req, res, next) => {
 });
 
 // CREATE A NEW FLASHCARD
-app.post('/api/fcItem', (req, res, next) => {
+app.post('/api/flashcards', (req, res, next) => {
   if (!req.body.fcQuestion || !req.body.fcAnswer || !req.body.fcDeckId) {
     return res.status(400).json({ error: 'Flashcard information is missing, please make sure to enter all required flashcard data when adding it to the deck.' });
   }

@@ -373,3 +373,12 @@ div.col-2 > h6 {
   font-size: 36px;
   margin-bottom: 0;
 }
+
+/* Review Flashcards */
+.flashcard-review-indicator-focused {
+  opacity: 1;
+}
+
+.flashcard-review-indicator-unfocused {
+  opacity: .3;
+}

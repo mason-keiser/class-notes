@@ -94,9 +94,9 @@ export default class NoteList extends React.Component {
       );
     } else {
       return (
-        <>
-          <h3>Loading</h3>
-        </>
+        <div className="loading">
+          <h3>Loading...</h3>
+        </div>
       );
     }
   }

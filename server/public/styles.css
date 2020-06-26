@@ -228,6 +228,13 @@ div.col-2 > h6 {
   padding: 20px;
 }
 
+.loading {
+  height: 100vh;
+  padding: 45px;
+  background-color: #3F3F3D;
+  color: #24997F;
+}
+
 ::-webkit-scrollbar,
 ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-track {

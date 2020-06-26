@@ -334,6 +334,11 @@ COPY public."fcDeck" ("fcDeckId", "notebookId") FROM stdin;
 
 COPY public."fcItem" ("fcId", "fcQuestion", "fcAnswer", "fcDeckId") FROM stdin;
 1	Question 1	Answer 1	1
+2	what is this flashcard?	It's just a string!	1
+3	what is this flashcard?	It's just a string!	1
+4	what is this flashcard????	It's just a stringhttp -v :3000/api/flashcards/http -v :3000/api/flashcards/	1
+5	What is the question?	I don't know, but this is the answer!	1
+6	What is the question?	I don't know, but this is the answer!	2
 \.
 
 
@@ -343,6 +348,7 @@ COPY public."fcItem" ("fcId", "fcQuestion", "fcAnswer", "fcDeckId") FROM stdin;
 
 COPY public.notebooks ("notebookId", "studentId", "notebookName") FROM stdin;
 1	1	HTML
+2	1	CSS
 \.
 
 
@@ -406,14 +412,14 @@ SELECT pg_catalog.setval('public."fcDeck_fcDeckId_seq"', 1, true);
 -- Name: fcItem_fcId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."fcItem_fcId_seq"', 1, true);
+SELECT pg_catalog.setval('public."fcItem_fcId_seq"', 6, true);
 
 
 --
 -- Name: notebooks_notebookId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."notebooks_notebookId_seq"', 1, true);
+SELECT pg_catalog.setval('public."notebooks_notebookId_seq"', 2, true);
 
 
 --

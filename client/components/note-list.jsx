@@ -25,10 +25,6 @@ export default class NoteList extends React.Component {
     this.state = { notes: [], currentId: null, currentName: '' };
   }
 
-  // handleChange(event) {
-  //   this.setState({currentNotebook: event.target.value})
-  // }
-
   componentDidMount() {
     this.setState({ currentId: 0 });
   }

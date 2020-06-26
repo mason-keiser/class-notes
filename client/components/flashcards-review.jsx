@@ -6,8 +6,25 @@ function NextButton(props) {
   return (
     <Button>
       <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
-        onClick={props.goToNextFlashcard}>
-          Next
+        onClick={() => {
+          props.goToNextFlashcard();
+          props.setSideToQuestion();
+        }}>
+        Next
+      </Link>
+    </Button>
+  );
+}
+
+function BackButton(props) {
+  return (
+    <Button>
+      <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
+        onClick={() => {
+          props.goToPrevFlashcard();
+          props.setSideToQuestion();
+        }}>
+        Back
       </Link>
     </Button>
   );
@@ -33,39 +50,14 @@ function Flashcard(props) {
         ? 'd-flex justify-content-center col-12'
         : 'd-none'
     }
+    onClick={props.setSide}
     key={props.index}>
-      <h1 className="flashcards-review-question">{props.flashcard.fcQuestion}</h1>
-      <h1 className="flashcards-review-answer">{props.flashcard.fcAnswer}</h1>
+      {props.side === 'question'
+        ? <h1 className="flashcards-review-question">{props.flashcard.fcQuestion}</h1>
+        : <h1 className="flashcards-review-answer">{props.flashcard.fcAnswer}</h1>
+      }
     </div>
   );
-}
-
-function Modal(props) {
-  let decrementor = 1;
-  if (props.activeIndex === props.length - 1) {
-    decrementor--;
-    if (decrementor === 0) {
-      return (
-        <div className="flashcards-review-modal-overlay">
-          <div className="flashcards-review-modal-content">
-            <h1>You finished reviewing this deck!  Would you like to start again?</h1>
-            <Button>
-              <Link to="#" className="d-flex flex-row align-items-center flashcard-next-button"
-                onClick={props.goToNextFlashcard}>
-              Yes, start again
-              </Link>
-            </Button>
-            <Button>
-              <Link to="/flashcards" className="d-flex flex-row align-items-center flashcard-out-button">
-              No, take me back to view all decks.
-              </Link>
-            </Button>
-          </div>
-        </div>
-      );
-    }
-  }
-  return null;
 }
 
 export default class FlashcardsReview extends React.Component {
@@ -73,11 +65,14 @@ export default class FlashcardsReview extends React.Component {
     super(props);
     this.state = {
       flashcards: [],
+      side: 'question',
       activeIndex: 0
     };
     this.getFlashcards = this.getFlashcards.bind(this);
+    this.goToPrevFlashcard = this.goToPrevFlashcard.bind(this);
     this.goToNextFlashcard = this.goToNextFlashcard.bind(this);
     this.shuffleFlashcardArray = this.shuffleFlashcardArray.bind(this);
+    this.setSide = this.setSide.bind(this);
   }
 
   // when possible, pass fcDeckId via props to the fetch endpoint
@@ -106,6 +101,20 @@ export default class FlashcardsReview extends React.Component {
     });
   }
 
+  goToPrevFlashcard() {
+    let index = this.state.activeIndex;
+    const length = this.state.flashcards.length;
+    if (index < 1) {
+      this.shuffleFlashcardArray();
+      index = length - 1;
+    } else {
+      index--;
+    }
+    this.setState({
+      activeIndex: index
+    });
+  }
+
   shuffleFlashcardArray() {
     const shuffledArray = this.state.flashcards;
     for (let index = shuffledArray.length - 1; index > 0; index--) {
@@ -117,29 +126,46 @@ export default class FlashcardsReview extends React.Component {
     });
   }
 
+  setSide() {
+    const side = this.state.side;
+    if (side === 'question') {
+      this.setState({
+        side: 'answer'
+      });
+    }
+    if (side === 'answer') {
+      this.setState({
+        side: 'question'
+      });
+    }
+  }
+
+  setSideToQuestion() {
+    this.setState({
+      side: 'question'
+    });
+  }
+
   componentDidMount() {
     this.getFlashcards();
+    this.shuffleFlashcardArray();
   }
 
   render() {
     if (this.state.flashcards === null) {
       return null;
     }
-    const length = this.state.flashcards.length;
     return (
       <div className="flashcard-review-container col-12">
         <div className="flashcard-container col-10 offset-1 d-flex align-items-center justify-content-center">
-          <Modal
-            length={length}
-            activeIndex={this.state.activeIndex}
-            goToNextFlashcard={() => this.goToNextFlashcard()}
-          />
           {this.state.flashcards.map((flashcard, index) =>
             <Flashcard
               key={index}
               index={index}
               activeIndex={this.state.activeIndex}
-              flashcard={flashcard} />
+              flashcard={flashcard}
+              side={this.state.side}
+              setSide={() => this.setSide()} />
           )}
           {this.state.flashcards.map((flashcard, index) =>
             <Indicator
@@ -147,11 +173,13 @@ export default class FlashcardsReview extends React.Component {
               index={index}
               activeIndex={this.state.activeIndex}
               flashcard={flashcard} />
-          // onClick={event => this.showAnswer()} />
-          // in above line, when flashcard is clicked, if question is showing, show answer.  if answer is showing, show next card
           )}
+          <BackButton
+            goToPrevFlashcard={() => this.goToPrevFlashcard()}
+            setSideToQuestion={() => this.setSideToQuestion()} />
           <NextButton
-            goToNextFlashcard={() => this.goToNextFlashcard()} />
+            goToNextFlashcard={() => this.goToNextFlashcard()}
+            setSideToQuestion={() => this.setSideToQuestion()} />
         </div>
       </div>
     );

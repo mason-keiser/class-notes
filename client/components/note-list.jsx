@@ -47,57 +47,64 @@ export default class NoteList extends React.Component {
   }
 
   render() {
-    if (this.state.notes.length) {
-      const notes = this.state.notes;
-      const names = this.props.notebooks;
-      return (
-        <div className="note-list-container d-flex flex-column ">
-          <div className="note-list-container-border">
-            <div className="d-flex flex-row align-items-center justify-content-center mb-5 mt-5">
-              <Form className="col-2">
-                <FormGroup className="mb-0">
-                  <Input type="select" name="notebookName" id="notebookName"
-                    style={{
-                      color: '#24997F',
-                      fontSize: '18px',
-                      fontWeight: 'bold',
-                      border: '1.5px solid #3F3F3D',
-                      backgroundColor: '#333333',
-                      padding: '0 0 0 15px'
-                    }}>
-                    {
-                      names.map(item => {
-                        return (
-                          <option key={item.notebookId}>{item.notebookName}</option>
-                        );
-                      })
-                    }
-                  </Input>
-                </FormGroup>
-              </Form>
-            </div>
-            <div className="col-12 list-container d-flex flex-row flex-wrap justify-content-around ">
-              {
-                notes.map(item => {
-                  return (
-                    <NoteListItem
-                      key={item.noteId}
-                      note={item}
-                      id={item.noteId} />
-                  );
-                })
-              }
-            </div>
-
-          </div>
-        </div>
-      );
-    } else {
+    if (this.state.currentId === null || this.state.currentId === 0) {
       return (
         <div className="loading">
           <h3>Loading...</h3>
         </div>
       );
     }
+    if (!this.state.notes.length) {
+      return (
+        <div className="loading">
+          <h3>Notebook</h3>
+          <h5>You do not have any notebook.</h5>
+          <h5>Please create one.</h5>
+        </div>
+      );
+    }
+    const notes = this.state.notes;
+    const names = this.props.notebooks;
+    return (
+      <div className = "note-list-container d-flex flex-column " >
+        <div className="note-list-container-border">
+          <div className="d-flex flex-row align-items-center justify-content-center mb-5 mt-5">
+            <Form className="col-2">
+              <FormGroup className="mb-0">
+                <Input type="select" name="notebookName" id="notebookName"
+                  style={{
+                    color: '#24997F',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    border: '1.5px solid #3F3F3D',
+                    backgroundColor: '#333333',
+                    padding: '0 0 0 15px'
+                  }}>
+                  {
+                    names.map(item => {
+                      return (
+                        <option key={item.notebookId}>{item.notebookName}</option>
+                      );
+                    })
+                  }
+                </Input>
+              </FormGroup>
+            </Form>
+          </div>
+          <div className="col-12 list-container d-flex flex-row flex-wrap justify-content-around ">
+            {
+              notes.map(item => {
+                return (
+                  <NoteListItem
+                    key={item.noteId}
+                    note={item}
+                    id={item.noteId} />
+                );
+              })
+            }
+          </div>
+        </div>
+      </div>
+    );
   }
 }

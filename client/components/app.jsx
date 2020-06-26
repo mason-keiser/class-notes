@@ -28,7 +28,8 @@ export default class App extends React.Component {
         <Switch>
           <Route path="/" exact component={MainPage}/>
           <Route path="/notebook" exact component={Notebook}/>
-          <Route path="/notes" component={Note}/>
+          <Route path="/notes/create" component={Note}/>
+          <Route path="/notes/:noteId" component={Note} />
           <Route path="/flashcards-review" exact component={FlashcardsReview}/>
         </Switch>
       </Router>

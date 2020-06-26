@@ -178,12 +178,21 @@ div.col-2 > h6 {
 .header-hamburger-icon {
   margin: 0;
 }
+
 .header-search-deco {
   width: 80px;
   border-bottom: 1px solid #24997F;
   height: 20px;
+  border: none;
 }
 
+.header-note-title {
+  background-color: #3F3F3D;
+  color: #24997F;
+  font-size: 40px;
+  line-height: 20px;
+  border: none;
+}
 /* note-list */
 
 .note-list-container {
@@ -286,6 +295,13 @@ div.col-2 > h6 {
   border: 0.5px solid #C4C4C4;
 }
 
+.diff-status {
+  width: 38px;
+  height: 38px;
+  border-radius: 5px;
+  border: 1px solid #C4C4C4;
+}
+
 .diff-1 {
   background-color: #FAEDCA;
 }
@@ -306,12 +322,14 @@ div.col-2 > h6 {
   background-color: #FE5D26;
 }
 
-.diff-status {
-  width: 45px;
-  height: 45px;
+.close-page-button {
+  width: 38px;
+  height: 38px;
   border-radius: 5px;
   background-color: #24997F;
   border: 1px solid #C4C4C4;
+  color:white;
+  font-size: 18px;
 }
 
 .solid-button {
@@ -344,7 +362,6 @@ div.col-2 > h6 {
 
 .resource-link {
   width: 55%;
-  margin-top: 0.5rem;
 }
 
 .cancel-btn {

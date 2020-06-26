@@ -141,10 +141,11 @@ app.get('/api/notes', (req, res, next) => {
 
 app.post('/api/notes', (req, res, next) => {
   if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
-    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
+    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode ||
+    !req.body.noteTags) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
-
+  console.log(req.body.noteTags);
   const noteSQL = `
   insert into "notes" ("notebookId", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode")
   values ($1, $2, $3, $4, $5, $6)
@@ -159,7 +160,22 @@ app.post('/api/notes', (req, res, next) => {
     req.body.noteCode
   ];
   db.query(noteSQL, noteValues)
-    .then(response => res.status(201).json(response.rows[0]))
+    .then(response => {
+      const createdNote = response.rows[0];
+      const checkForTagsSQL = `
+      SELECT exists (SELECT 1 FROM "tagTable" WHERE "tagName" = $1 LIMIT 1);`;
+      db.query(checkForTagsSQL, [req.body.noteTags[0]])
+        .then(response => {
+          if (response.rows[0].exists) {
+            console.log('its here');
+          } else {
+            console.log('it does note exist in the database');
+          }
+
+        })
+        .catch(err => next(err));
+      // res.status(201).json(response.rows[0])
+    })
     .catch(err => next(err));
 });
 

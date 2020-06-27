@@ -32,20 +32,30 @@ function BackButton(props) {
 
 function ProgressBar(props) {
   const percentageIndicator = props.progressBarPercentageIndicator;
-
+  const side = props.side;
+  const index = props.activeIndex;
+  const length = props.flashcards.length;
+  let fillerStyles;
   const containerStyles = {
     height: 10,
     width: '100%',
     backgroundColor: '#3F3F3C'
   };
-
-  const fillerStyles = {
-    height: '100%',
-    width: `${percentageIndicator}%`,
-    backgroundColor: '#24997F',
-    textAlign: 'right'
-  };
-
+  if (side === 'answer' && index === length - 1) {
+    fillerStyles = {
+      height: '100%',
+      width: '100%',
+      backgroundColor: '#24997F',
+      textAlign: 'right'
+    };
+  } else {
+    fillerStyles = {
+      height: '100%',
+      width: `${percentageIndicator}%`,
+      backgroundColor: '#24997F',
+      textAlign: 'right'
+    };
+  }
   return (
     <div style={containerStyles}>
       <div style={fillerStyles}>
@@ -54,18 +64,19 @@ function ProgressBar(props) {
   );
 }
 
-function Indicator(props) {
-  return (
-    <div className={
-      props.index <= props.activeIndex
-        ? 'flashcards-review-indicator-focused'
-        : 'flashcards-review-indicator-unfocused'
-    }
-    key={props.index}>
-      <i className="fa fa-circle mx-1"></i>
-    </div>
-  );
-}
+// keep below code in case it needs to be reused.  remove before production
+// function Indicator(props) {
+//   return (
+//     <div className={
+//       props.index <= props.activeIndex
+//         ? 'flashcards-review-indicator-focused'
+//         : 'flashcards-review-indicator-unfocused'
+//     }
+//     key={props.index}>
+//       <i className="fa fa-circle mx-1"></i>
+//     </div>
+//   );
+// }
 
 function Flashcard(props) {
   return (
@@ -84,4 +95,4 @@ function Flashcard(props) {
   );
 }
 
-export { NextButton, BackButton, Indicator, Flashcard, ProgressBar };
+export { NextButton, BackButton, Flashcard, ProgressBar };

@@ -1,6 +1,6 @@
 import React from 'react';
 import FlashcardsReviewHeader from './flashcards-review-header';
-import { NextButton, BackButton, Indicator, Flashcard, ProgressBar } from './flashcards-review-ui-components';
+import { NextButton, BackButton, Flashcard, ProgressBar } from './flashcards-review-ui-components';
 
 export default class FlashcardsReview extends React.Component {
   constructor(props) {
@@ -119,12 +119,13 @@ export default class FlashcardsReview extends React.Component {
                 side={this.state.side}
                 setSide={() => this.setSide()} />
             )}
+            {/* keep below code in case it needs to be reused.  remove before production
             {this.state.flashcards.map((flashcard, index) =>
               <Indicator
                 key={index}
                 index={index}
                 activeIndex={this.state.activeIndex} />
-            )}
+            )} */}
             <BackButton
               goToPrevFlashcard={() => this.goToPrevFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />
@@ -133,7 +134,10 @@ export default class FlashcardsReview extends React.Component {
               setSideToQuestion={() => this.setSideToQuestion()} />
           </div>
           <ProgressBar
-            progressBarPercentageIndicator={this.progressBarPercentageIndicator()} />
+            progressBarPercentageIndicator={this.progressBarPercentageIndicator()}
+            side={this.state.side}
+            activeIndex={this.state.activeIndex}
+            flashcards={this.state.flashcards} />
         </div>
       </>
     );

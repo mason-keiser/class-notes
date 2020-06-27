@@ -1,6 +1,6 @@
 require('dotenv/config');
 const express = require('express');
-
+const format = require('pg-format');
 const db = require('./database');
 const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
@@ -73,10 +73,6 @@ app.get('/api/notes/:noteId', (req, res, next) => {
   db.query(sql, noteParam)
     .then(result => {
       const note = result.rows[0];
-
-      if (!sql) {
-        next(new ClientError('An unexpected error occurred', 500));
-      }
       if (!note) {
         next(new ClientError(`Cannot find note with "noteId" ${noteId}`, 404));
       } else {
@@ -90,7 +86,6 @@ app.get('/api/notes/:noteId', (req, res, next) => {
         db.query(tagSQL, noteParam)
           .then(result => {
             const data = result.rows;
-
             const tagsArray = [];
             data.map(tag => tagsArray.push(tag.tagName));
             return tagsArray;
@@ -140,15 +135,11 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
 
 app.post('/api/notes', (req, res, next) => {
   if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
-    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
+    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode ||
+    !req.body.noteTags) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
-
-  const noteSQL = `
-  insert into "notes" ("notebookId", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode")
-  values ($1, $2, $3, $4, $5, $6)
-  returning *`;
-
+  const noteTags = req.body.noteTags;
   const noteValues = [
     req.body.notebookId,
     req.body.noteTitle,
@@ -157,8 +148,45 @@ app.post('/api/notes', (req, res, next) => {
     req.body.noteResource,
     req.body.noteCode
   ];
-  db.query(noteSQL, noteValues)
-    .then(response => res.status(201).json(response.rows[0]))
+
+  const tagsArray = [];
+
+  noteTags.map(tag => {
+    const individualTagArray = [];
+    individualTagArray.push(tag);
+    tagsArray.push(individualTagArray);
+
+  });
+
+  const noteSQL = format(`
+    with "insertedNote" as (
+        insert into "notes" ("notebookId", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode")
+        values (%L)
+        returning *
+    ), "insertedTags" as (
+        insert into "tagTable" ("tagName")
+        values %L
+        on conflict ("tagName")
+        do update
+        set "updatedAt" = now()
+        returning*
+    ), "insertedTagRelations" as (
+        insert into "tagRelations" ("itemId", "tagId", "type")
+        select "noteId", "tagId", 'note' as "type"
+        from "insertedNote", "insertedTags"
+        on conflict ("itemId", "tagId", "type")
+        do nothing
+    )
+
+    select "noteId", "notebookId", "noteTitle", "noteContent", "noteDifficulty",
+     "noteResource", "noteCode"  from "insertedNote";`, noteValues, tagsArray);
+
+  db.query(noteSQL)
+    .then(response => {
+      const newNote = response.rows[0];
+      newNote.tags = noteTags;
+      res.status(201).json(response.rows[0]);
+    })
     .catch(err => next(err));
 });
 
@@ -202,10 +230,10 @@ app.put('/api/notes/:noteId', (req, res, next) => {
   }
 
   if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
-    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode) {
+    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode || !req.body.noteTags) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
-
+  const noteTags = req.body.noteTags;
   const newNoteValues = [
     req.body.notebookId,
     req.body.noteTitle,
@@ -215,9 +243,18 @@ app.put('/api/notes/:noteId', (req, res, next) => {
     req.body.noteCode,
     noteId
   ];
+  const tagsArray = [];
 
-  const sql = `
-    update "notes"
+  noteTags.map(tag => {
+    const individualTagArray = [];
+    individualTagArray.push(tag);
+    tagsArray.push(individualTagArray);
+
+  });
+
+  const noteSQL = format(`
+    with "insertedNote" as (
+       update "notes"
        set "notebookId" = $1,
            "noteTitle" = $2,
            "noteContent" = $3,
@@ -225,15 +262,34 @@ app.put('/api/notes/:noteId', (req, res, next) => {
            "noteResource" = $5,
            "noteCode" = $6
      where "noteId" = $7
-    returning*;`;
+    returning*
+    ), "insertedTags" as (
+        insert into "tagTable" ("tagName")
+        values %L
+        on conflict ("tagName")
+        do update
+        set "updatedAt" = now()
+        returning*
+    ), "insertedTagRelations" as (
+        insert into "tagRelations" ("itemId", "tagId", "type")
+        select "noteId", "tagId", 'note' as "type"
+        from "insertedNote", "insertedTags"
+        on conflict ("itemId", "tagId", "type")
+        do nothing
+    )
 
-  db.query(sql, newNoteValues)
+    select "noteId", "notebookId", "noteTitle", "noteContent", "noteDifficulty",
+     "noteResource", "noteCode"  from "insertedNote";`, tagsArray);
+
+  db.query(noteSQL, newNoteValues)
     .then(response => {
       const updatedNote = response.rows[0];
       if (!updatedNote) {
         res.status(404).json({ error: `noteId ${noteId} does not exist` });
       } else {
-        res.status(200).json(response.rows[0]);
+        const returnedNote = response.rows[0];
+        returnedNote.noteTags = noteTags;
+        res.status(200).json(returnedNote);
       }
     })
     .catch(err => next(err));

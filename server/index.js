@@ -1,6 +1,6 @@
 require('dotenv/config');
 const express = require('express');
-
+const format = require('pg-format');
 const db = require('./database');
 const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
@@ -145,11 +145,6 @@ app.post('/api/notes', (req, res, next) => {
     !req.body.noteTags) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
-  const noteTags = req.body.noteTags;
-  const noteSQL = `
-  insert into "notes" ("notebookId", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode")
-  values ($1, $2, $3, $4, $5, $6)
-  returning *`;
 
   const noteValues = [
     req.body.notebookId,
@@ -159,63 +154,40 @@ app.post('/api/notes', (req, res, next) => {
     req.body.noteResource,
     req.body.noteCode
   ];
-  db.query(noteSQL, noteValues)
-    .then(response => {
-      const createdNote = response.rows[0];
-      createdNote.tags = [];
 
-      noteTags.map(currentNoteTag => {
-        const checkForTagsSQL = `
-      select "tagId"
-      from "tagTable"
-      where "tagName" = $1;`;
-        db.query(checkForTagsSQL, [currentNoteTag])
-          .then(response => {
-            if (response.rows[0]) {
-              console.log(`the tag ${currentNoteTag} exists`);
-              const insertIntoRelationsSQL = `
-            insert into "tagRelations" ("tagId", "itemId" , "type")
-            values ($1, $2, 'note')
-            returning*;`;
-              db.query(insertIntoRelationsSQL, [response.rows[0].tagId, createdNote.noteId])
-                .then(response => {
-                  console.log(`the tag ${currentNoteTag} was associated with noteId ${createdNote.noteId}`);
-                  createdNote.tags.push(currentNoteTag);
-                })
-                .catch(err => next(err));
-            } else {
-              console.log(`the tag ${currentNoteTag} does note exist in the database`);
-              const insertNewTagSQL = `
-            insert into "tagTable" ("tagName")
-            values($1)
-            returning*;`;
-              db.query(insertNewTagSQL, [currentNoteTag])
-                .then(response => {
-                  console.log(`the tag ${response.rows[0].tagName} was created and added to database`);
-                  const newTagsId = response.rows[0].tagId;
-                  const relationsSQL = `
-            insert into "tagRelations" ("tagId", "itemId" , "type")
-            values ($1, $2, 'note')
-            returning*;`;
-                  db.query(relationsSQL, [newTagsId, createdNote.noteId])
-                    .then(response => {
-                      console.log(`the tag ${currentNoteTag} was associated with ${createdNote.noteId}`);
+  const tagsArray = [];
 
-                    })
-                    .catch(err => next(err));
+  req.body.noteTags.map(tag => {
+    const individualTagArray = [];
+    individualTagArray.push(tag);
+    tagsArray.push(individualTagArray);
 
-                });
+  });
 
-            }
+  const noteSQL = format(`
+    with "insertedNote" as (
+        insert into "notes" ("notebookId", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode")
+        values (%L)
+        returning *
+    ), "insertedTags" as (
+        insert into "tagTable" ("tagName")
+        values %L
+        on conflict ("tagName")
+        do update
+        set "updatedAt" = now()
+        returning*
+    ), "insertedTagRelations" as (
+        insert into "tagRelations" ("itemId", "tagId", "type")
+        select "noteId", "tagId", 'note' as "type"
+        from "insertedNote", "insertedTags"
+        on conflict ("itemId", "tagId", "type")
+        do nothing
+    )
 
-          })
-          .catch(err => next(err));
-      });
+    select "noteId" from "insertedNote";`, noteValues, tagsArray);
 
-      // console.log(addedTags);
-      // res.status(201).json(createdNote);
-    })
-
+  db.query(noteSQL)
+    .then(response => res.status(201).json(response.rows[0]))
     .catch(err => next(err));
 });
 

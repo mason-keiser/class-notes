@@ -129,11 +129,12 @@ div.col-2 > h6 {
 }
 
 /* header */
+
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 45px;
+  padding: 5px 45px;
   background-color: #3F3F3D;
 }
 
@@ -178,37 +179,42 @@ div.col-2 > h6 {
 .header-hamburger-icon {
   margin: 0;
 }
+
 .header-search-deco {
   width: 80px;
   border-bottom: 1px solid #24997F;
   height: 20px;
+  border: none;
 }
 
+.header-note-title {
+  background-color: #3F3F3D;
+  color: #24997F;
+  font-size: 40px;
+  line-height: 20px;
+  border: none;
+}
 /* note-list */
 
 .note-list-container {
   background-color: #333333;
-  height: 100vh;
-  padding: 30px 30px
-;
+  height: 100%;
+  padding: 30px 30px;
 }
 
 .note-list-container-border {
   width: 100%;
-  padding: 0 8%;
+  padding: 0 5%;
   border: 1.5px solid #3F3F3D;
   border-radius: 5px;
-  max-height: 93vh;
+  max-height: 100vh;
   overflow-y: auto;
-}
-
-.notebook-name {
-  font-size: 30px;
-  color: #24997F
 }
 
 .note-list-item {
   background-color: #333333;
+  width: 30%;
+  height: 60vh;
 }
 
 .note-list-item-body {
@@ -217,21 +223,26 @@ div.col-2 > h6 {
 
 .note-list-item-content {
   color: #FFFFFF;
+  height:100%;
   margin: 22px;
   padding: 10px;
+  font-size: 20px;
+  max-height: 65%;
+  overflow-y: auto;
 }
 
 .note-list-item-title {
   color: #24997F;
   background-color: #3F3F3D;
   font-size: 40px;
-  padding: 23px;
+  padding: 20px;
 }
 
-.note-list-item-content {
-  font-size: 20px;
-  max-height: 200px;
-  overflow-y: auto;
+.loading {
+  height: 100vh;
+  padding: 45px;
+  background-color: #3F3F3D;
+  color: #24997F;
 }
 
 ::-webkit-scrollbar,
@@ -257,20 +268,13 @@ div.col-2 > h6 {
     background-repeat: repeat-y;
     background-size: contain;
 }
-
-
 /* General */
+
 .theme-green {
   color: #24997F;
 }
 
 /* note page */
-
-.note-page-container {
-  height: 100vh;
-  background-color: #333333;
-}
-
 .note-main {
   display: flex;
   color:#24997F;
@@ -285,6 +289,13 @@ div.col-2 > h6 {
   height: 25px;
   border-radius: 50%;
   border: 0.5px solid #C4C4C4;
+}
+
+.diff-status {
+  width: 38px;
+  height: 38px;
+  border-radius: 5px;
+  border: 1px solid #C4C4C4;
 }
 
 .diff-1 {
@@ -307,12 +318,14 @@ div.col-2 > h6 {
   background-color: #FE5D26;
 }
 
-.diff-status {
-  width: 45px;
-  height: 45px;
+.close-page-button {
+  width: 38px;
+  height: 38px;
   border-radius: 5px;
   background-color: #24997F;
   border: 1px solid #C4C4C4;
+  color:white;
+  font-size: 18px;
 }
 
 .solid-button {
@@ -345,7 +358,6 @@ div.col-2 > h6 {
 
 .resource-link {
   width: 55%;
-  margin-top: 0.5rem;
 }
 
 .cancel-btn {
@@ -372,4 +384,119 @@ div.col-2 > h6 {
 .note-font-2 {
   font-size: 36px;
   margin-bottom: 0;
+}
+
+textarea.note-content {
+  height: 40vh;
+  padding: 10px 15px;
+}
+
+.note-page-container {
+  height: 100vh;
+  background-color: #333333;
+
+/* flashcard page */
+.fc-list-container {
+  background-color: #333333;
+  height: 100vh;
+  padding: 30px 30px
+;
+}
+
+.fc-list-container-border {
+  width: 100%;
+  padding: 0 8%;
+  border: 1.5px solid #3F3F3D;
+  border-radius: 5px;
+  max-height: 93vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#notebook-name {
+  font-size: 30px;
+  color: #24997F;
+  margin-bottom: 0em;
+}
+
+#fccard {
+  background-color: #333333;
+  margin-top: 5rem;
+  margin-bottom: 0;
+  border: 1px solid #c4c4c4;
+  width: 500px;
+  height: fit-content;
+  border-radius: 5px;
+}
+
+.fc-list-item {
+  border: 1px solid #3F3F3C;
+  color: white;
+}
+
+.fc-list-item-content {
+  margin-top: 10px;
+  display: flex;
+  flex: column;
+  color:#24997F;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.study-button {
+  color:#24997F;
+  font-size: 20px;
+  width: 140px;
+  height: 45px;
+  padding: 0;
+  background-color: #333333;
+  margin-left: 11rem;
+  margin-bottom: 2rem;
+  align-self: center;
+}
+
+.study-button:hover {
+  background-color: #24997F;
+  border-color: #24997F;
+  color: #3F3F3C;
+}
+
+#cardTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: baseline;
+  background-color: #3F3F3C;
+  height: fit-content;
+}
+
+.q{
+  margin-top: 10px;
+  font-size: larger;
+}
+
+#deckLength {
+  color:#24997F;
+  width: 9rem;
+  margin-left: 4rem;
+
+}
+
+/* Review Flashcards */
+.flashcards-review-indicator-focused {
+  opacity: 1;
+}
+
+.flashcards-review-indicator-unfocused {
+  opacity: .3;
+}
+
+.flashcards-review-modal-overlay {
+  position: absolute;
+  top: 1px;
+  width: 100%;
+  height: 100vh;
+  border: 1px solid black;
 }

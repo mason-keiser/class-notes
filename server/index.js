@@ -121,16 +121,15 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
 });
 
 // GET INFORMATION ABOUT ALL NOTES FOR ALL STUDENTS WITHIN THE NOTES TABLE
-
-app.get('/api/notes', (req, res, next) => {
-  const sql = `
-  select "noteId" , "noteTitle", "noteContent"
-  from "notes";
-  `;
-  db.query(sql)
-    .then(result => res.status(200).json(result.rows))
-    .catch(err => next(err));
-});
+// app.get('/api/notes', (req, res, next) => {
+//   const sql = `
+//   select "noteId" , "noteTitle", "noteContent"
+//   from "notes";
+//   `;
+//   db.query(sql)
+//     .then(result => res.status(200).json(result.rows))
+//     .catch(err => next(err));
+// });
 
 // CREATE A NEW NOTE
 
@@ -347,7 +346,7 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
     );
 });
 
-// USER CAN REVIEW FLASHCARDS
+// USER CAN VIEW ALL FLASHCARDS
 app.get('/api/flashcards', (req, res, next) => {
   const sql = `
   SELECT *
@@ -363,8 +362,30 @@ app.get('/api/flashcards', (req, res, next) => {
     );
 });
 
+// USER CAN REVIEW FLASHCARDS
+app.get('/api/flashcards-review/:fcDeckId', (req, res, next) => {
+  const fcDeckId = parseInt(req.params.fcDeckId);
+  if (!Number.isInteger(fcDeckId) || fcDeckId <= 0) {
+    return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
+  }
+  const sql = `
+  SELECT *
+  FROM "fcDeck"
+  JOIN "fcItem" USING ("fcDeckId")
+  WHERE "fcDeckId" = $1
+  `;
+  const fcDeckIdValue = [fcDeckId];
+  db.query(sql, fcDeckIdValue)
+    .then(result => {
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => next(err,
+      res.status(500).json({ error: 'An unexpected error occurred' }))
+    );
+});
+
 // CREATE A NEW FLASHCARD
-app.post('/api/fcItem', (req, res, next) => {
+app.post('/api/flashcards', (req, res, next) => {
   if (!req.body.fcQuestion || !req.body.fcAnswer || !req.body.fcDeckId) {
     return res.status(400).json({ error: 'Flashcard information is missing, please make sure to enter all required flashcard data when adding it to the deck.' });
   }

@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import MainPage from './main-page';
 import Notebook from './notebook';
 import Note from './note';
+import Flashcards from './flashcards';
+import FlashcardsReview from './flashcards-review';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -28,6 +30,10 @@ export default class App extends React.Component {
           <Route path="/" exact component={MainPage}/>
           <Route path="/notebook" exact component={Notebook}/>
           <Route path="/notes" component={Note}/>
+          <Route path="/flashcards" exact component={Flashcards}/>
+          <Route path="/notes/create" component={Note}/>
+          <Route path="/notes/:noteId" component={Note} />
+          <Route path="/flashcards-review/:fcDeckId" exact component={FlashcardsReview}/>
         </Switch>
       </Router>
     );

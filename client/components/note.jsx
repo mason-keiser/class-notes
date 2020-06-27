@@ -39,6 +39,17 @@ class Note extends React.Component {
     this.setState({ view: viewName });
   }
 
+  deleteNote(noteId) {
+    fetch(`/api/notes/${noteId}`, {
+      method: 'DELETE'
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => console.error(error));
+  }
+
   render() {
     const justifyContent = this.state.view === 'viewNote' || this.state.view === 'createNote'
       ? 'justify-content-between' : 'justify-content-start';
@@ -83,7 +94,13 @@ class Note extends React.Component {
                   className="solid-button ml-4"
                   onClick={() => this.setView('code')}>Code</Button>
               </div>
-              <NoteComponent view={this.state.view} setView={this.setView} resource={note.noteResource} code={note.noteCode}/>
+              <NoteComponent
+                noteId={note.noteId}
+                view={this.state.view}
+                setView={this.setView}
+                resource={note.noteResource}
+                code={note.noteCode}
+                deleteNote={this.deleteNote}/>
             </div>
           </main>
         </div>

@@ -1,65 +1,6 @@
 import React from 'react';
-import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import FlashcardsReviewHeader from './flashcards-review-header';
-
-function NextButton(props) {
-  return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
-      onClick={() => {
-        props.goToNextFlashcard();
-        props.setSideToQuestion();
-      }}>
-      <Button>
-        Next
-      </Button>
-    </Link>
-  );
-}
-
-function BackButton(props) {
-  return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
-      onClick={() => {
-        props.goToPrevFlashcard();
-        props.setSideToQuestion();
-      }}>
-      <Button>
-        Back
-      </Button>
-    </Link>
-  );
-}
-
-function Indicator(props) {
-  return (
-    <div className={
-      props.index <= props.activeIndex
-        ? 'flashcards-review-indicator-focused'
-        : 'flashcards-review-indicator-unfocused'
-    }
-    key={props.index}>
-      <i className="fa fa-circle mx-1"></i>
-    </div>
-  );
-}
-
-function Flashcard(props) {
-  return (
-    <div className={
-      props.index === props.activeIndex
-        ? 'd-flex justify-content-center col-12'
-        : 'd-none'
-    }
-    onClick={props.setSide}
-    key={props.index}>
-      {props.side === 'question'
-        ? <h1 className="flashcards-review-question">{props.flashcard.fcQuestion}</h1>
-        : <h1 className="flashcards-review-answer">{props.flashcard.fcAnswer}</h1>
-      }
-    </div>
-  );
-}
+import { NextButton, BackButton, Indicator, Flashcard, ProgressBar } from './flashcards-review-ui-components';
 
 export default class FlashcardsReview extends React.Component {
   constructor(props) {
@@ -74,6 +15,7 @@ export default class FlashcardsReview extends React.Component {
     this.goToNextFlashcard = this.goToNextFlashcard.bind(this);
     this.shuffleFlashcardArray = this.shuffleFlashcardArray.bind(this);
     this.setSide = this.setSide.bind(this);
+    this.progressBarPercentageIndicator = this.progressBarPercentageIndicator.bind(this);
   }
 
   getFlashcards() {
@@ -86,6 +28,17 @@ export default class FlashcardsReview extends React.Component {
         }));
       })
       .catch(err => console.error('getFlashcards() fetch failed:', err));
+  }
+
+  shuffleFlashcardArray() {
+    const shuffledArray = this.state.flashcards;
+    for (let index = shuffledArray.length - 1; index > 0; index--) {
+      const tempIndex = Math.floor(Math.random() * (index + 1));
+      [shuffledArray[index], shuffledArray[tempIndex]] = [shuffledArray[tempIndex], shuffledArray[index]];
+    }
+    this.setState({
+      flashcards: shuffledArray
+    });
   }
 
   goToNextFlashcard() {
@@ -116,17 +69,6 @@ export default class FlashcardsReview extends React.Component {
     });
   }
 
-  shuffleFlashcardArray() {
-    const shuffledArray = this.state.flashcards;
-    for (let index = shuffledArray.length - 1; index > 0; index--) {
-      const tempIndex = Math.floor(Math.random() * (index + 1));
-      [shuffledArray[index], shuffledArray[tempIndex]] = [shuffledArray[tempIndex], shuffledArray[index]];
-    }
-    this.setState({
-      flashcards: shuffledArray
-    });
-  }
-
   setSide() {
     const side = this.state.side;
     if (side === 'question') {
@@ -145,6 +87,13 @@ export default class FlashcardsReview extends React.Component {
     this.setState({
       side: 'question'
     });
+  }
+
+  progressBarPercentageIndicator(index, length) {
+    index = this.state.activeIndex;
+    length = this.state.flashcards.length;
+    const percentage = (index / length) * 100;
+    return percentage;
   }
 
   componentDidMount() {
@@ -174,8 +123,7 @@ export default class FlashcardsReview extends React.Component {
               <Indicator
                 key={index}
                 index={index}
-                activeIndex={this.state.activeIndex}
-                flashcard={flashcard} />
+                activeIndex={this.state.activeIndex} />
             )}
             <BackButton
               goToPrevFlashcard={() => this.goToPrevFlashcard()}
@@ -184,6 +132,8 @@ export default class FlashcardsReview extends React.Component {
               goToNextFlashcard={() => this.goToNextFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />
           </div>
+          <ProgressBar
+            progressBarPercentageIndicator={this.progressBarPercentageIndicator()} />
         </div>
       </>
     );

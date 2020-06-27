@@ -199,9 +199,8 @@ app.post('/api/notes', (req, res, next) => {
             returning*;`;
                   db.query(relationsSQL, [newTagsId, createdNote.noteId])
                     .then(response => {
-                      console.log(`the tag ${currentNoteTag} was associated with ${response.rows[0].noteId}`);
-                      createdNote.tags.push(currentNoteTag);
-                      console.log(createdNote);
+                      console.log(`the tag ${currentNoteTag} was associated with ${createdNote.noteId}`);
+
                     })
                     .catch(err => next(err));
 
@@ -213,8 +212,10 @@ app.post('/api/notes', (req, res, next) => {
           .catch(err => next(err));
       });
 
-      // res.status(201).json(response.rows[0])
+      // console.log(addedTags);
+      // res.status(201).json(createdNote);
     })
+
     .catch(err => next(err));
 });
 

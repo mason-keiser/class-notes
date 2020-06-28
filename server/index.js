@@ -388,25 +388,53 @@ app.get('/api/flashcards-review/:fcDeckId', (req, res, next) => {
 app.post('/api/flashcards', (req, res, next) => {
   const fcQuestion = req.body.fcQuestion;
   const fcAnswer = req.body.fcAnswer;
-  const fcDeckId = parseInt(req.body.fcDeckId);
-  if (!fcQuestion || !fcAnswer || !fcDeckId) {
+  const fcDeckId = req.body.fcDeckId;
+  const fcTags = req.body.fcTags;
+  if (!fcQuestion || !fcAnswer || !fcDeckId || !fcTags) {
     return res.status(400).json({ error: 'Flashcard information is missing, please make sure to enter all required flashcard data when adding it to the deck.' });
   }
-  if (!Number.isInteger(fcDeckId) || fcDeckId <= 0) {
-    return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
-  }
-  const fcSQL = `
-  insert into "fcItem" ("fcQuestion", "fcAnswer", "fcDeckId")
-  values ($1, $2, $3)
-  returning *
-  `;
+  // if (!Number.isInteger(fcDeckId) || fcDeckId <= 0) {
+  //   return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
+  // }
   const fcValues = [
     fcQuestion,
     fcAnswer,
-    fcDeckId
-  ];
-  db.query(fcSQL, fcValues)
-    .then(response => res.status(201).json(response.rows[0]))
+    fcDeckId];
+
+  const tagsArray = [];
+
+  fcTags.map(tag => {
+    const individualTagArray = [];
+    individualTagArray.push(tag);
+    tagsArray.push(individualTagArray);
+  });
+  const fcSQL = format(`
+  with "insertedFlashcard" as (
+      insert into "fcItem" ("fcQuestion", "fcAnswer", "fcDeckId")
+      values (%L)
+      returning *
+  ), "insertedTags" as (
+    insert into "tagTable" ("tagName")
+    values %L
+    on conflict ("tagName")
+    do update
+    set "updatedAt" = now()
+    returning *
+  ), "insertedTagRelations" as (
+    insert into "tagRelations" ("itemId", "tagId", "type")
+    select "fcId", "tagId", 'fc' as "type"
+    from "insertedFlashcard", "insertedTags"
+    on conflict ("itemId", "tagId", "type")
+    do nothing
+  )
+
+  select "fcId", "fcQuestion", "fcAnswer" from "insertedFlashcard";`, fcValues, tagsArray);
+  db.query(fcSQL)
+    .then(response => {
+      const newFC = response.rows[0];
+      newFC.tags = fcTags;
+      res.status(201).json(response.rows[0]);
+    })
     .catch(err => next(err));
 });
 

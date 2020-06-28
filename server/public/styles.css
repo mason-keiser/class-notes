@@ -394,13 +394,18 @@ textarea.note-content {
 .note-page-container {
   height: 100vh;
   background-color: #333333;
+}
 
+.note-delete {
+  padding: 45px;
+  color: white;
+  background-color: #333333;
+}
 /* flashcard page */
 .fc-list-container {
   background-color: #333333;
   height: 100vh;
-  padding: 30px 30px
-;
+  padding: 30px 30px;
 }
 
 .fc-list-container-border {

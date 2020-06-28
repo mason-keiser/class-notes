@@ -1,6 +1,6 @@
 import React from 'react';
 import FlashcardsReviewHeader from './flashcards-review-header';
-import { NextButton, BackButton, Flashcard, ProgressBar } from './flashcards-review-ui-components';
+import { NextArrow, BackArrow, Flashcard, ProgressBar } from './flashcards-review-ui-components';
 
 export default class FlashcardsReview extends React.Component {
   constructor(props) {
@@ -89,11 +89,16 @@ export default class FlashcardsReview extends React.Component {
     });
   }
 
-  progressBarPercentageIndicator(index, length) {
-    index = this.state.activeIndex;
-    length = this.state.flashcards.length;
-    const percentage = (index / length) * 100;
-    return percentage;
+  progressBarPercentageIndicator() {
+    let index;
+    const length = this.state.flashcards.length;
+    if (this.state.side === 'question') {
+      index = this.state.activeIndex;
+    }
+    if (this.state.side === 'answer') {
+      index = this.state.activeIndex + 1;
+    }
+    return ((index / length) * 100);
   }
 
   componentDidMount() {
@@ -110,6 +115,9 @@ export default class FlashcardsReview extends React.Component {
         <FlashcardsReviewHeader />
         <div className="flashcard-review-container col-12">
           <div className="flashcard-container col-10 offset-1 d-flex align-items-center justify-content-center">
+            <BackArrow
+              goToPrevFlashcard={() => this.goToPrevFlashcard()}
+              setSideToQuestion={() => this.setSideToQuestion()} />
             {this.state.flashcards.map((flashcard, index) =>
               <Flashcard
                 key={index}
@@ -126,17 +134,12 @@ export default class FlashcardsReview extends React.Component {
                 index={index}
                 activeIndex={this.state.activeIndex} />
             )} */}
-            <BackButton
-              goToPrevFlashcard={() => this.goToPrevFlashcard()}
-              setSideToQuestion={() => this.setSideToQuestion()} />
-            <NextButton
+            <NextArrow
               goToNextFlashcard={() => this.goToNextFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />
           </div>
           <ProgressBar
             progressBarPercentageIndicator={this.progressBarPercentageIndicator()}
-            side={this.state.side}
-            activeIndex={this.state.activeIndex}
             flashcards={this.state.flashcards} />
         </div>
       </>

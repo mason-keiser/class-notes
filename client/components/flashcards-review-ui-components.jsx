@@ -1,64 +1,54 @@
 import React from 'react';
-import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-function NextButton(props) {
+function NextArrow(props) {
   return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
+    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-arrow"
+      style={{ textDecoration: 'none' }}
       onClick={() => {
         props.goToNextFlashcard();
         props.setSideToQuestion();
       }}>
-      <Button>
+      <i className="fa fa-angle-right fa-3x text-secondary" aria-hidden="true"></i>
+      {/* <Button>
         Next
-      </Button>
+      </Button> */}
     </Link>
   );
 }
 
-function BackButton(props) {
+function BackArrow(props) {
   return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-button"
+    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-back-arrow"
+      style={{ textDecoration: 'none' }}
       onClick={() => {
         props.goToPrevFlashcard();
         props.setSideToQuestion();
       }}>
-      <Button>
+      <i className="fa fa-angle-left fa-3x text-secondary" aria-hidden="true"></i>
+      {/* <Button>
         Back
-      </Button>
+      </Button> */}
     </Link>
   );
 }
 
 function ProgressBar(props) {
   const percentageIndicator = props.progressBarPercentageIndicator;
-  const side = props.side;
-  const index = props.activeIndex;
-  const length = props.flashcards.length;
-  let fillerStyles;
-  const containerStyles = {
+  const containerStyling = {
     height: 10,
     width: '100%',
-    backgroundColor: '#3F3F3C'
+    backgroundColor: '#3F3F3D'
   };
-  if (side === 'answer' && index === length - 1) {
-    fillerStyles = {
-      height: '100%',
-      width: '100%',
-      backgroundColor: '#24997F',
-      textAlign: 'right'
-    };
-  } else {
-    fillerStyles = {
-      height: '100%',
-      width: `${percentageIndicator}%`,
-      backgroundColor: '#24997F',
-      textAlign: 'right'
-    };
-  }
+  const fillerStyling = {
+    height: '100%',
+    width: `${percentageIndicator}%`,
+    backgroundColor: '#24997F',
+    textAlign: 'right'
+  };
   return (
-    <div style={containerStyles}>
-      <div style={fillerStyles}>
+    <div className="progress-bar-container" style={containerStyling}>
+      <div style={fillerStyling}>
       </div>
     </div>
   );
@@ -82,7 +72,7 @@ function Flashcard(props) {
   return (
     <div className={
       props.index === props.activeIndex
-        ? 'd-flex justify-content-center col-12'
+        ? 'flashcards-review-flashcard d-flex justify-content-center align-items-center col-12'
         : 'd-none'
     }
     onClick={props.setSide}
@@ -95,4 +85,4 @@ function Flashcard(props) {
   );
 }
 
-export { NextButton, BackButton, Flashcard, ProgressBar };
+export { NextArrow, BackArrow, Flashcard, ProgressBar };

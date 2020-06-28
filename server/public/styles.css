@@ -493,10 +493,36 @@ textarea.note-content {
   opacity: .3;
 }
 
-.flashcards-review-modal-overlay {
-  position: absolute;
-  top: 1px;
+.flashcard-review-container {
   width: 100%;
   height: 100vh;
+  background-color: #333333;
+}
+
+.flashcard-container {
+  top: 10%;
+  height: 60%;
+  width: 100%;
+}
+
+.flashcards-review-flashcard {
   border: 1px solid black;
+  height: 100%;
+  color: #24997F;
+  background-color: #333333;
+}
+
+.flashcards-review-next-arrow:hover, .flashcards-review-back-arrow:hover {
+  opacity: .5;
+}
+
+.flashcards-review-flashcard:hover {
+  cursor: pointer;
+  opacity: .7;
+  background-color: #3F3F3D;
+}
+
+.progress-bar-container {
+  position: relative;
+  top: 11%;
 }

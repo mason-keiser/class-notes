@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, FormGroup, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
 
 function NoteListItem(props) {
   const noteListItem = props.note;
@@ -45,17 +45,20 @@ export default class NoteList extends React.Component {
   render() {
     if (this.state.currentId === null || this.state.currentId === 0) {
       return (
-        <div className="loading">
-          <h3>Loading...</h3>
+        <div className="note-page-container loading">
+          <h3 className="note-font-2">Loading...</h3>
         </div>
       );
     }
     if (!this.state.notes.length) {
       return (
-        <div className="loading">
-          <h3>Notebook</h3>
-          <h5>You do not have any notebook.</h5>
-          <h5>Please create one.</h5>
+        <div className="note-page-container loading">
+          <h3 className="note-font-2 mb-4">Notebook</h3>
+          <h5 className="color-white">You do not have any notebook.</h5>
+          <h5 className="color-white">Please create one.</h5>
+          <Link to="/notes/create">
+            <Button outline className="header-outline-button mt-4">New Note</Button>
+          </Link>
         </div>
       );
     }

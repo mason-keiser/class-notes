@@ -15,10 +15,9 @@ export default class NoteHeader extends React.Component {
     return (
       <header className="header-container d-flex flex-row justify-content-between">
         <div className="d-flex flex-row align-items-center">
-          <Link to="/" className="d-flex flex-row align-items-center">
+          <Link to="/" className="d-flex flex-row align-items-center col-1">
             <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i>
           </Link>
-          {/* <h3 className="ml-5 note-font-2 theme-green align-items-center">Enter Note Title</h3> */}
           <Form className="ml-5">
             <FormGroup className="mb-0">
               <Label for="noteTile"></Label>
@@ -26,7 +25,7 @@ export default class NoteHeader extends React.Component {
             </FormGroup>
           </Form>
         </div>
-        <div className="d-flex flex-row align-items-center justify-content-between header-right-container">
+        <div className="d-flex flex-row align-items-center justify-content-between col-2">
           <Form>
             <Input type="select" name="noteTags" id="noteTags">
               <option defaultValue>Note Tag</option>

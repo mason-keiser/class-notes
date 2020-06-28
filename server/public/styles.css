@@ -500,13 +500,13 @@ textarea.note-content {
 }
 
 .flashcard-container {
-  top: 10%;
-  height: 60%;
+  top: 7%;
+  height: 80%;
   width: 100%;
 }
 
 .flashcards-review-flashcard {
-  border: 1px solid black;
+  border: 3px solid #3F3F3D;
   height: 100%;
   color: #24997F;
   background-color: #333333;
@@ -524,5 +524,5 @@ textarea.note-content {
 
 .progress-bar-container {
   position: relative;
-  top: 11%;
+  top: 10%;
 }

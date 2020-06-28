@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function NextArrow(props) {
   return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-arrow"
+    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-arrow ml-5"
       style={{ textDecoration: 'none' }}
       onClick={() => {
         props.goToNextFlashcard();
@@ -19,7 +19,7 @@ function NextArrow(props) {
 
 function BackArrow(props) {
   return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-back-arrow"
+    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-back-arrow mr-5"
       style={{ textDecoration: 'none' }}
       onClick={() => {
         props.goToPrevFlashcard();

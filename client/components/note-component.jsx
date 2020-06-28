@@ -7,7 +7,7 @@ class NoteComponent extends React.Component {
       return (
         <div className="d-flex flex-row align-items-center justify-content-center">
           <Button className="solid-button">Update</Button>
-          <Button className="solid-button ml-5">Delete</Button>
+          <Button className="solid-button ml-5" onClick={() => this.props.deleteNote(this.props.noteId)}>Delete</Button>
         </div>
       );
     } else if (this.props.view === 'createNote') {

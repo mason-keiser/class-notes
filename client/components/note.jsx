@@ -2,13 +2,14 @@ import React from 'react';
 import NoteHeader from './note-header';
 import NoteComponent from './note-component';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Note extends React.Component {
   constructor(props) {
     super(props);
     this.state = { note: null, view: 'viewNote' };
     this.setView = this.setView.bind(this);
+    this.deleteNote = this.deleteNote.bind(this);
   }
 
   componentDidMount() {
@@ -39,14 +40,37 @@ class Note extends React.Component {
     this.setState({ view: viewName });
   }
 
+  deleteNote(noteId) {
+    fetch(`/api/notes/${noteId}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        this.setState({ view: 'deleteSuccess' });
+      })
+      .catch(error => console.error(error));
+  }
+
   render() {
+    if (this.state.view === 'deleteSuccess') {
+      return (
+        <div className="note-page-container">
+          <NoteHeader />
+          <div className="note-delete">
+            <h3>Your note has been deleted.</h3>
+            <Link to="/notebook" className="notebooks-link">
+              <Button className="solid-button mt-4">Back</Button>
+            </Link>
+          </div>
+        </div>
+      );
+    }
     const justifyContent = this.state.view === 'viewNote' || this.state.view === 'createNote'
       ? 'justify-content-between' : 'justify-content-start';
     const note = this.state.note;
     return note === null ? (null)
       : (
         <div className="note-page-container">
-          <NoteHeader view={this.state.view} tags={note.tags} difficulty={note.noteDifficulty} title={note.noteTitle}/>
+          <NoteHeader view={this.state.view} tags={note.tags} difficulty={note.noteDifficulty} title={note.noteTitle} />
           <main className="note-main">
             <div className="note-left-component col-6">
               <div className="d-flex flex-row align-items-center mb-4">
@@ -83,7 +107,13 @@ class Note extends React.Component {
                   className="solid-button ml-4"
                   onClick={() => this.setView('code')}>Code</Button>
               </div>
-              <NoteComponent view={this.state.view} setView={this.setView} resource={note.noteResource} code={note.noteCode}/>
+              <NoteComponent
+                noteId={note.noteId}
+                view={this.state.view}
+                setView={this.setView}
+                resource={note.noteResource}
+                code={note.noteCode}
+                deleteNote={this.deleteNote} />
             </div>
           </main>
         </div>

@@ -389,6 +389,9 @@ app.post('/api/flashcards', (req, res, next) => {
   if (!req.body.fcQuestion || !req.body.fcAnswer || !req.body.fcDeckId) {
     return res.status(400).json({ error: 'Flashcard information is missing, please make sure to enter all required flashcard data when adding it to the deck.' });
   }
+  if (!Number.isInteger(req.body.fcDeckId) || req.body.fcDeckId <= 0) {
+    return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
+  }
   const fcSQL = `
   insert into "fcItem" ("fcQuestion", "fcAnswer", "fcDeckId")
   values ($1, $2, $3)
@@ -400,6 +403,28 @@ app.post('/api/flashcards', (req, res, next) => {
     parseInt(req.body.fcDeckId)
   ];
   db.query(fcSQL, fcValues)
+    .then(response => res.status(201).json(response.rows[0]))
+    .catch(err => next(err));
+});
+
+// CREATE A NEW NOTEBOOK
+app.post('/api/notebooks', (req, res, next) => {
+  if (!req.body.studentId || !req.body.notebookName) {
+    return res.status(400).json({ error: 'Notebook information is missing, please make sure to enter all required notebook data when creating it.' });
+  }
+  if (!Number.isInteger(req.body.studentId) || req.body.studentId <= 0) {
+    return res.status(400).json({ error: '"studentId" must be a positive integer' });
+  }
+  const createNotebookSQL = `
+  insert into "notebooks" ("studentId", "notebookName")
+  values ($1, $2)
+  returning *
+  `;
+  const createNotebookValues = [
+    parseInt(req.body.studentId),
+    req.body.notebookName
+  ];
+  db.query(createNotebookSQL, createNotebookValues)
     .then(response => res.status(201).json(response.rows[0]))
     .catch(err => next(err));
 });

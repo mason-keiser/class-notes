@@ -337,11 +337,6 @@ COPY public."fcDeck" ("fcDeckId", "notebookId") FROM stdin;
 
 COPY public."fcItem" ("fcId", "fcQuestion", "fcAnswer", "fcDeckId") FROM stdin;
 1	Question 1	Answer 1	1
-2	what is this flashcard?	It's just a string!	1
-3	what is this flashcard?	It's just a string!	1
-4	what is this flashcard????	It's just a stringhttp -v :3000/api/flashcards/http -v :3000/api/flashcards/	1
-5	What is the question?	I don't know, but this is the answer!	1
-6	What is the question?	I don't know, but this is the answer!	2
 \.
 
 
@@ -351,7 +346,6 @@ COPY public."fcItem" ("fcId", "fcQuestion", "fcAnswer", "fcDeckId") FROM stdin;
 
 COPY public.notebooks ("notebookId", "studentId", "notebookName") FROM stdin;
 1	1	HTML
-2	1	CSS
 \.
 
 
@@ -360,7 +354,6 @@ COPY public.notebooks ("notebookId", "studentId", "notebookName") FROM stdin;
 --
 
 COPY public.notes ("noteId", "notebookId", "createdAt", "noteTitle", "noteContent", "noteDifficulty", "noteResource", "noteCode") FROM stdin;
-
 2	1	2020-06-23 20:19:45.649218+00	HTML DOM Traversal	Here is the content for the note	5	[{"link": "www.github.com", "name": "Github Link"}, {"link": "www.youtube.com", "name": "youtube link"}]	[{"css": "filler", "html": "filler", "javascript": "filler"}]
 3	1	2020-06-25 01:11:54.997341+00	JavaScript	Kogi drinking vinegar +1, meggings pinterest tacos pork belly lumbersexual copper mug chartreuse. Kickstarter coloring book celiac typewriter keffiyeh. Hexagon enamel pin chartreuse, iPhone ennui listicle viral 8-bit bitters direct trade messenger bag austin tbh seitan. Sriracha master cleanse chambray, irony polaroid migas DIY neutra salvia meditation four loko. Umami drinking vinegar man bun schlitz hashtag iPhone meh sartorial raclette fixie fanny pack quinoa. Vinyl lumbersexual paleo la croix disrupt tattooed pinterest asymmetrical vice hell of gentrify four loko.	5	[{"link": "https://en.wikipedia.org/wiki/Detective_Story_Magazine", "name": "Detective Story Wikipedia Article"}]	{"css": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "html": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "javascript": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler "}
 4	1	2020-06-25 01:12:13.286173+00	JavaScript	Kogi drinking vinegar +1, meggings pinterest tacos pork belly lumbersexual copper mug chartreuse. Kickstarter coloring book celiac typewriter keffiyeh. Hexagon enamel pin chartreuse, iPhone ennui listicle viral 8-bit bitters direct trade messenger bag austin tbh seitan. Sriracha master cleanse chambray, irony polaroid migas DIY neutra salvia meditation four loko. Umami drinking vinegar man bun schlitz hashtag iPhone meh sartorial raclette fixie fanny pack quinoa. Vinyl lumbersexual paleo la croix disrupt tattooed pinterest asymmetrical vice hell of gentrify four loko.	5	[{"link": "https://en.wikipedia.org/wiki/Detective_Story_Magazine", "name": "Detective Story Wikipedia Article"}]	{"css": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "html": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "javascript": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler "}
@@ -370,9 +363,9 @@ COPY public.notes ("noteId", "notebookId", "createdAt", "noteTitle", "noteConten
 8	1	2020-06-25 01:12:42.752996+00	JavaScript	Kogi drinking vinegar +1, meggings pinterest tacos pork belly lumbersexual copper mug chartreuse. Kickstarter coloring book celiac typewriter keffiyeh. Hexagon enamel pin chartreuse, iPhone ennui listicle viral 8-bit bitters direct trade messenger bag austin tbh seitan. Sriracha master cleanse chambray, irony polaroid migas DIY neutra salvia meditation four loko. Umami drinking vinegar man bun schlitz hashtag iPhone meh sartorial raclette fixie fanny pack quinoa. Vinyl lumbersexual paleo la croix disrupt tattooed pinterest asymmetrical vice hell of gentrify four loko.	5	[{"link": "https://en.wikipedia.org/wiki/Detective_Story_Magazine", "name": "Detective Story Wikipedia Article"}]	{"css": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "html": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "javascript": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler "}
 9	1	2020-06-25 01:12:45.854377+00	JavaScript	Kogi drinking vinegar +1, meggings pinterest tacos pork belly lumbersexual copper mug chartreuse. Kickstarter coloring book celiac typewriter keffiyeh. Hexagon enamel pin chartreuse, iPhone ennui listicle viral 8-bit bitters direct trade messenger bag austin tbh seitan. Sriracha master cleanse chambray, irony polaroid migas DIY neutra salvia meditation four loko. Umami drinking vinegar man bun schlitz hashtag iPhone meh sartorial raclette fixie fanny pack quinoa. Vinyl lumbersexual paleo la croix disrupt tattooed pinterest asymmetrical vice hell of gentrify four loko.	5	[{"link": "https://en.wikipedia.org/wiki/Detective_Story_Magazine", "name": "Detective Story Wikipedia Article"}]	{"css": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "html": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "javascript": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler "}
 10	1	2020-06-25 01:54:43.121954+00	JavaScript	Kogi drinking vinegar +1, meggings pinterest tacos pork belly lumbersexual copper mug chartreuse. Kickstarter coloring book celiac typewriter keffiyeh. Hexagon enamel pin chartreuse, iPhone ennui listicle viral 8-bit bitters direct trade messenger bag austin tbh seitan. Sriracha master cleanse chambray, irony polaroid migas DIY neutra salvia meditation four loko. Umami drinking vinegar man bun schlitz hashtag iPhone meh sartorial raclette fixie fanny pack quinoa. Vinyl lumbersexual paleo la croix disrupt tattooed pinterest asymmetrical vice hell of gentrify four loko. filler filler filler filler filler filler fillerr filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler friller filler filler filler filler filler filler filler filler filler filler	5	[{"link": "https://en.wikipedia.org/wiki/Detective_Story_Magazine", "name": "Detective Story Wikipedia Article"}]	{"css": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "html": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "javascript": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler "}
-1	1	2020-06-23 20:18:17.54502+00	Testing Note Update	some note content for you	2	[{"link": "www.youtube.com", "name": "youTube"}]	{"css": "css content", "html": "html content", "javascript": "javascript content"}
+1	1	2020-06-23 20:18:17.54502+00	Testing Note Update	HTML Content	2	[{"link": "www.youtube.com", "name": "youTube"}]	{"css": "css content", "html": "html content", "javascript": "javascript content"}
 11	1	2020-06-25 01:57:20.334361+00	JavaScript	Kogi drinking vinegar +1, meggings pinterest tacos pork belly lumbersexual copper mug chartreuse. Kickstarter coloring book celiac typewriter keffiyeh. Hexagon enamel pin chartreuse, iPhone ennui listicle viral 8-bit bitters direct trade messenger bag austin tbh seitan. Sriracha master cleanse chambray, irony polaroid migas DIY neutra salvia meditation four loko. Umami drinking vinegar man bun schlitz hashtag iPhone meh sartorial raclette fixie fanny pack quinoa. Vinyl lumbersexual paleo la croix disrupt tattooed pinterest asymmetrical vice hell of gentrify four loko.	5	[{"link": "https://en.wikipedia.org/wiki/Detective_Story_Magazine", "name": "Detective Story Wikipedia Article"}]	{"css": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "html": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler ", "javascript": "filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler "}
-
+17	1	2020-06-28 22:02:22.561273+00	Testing Note Update	HTML Content	2	[{"link": "www.youtube.com", "name": "youTube"}]	{"css": "css content", "html": "html content", "javascript": "javascript content"}
 \.
 
 
@@ -396,6 +389,10 @@ COPY public."tagRelations" ("itemId", type, "tagId") FROM stdin;
 1	note	6
 1	note	7
 1	note	26
+17	note	1
+17	note	6
+17	note	7
+17	note	26
 \.
 
 
@@ -405,10 +402,10 @@ COPY public."tagRelations" ("itemId", type, "tagId") FROM stdin;
 
 COPY public."tagTable" ("tagId", "tagName", "updatedAt") FROM stdin;
 2	CSS rule declarations	2020-06-27 18:20:33.590789+00
-1	HTML	2020-06-27 23:15:28.136503+00
-6	variables	2020-06-27 23:15:28.136503+00
-7	javascript	2020-06-27 23:15:28.136503+00
-26	CSS	2020-06-27 23:15:28.136503+00
+1	HTML	2020-06-28 22:02:22.561273+00
+6	variables	2020-06-28 22:02:22.561273+00
+7	javascript	2020-06-28 22:02:22.561273+00
+26	CSS	2020-06-28 22:02:22.561273+00
 \.
 
 
@@ -423,21 +420,21 @@ SELECT pg_catalog.setval('public."fcDeck_fcDeckId_seq"', 1, true);
 -- Name: fcItem_fcId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."fcItem_fcId_seq"', 6, true);
+SELECT pg_catalog.setval('public."fcItem_fcId_seq"', 1, true);
 
 
 --
 -- Name: notebooks_notebookId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."notebooks_notebookId_seq"', 2, true);
+SELECT pg_catalog.setval('public."notebooks_notebookId_seq"', 1, true);
 
 
 --
 -- Name: notes_noteId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."notes_noteId_seq"', 16, true);
+SELECT pg_catalog.setval('public."notes_noteId_seq"', 17, true);
 
 
 --
@@ -451,7 +448,7 @@ SELECT pg_catalog.setval('public."students_studentId_seq"', 1, true);
 -- Name: tagTable_tagId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."tagTable_tagId_seq"', 30, true);
+SELECT pg_catalog.setval('public."tagTable_tagId_seq"', 38, true);
 
 
 --

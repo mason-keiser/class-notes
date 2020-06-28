@@ -386,8 +386,14 @@ app.get('/api/flashcards-review/:fcDeckId', (req, res, next) => {
 
 // CREATE A NEW FLASHCARD
 app.post('/api/flashcards', (req, res, next) => {
-  if (!req.body.fcQuestion || !req.body.fcAnswer || !req.body.fcDeckId) {
+  const fcQuestion = req.body.fcQuestion;
+  const fcAnswer = req.body.fcAnswer;
+  const fcDeckId = parseInt(req.body.fcDeckId);
+  if (!fcQuestion || !fcAnswer || !fcDeckId) {
     return res.status(400).json({ error: 'Flashcard information is missing, please make sure to enter all required flashcard data when adding it to the deck.' });
+  }
+  if (!Number.isInteger(fcDeckId) || fcDeckId <= 0) {
+    return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
   }
   const fcSQL = `
   insert into "fcItem" ("fcQuestion", "fcAnswer", "fcDeckId")
@@ -395,11 +401,35 @@ app.post('/api/flashcards', (req, res, next) => {
   returning *
   `;
   const fcValues = [
-    req.body.fcQuestion,
-    req.body.fcAnswer,
-    parseInt(req.body.fcDeckId)
+    fcQuestion,
+    fcAnswer,
+    fcDeckId
   ];
   db.query(fcSQL, fcValues)
+    .then(response => res.status(201).json(response.rows[0]))
+    .catch(err => next(err));
+});
+
+// CREATE A NEW NOTEBOOK
+app.post('/api/notebooks', (req, res, next) => {
+  const studentId = parseInt(req.body.studentId);
+  const notebookName = req.body.notebookName;
+  if (!studentId || !notebookName) {
+    return res.status(400).json({ error: 'Notebook information is missing, please make sure to enter all required notebook data when creating it.' });
+  }
+  if (!Number.isInteger(studentId) || studentId <= 0) {
+    return res.status(400).json({ error: '"studentId" must be a positive integer' });
+  }
+  const createNotebookSQL = `
+  insert into "notebooks" ("studentId", "notebookName")
+  values ($1, $2)
+  returning *
+  `;
+  const createNotebookValues = [
+    studentId,
+    notebookName
+  ];
+  db.query(createNotebookSQL, createNotebookValues)
     .then(response => res.status(201).json(response.rows[0]))
     .catch(err => next(err));
 });

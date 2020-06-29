@@ -439,6 +439,9 @@ app.post('/api/flashcards', (req, res, next) => {
 });
 
 // USER CAN SEARCH FLASHCARDS BY A SINGLE TAG, NOT CASE SENSITIVE
+// Note: can make this more robust by only showing flashcards from a certain deckId
+// Note: can make this more robust by only showing flashcards from a certain deckId
+//   and student Id
 app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
   const fcTag = req.params.fcTag;
   const fcTagSearchSQL = `

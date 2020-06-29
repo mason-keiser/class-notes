@@ -108,7 +108,6 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
   if (!Number.isInteger(notebookId) || notebookId <= 0) {
     return res.status(400).json({ error: 'notebookId must be a positive integer' });
   }
-
   const sql = `
   select "notes"."noteTitle", "notes"."noteContent","notes"."noteId"
   from "notes"
@@ -335,15 +334,32 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
   const id = [fcId];
   db.query(sql, id)
     .then(result => {
-      if (!result.rows[0]) {
-        return res.status(404).json({ error: `Cannot find flashcard with given "fcId" ${fcId}` });
+      const fc = result.rows[0];
+      if (!fc) {
+        next(new ClientError(`Cannot find flashcard with "fcId" ${fcId}`, 404));
       } else {
-        return res.status(200).json(result.rows[0]);
+        const tagSQL = `
+        select "tagRelations"."itemId", "tagRelations"."type", "tagTable"."tagName"
+        from "tagRelations"
+        join "tagTable" using ("tagId")
+        where "tagRelations"."itemId" = $1
+        and "tagRelations"."type" = 'fc';
+        `;
+        db.query(tagSQL, id)
+          .then(result => {
+            const data = result.rows;
+            const tagsArray = [];
+            data.map(tag => tagsArray.push(tag.tagName));
+            return tagsArray;
+          })
+          .then(tagsArray => {
+            fc.fcTags = tagsArray;
+            res.status(200).json(fc);
+          })
+          .catch(err => next(err));
       }
     })
-    .catch(err => next(err,
-      res.status(500).json({ error: 'An unexpected error occurred' }))
-    );
+    .catch(err => next(err));
 });
 
 // USER CAN VIEW ALL FLASHCARDS
@@ -431,8 +447,8 @@ app.post('/api/flashcards', (req, res, next) => {
   select "fcId", "fcQuestion", "fcAnswer" from "insertedFlashcard";`, fcValues, tagsArray);
   db.query(fcSQL)
     .then(response => {
-      const newFC = response.rows[0];
-      newFC.tags = fcTags;
+      const newFc = response.rows[0];
+      newFc.tags = fcTags;
       res.status(201).json(response.rows[0]);
     })
     .catch(err => next(err));
@@ -449,7 +465,7 @@ app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
     FROM "fcItem"
     JOIN "tagRelations" ON "fcItem"."fcId" = "tagRelations"."itemId"
     JOIN "tagTable" using ("tagId")
-    WHERE lower("tagTable"."tagName") LIKE lower($1)
+    WHERE lower("tagTable"."tagName") LIKE LOWER($1)
   `;
   const fcTagValue = [fcTag];
   db.query(fcTagSearchSQL, fcTagValue)

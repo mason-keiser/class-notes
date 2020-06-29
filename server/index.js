@@ -108,7 +108,6 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
   if (!Number.isInteger(notebookId) || notebookId <= 0) {
     return res.status(400).json({ error: 'notebookId must be a positive integer' });
   }
-
   const sql = `
   select "notes"."noteTitle", "notes"."noteContent","notes"."noteId"
   from "notes"
@@ -354,7 +353,7 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
             return tagsArray;
           })
           .then(tagsArray => {
-            fc.noteTags = tagsArray;
+            fc.fcTags = tagsArray;
             res.status(200).json(fc);
           })
           .catch(err => next(err));
@@ -448,8 +447,8 @@ app.post('/api/flashcards', (req, res, next) => {
   select "fcId", "fcQuestion", "fcAnswer" from "insertedFlashcard";`, fcValues, tagsArray);
   db.query(fcSQL)
     .then(response => {
-      const newFC = response.rows[0];
-      newFC.tags = fcTags;
+      const newFc = response.rows[0];
+      newFc.tags = fcTags;
       res.status(201).json(response.rows[0]);
     })
     .catch(err => next(err));
@@ -466,7 +465,7 @@ app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
     FROM "fcItem"
     JOIN "tagRelations" ON "fcItem"."fcId" = "tagRelations"."itemId"
     JOIN "tagTable" using ("tagId")
-    WHERE lower("tagTable"."tagName") LIKE lower($1)
+    WHERE lower("tagTable"."tagName") LIKE LOWER($1)
   `;
   const fcTagValue = [fcTag];
   db.query(fcTagSearchSQL, fcTagValue)

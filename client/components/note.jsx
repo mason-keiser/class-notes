@@ -108,7 +108,6 @@ class Note extends React.Component {
     const justifyContent = this.state.view === 'viewNote' || this.state.view === 'createNote'
       ? 'justify-content-between' : 'justify-content-start';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
-
     if (view === 'deleteSuccess') {
       return (
         <>

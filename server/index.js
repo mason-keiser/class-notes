@@ -393,9 +393,9 @@ app.post('/api/flashcards', (req, res, next) => {
   if (!fcQuestion || !fcAnswer || !fcDeckId || !fcTags) {
     return res.status(400).json({ error: 'Flashcard information is missing, please make sure to enter all required flashcard data when adding it to the deck.' });
   }
-  // if (!Number.isInteger(fcDeckId) || fcDeckId <= 0) {
-  //   return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
-  // }
+  if (!Number.isInteger(fcDeckId) || fcDeckId <= 0) {
+    return res.status(400).json({ error: '"fcDeckId" must be a positive integer' });
+  }
   const fcValues = [
     fcQuestion,
     fcAnswer,
@@ -436,6 +436,34 @@ app.post('/api/flashcards', (req, res, next) => {
       res.status(201).json(response.rows[0]);
     })
     .catch(err => next(err));
+});
+
+// USER CAN SEARCH FLASHCARDS BY A SINGLE TAG, NOT CASE SENSITIVE
+// Note: can make this more robust by only showing flashcards from a certain deckId
+// Note: can make this more robust by only showing flashcards from a certain deckId
+//   and student Id
+app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
+  const fcTag = req.params.fcTag;
+  const fcTagSearchSQL = `
+  SELECT "fcItem"."fcId", "fcItem"."fcQuestion", "fcItem"."fcAnswer", "tagTable"."tagName"
+    FROM "fcItem"
+    JOIN "tagRelations" ON "fcItem"."fcId" = "tagRelations"."itemId"
+    JOIN "tagTable" using ("tagId")
+    WHERE lower("tagTable"."tagName") LIKE lower($1)
+  `;
+  const fcTagValue = [fcTag];
+  db.query(fcTagSearchSQL, fcTagValue)
+    .then(result => {
+      if (!result.rows[0]) {
+        return res.status(404).json({ error: `Cannot find flashcard with "fcTag" ${fcTag}` });
+      } else {
+        return res.status(200).json(result.rows);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
 });
 
 // CREATE A NEW NOTEBOOK

@@ -442,6 +442,7 @@ app.post('/api/flashcards', (req, res, next) => {
 // Note: can make this more robust by only showing flashcards from a certain deckId
 // Note: can make this more robust by only showing flashcards from a certain deckId
 //   and student Id
+//     WHERE lower("tagTable"."tagName") LIKE lower($1)
 app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
   const fcTag = req.params.fcTag;
   const fcTagSearchSQL = `
@@ -449,8 +450,8 @@ app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
     FROM "fcItem"
     JOIN "tagRelations" ON "fcItem"."fcId" = "tagRelations"."itemId"
     JOIN "tagTable" using ("tagId")
-    WHERE lower("tagTable"."tagName") LIKE lower($1)
-  `;
+    WHERE to_tsvector("tagName") @@ to_tsquery($1)
+    `;
   const fcTagValue = [fcTag];
   db.query(fcTagSearchSQL, fcTagValue)
     .then(result => {

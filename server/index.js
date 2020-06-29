@@ -335,15 +335,32 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
   const id = [fcId];
   db.query(sql, id)
     .then(result => {
-      if (!result.rows[0]) {
-        return res.status(404).json({ error: `Cannot find flashcard with given "fcId" ${fcId}` });
+      const fc = result.rows[0];
+      if (!fc) {
+        next(new ClientError(`Cannot find flashcard with "fcId" ${fcId}`, 404));
       } else {
-        return res.status(200).json(result.rows[0]);
+        const tagSQL = `
+        select "tagRelations"."itemId", "tagRelations"."type", "tagTable"."tagName"
+        from "tagRelations"
+        join "tagTable" using ("tagId")
+        where "tagRelations"."itemId" = $1
+        and "tagRelations"."type" = 'fc';
+        `;
+        db.query(tagSQL, id)
+          .then(result => {
+            const data = result.rows;
+            const tagsArray = [];
+            data.map(tag => tagsArray.push(tag.tagName));
+            return tagsArray;
+          })
+          .then(tagsArray => {
+            fc.noteTags = tagsArray;
+            res.status(200).json(fc);
+          })
+          .catch(err => next(err));
       }
     })
-    .catch(err => next(err,
-      res.status(500).json({ error: 'An unexpected error occurred' }))
-    );
+    .catch(err => next(err));
 });
 
 // USER CAN VIEW ALL FLASHCARDS

@@ -91,7 +91,7 @@ app.get('/api/notes/:noteId', (req, res, next) => {
             return tagsArray;
           })
           .then(tagsArray => {
-            note.tags = tagsArray;
+            note.noteTags = tagsArray;
             res.status(200).json(note);
           })
           .catch(err => next(err));
@@ -156,7 +156,6 @@ app.post('/api/notes', (req, res, next) => {
     const individualTagArray = [];
     individualTagArray.push(tag);
     tagsArray.push(individualTagArray);
-
   });
 
   const noteSQL = format(`

@@ -1,11 +1,12 @@
 import React from 'react';
+import NotebookHeader from './notebook-header';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { note: null, view: 'viewNote' };
+    this.state = { note: null, view: 'viewNote', element: null };
     this.deleteNote = this.deleteNote.bind(this);
     this.handleDifficultyChange = this.handleDifficultyChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
@@ -103,46 +104,15 @@ class Note extends React.Component {
   render() {
     const note = this.state.note;
     const view = this.state.view;
-    let rightColumn = null;
-    const justifyContent = this.state.view === 'viewNote' || this.state.view === 'createNote'
-      ? 'justify-content-between' : 'justify-content-start';
+    const element = this.state.element;
+    const justifyContent = element ? 'justify-content-star' : 'justify-content-between';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
+    let elementRow, rightColumn;
 
     if (view === 'deleteSuccess') {
       return (
         <>
-          <header className="header-container d-flex flex-row justify-content-between">
-            <div className="d-flex flex-row align-items-center">
-              <Link to="/" className="d-flex flex-row align-items-center col-1">
-                <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i>
-              </Link>
-              <Form className="ml-5">
-                <FormGroup className="mb-0">
-                  <Label for="noteTile"></Label>
-                  <input
-                    className="header-note-title"
-                    type="text" name="noteTile"
-                    id="noteTile"
-                    defaultValue={note.noteTitle}
-                    onChange={this.handleTitleChange} />
-                </FormGroup>
-              </Form>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-between col-2">
-              <Form>
-                <Input type="select" name="noteTags" id="noteTags">
-                  <option defaultValue>Note Tag</option>
-                  <option>Create new tag</option>
-                </Input>
-              </Form>
-              <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
-              <Link to={{ pathname: closeButton }}>
-                <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">
-                  <i className="fas fa-times"></i>
-                </Button>
-              </Link>
-            </div>
-          </header>
+          <NotebookHeader />
           <div className="note-page-container">
             <div className="note-delete">
               <h3>Your note has been deleted.</h3>
@@ -155,25 +125,9 @@ class Note extends React.Component {
       );
     }
 
-    switch (view) {
-      case 'viewNote':
-        rightColumn = (
-          <div className="d-flex flex-row align-items-center justify-content-center">
-            <Button type="submit" className="solid-button">Update</Button>
-            <Button type="reset" className="solid-button ml-4">Cancel</Button>
-            <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
-          </div>
-        );
-        break;
-      case 'createNote':
-        rightColumn = (
-          <div className="d-flex flex-row align-items-center justify-content-center">
-            <Button type="submit" className="solid-button">Create</Button>
-          </div>
-        );
-        break;
+    switch (element) {
       case 'flashcard':
-        rightColumn = (
+        elementRow = (
           <>
             <FormGroup className="mb-4">
               <Label for="flashcardQuestion" className="note-font-1">Enter Question:</Label>
@@ -193,14 +147,11 @@ class Note extends React.Component {
               </FormGroup>
               <Button className="solid-button-large ml-4">Make Flashcard</Button>
             </div>
-            <div className="d-flex justify-content-center mt-4">
-              <Button className="solid-button" onClick={() => this.setState({ view: 'viewNote' })}>Cancel</Button>
-            </div>
           </>
         );
         break;
       case 'resource':
-        rightColumn = (
+        elementRow = (
           <>
             {
               note.noteResource.map((item, index) => {
@@ -218,16 +169,12 @@ class Note extends React.Component {
                 );
               })
             }
-            <Button className="add-button"><i className="fas fa-plus"></i></Button>
-            {/* <div className="d-flex flex-row align-items-center justify-content-center mt-4">
-              <Button className="solid-button mr-4">Add</Button>
-              <Button className="solid-button" onClick={() => this.setState({ view: 'viewNote' })}>Cancel</Button>
-            </div> */}
+            <div className="add-button"><i className="fas fa-plus"></i></div>
           </>
         );
         break;
       case 'code':
-        rightColumn = (
+        elementRow = (
           <>
             <h3>HTML</h3>
             <p>{note.noteCode.html}</p>
@@ -237,7 +184,35 @@ class Note extends React.Component {
             <p>{note.noteCode.javascript}</p>
           </>
         );
+        break;
     }
+
+    switch (view) {
+      case 'viewNote':
+        rightColumn = (
+          <div className="d-flex flex-column justify-content-between">
+            {elementRow}
+            <div className="d-flex flex-row align-items-center justify-content-center">
+              <Button type="submit" className="solid-button">Update</Button>
+              <Button type="reset" className="solid-button ml-4">Cancel</Button>
+              <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
+            </div>
+          </div>
+        );
+        break;
+      case 'createNote':
+        rightColumn = (
+          <div className="d-flex flex-column justify-content-between">
+            {elementRow}
+            <div className="d-flex flex-row align-items-center justify-content-center">
+              <Button type="submit" className="solid-button">Create</Button>
+              <Button type="reset" className="solid-button ml-4">Cancel</Button>
+            </div>
+          </div>
+        );
+        break;
+    }
+
     return note === null ? (null) : (
       <Form onSubmit={this.createNewNote}>
         <header className="header-container d-flex flex-row justify-content-between">
@@ -308,17 +283,17 @@ class Note extends React.Component {
                 onChange={this.handleContentChange}></textarea>
             </FormGroup>
           </div>
-          <div className={`col-5 d-flex flex-column ${justifyContent}`}>
+          <div className={`h-100 col-5 d-flex flex-column ${justifyContent}`}>
             <div className="note-top-button-group mb-4">
               <Button
                 className="solid-button"
-                onClick={() => this.setState({ view: 'flashcard' })}>Flashcard</Button>
+                onClick={() => this.setState({ element: 'flashcard' })}>Flashcard</Button>
               <Button
                 className="solid-button ml-4"
-                onClick={() => this.setState({ view: 'resource' })}>Resource</Button>
+                onClick={() => this.setState({ element: 'resource' })}>Resource</Button>
               <Button
                 className="solid-button ml-4"
-                onClick={() => this.setState({ view: 'code' })}>Code</Button>
+                onClick={() => this.setState({ element: 'code' })}>Code</Button>
             </div>
             {rightColumn}
           </div>

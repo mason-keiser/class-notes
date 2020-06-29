@@ -357,6 +357,7 @@ div.col-2 > h6 {
 
 .add-button {
   background-color: #24997F;
+  color:white;
   border: none;
   width: 45px;
   height: 45px;
@@ -366,6 +367,7 @@ div.col-2 > h6 {
   align-items: center;
   margin-bottom: 150px;
   margin-left: calc((100% - 45px)/2);
+  cursor: pointer;
 }
 
 .note-font-1 {

@@ -91,7 +91,7 @@ app.get('/api/notes/:noteId', (req, res, next) => {
             return tagsArray;
           })
           .then(tagsArray => {
-            note.tags = tagsArray;
+            note.noteTags = tagsArray;
             res.status(200).json(note);
           })
           .catch(err => next(err));
@@ -110,10 +110,11 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
   }
 
   const sql = `
-  select *
+  select "notes"."noteTitle", "notes"."noteContent","notes"."noteId"
   from "notes"
   join "notebooks" using ("notebookId")
-  where "notebookId" = $1;`;
+  where "notebookId" = $1
+  order by "notes"."noteId"`;
 
   db.query(sql, [notebookId])
     .then(result => res.status(200).json(result.rows))
@@ -155,7 +156,6 @@ app.post('/api/notes', (req, res, next) => {
     const individualTagArray = [];
     individualTagArray.push(tag);
     tagsArray.push(individualTagArray);
-
   });
 
   const noteSQL = format(`

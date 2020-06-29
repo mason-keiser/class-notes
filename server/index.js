@@ -442,7 +442,7 @@ app.post('/api/flashcards', (req, res, next) => {
 app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
   const fcTag = req.params.fcTag;
   const fcTagSearchSQL = `
-  SELECT "fcItem"."fcId", "fcItem"."fcAnswer", "fcItem"."fcAnswer", "tagTable"."tagName"
+  SELECT "fcItem"."fcId", "fcItem"."fcQuestion", "fcItem"."fcAnswer", "tagTable"."tagName"
     FROM "fcItem"
     JOIN "tagRelations" ON "fcItem"."fcId" = "tagRelations"."itemId"
     JOIN "tagTable" using ("tagId")

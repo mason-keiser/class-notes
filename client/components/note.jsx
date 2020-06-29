@@ -65,27 +65,26 @@ class Note extends React.Component {
     });
   }
 
+  cancelUpdate() {
+
+  }
+
+  handleEdit() {
+    fetch(`/api/notes/${this.state.note.noteId}`, {
+      method: 'PATCH',
+      header: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state.note)
+    })
+      .then(res => res.json())
+      .then(data => this.setState({ note: this.state.note }))
+      .catch(error => console.error(error));
+  }
+
   deleteNote(noteId) {
     fetch(`/api/notes/${noteId}`, {
       method: 'DELETE'
     })
       .then(() => { this.setState({ view: 'deleteSuccess' }); })
-      .catch(error => console.error(error));
-  }
-
-  cancelUpdate() {
-
-  }
-
-  handleEdit(noteId) {
-    const newNote = this.state.note;
-    fetch(`/api/notes/${noteId}`, {
-      method: 'PATCH',
-      header: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newNote)
-    })
-      .then(res => res.json())
-      .then(data => this.setState({ note: newNote }))
       .catch(error => console.error(error));
   }
 

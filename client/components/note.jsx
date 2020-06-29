@@ -29,7 +29,8 @@ class Note extends React.Component {
           noteDifficulty: '',
           noteResource: [],
           noteCode: {},
-          noteTags: ['']
+          noteTags: [''],
+          notebookName: ''
         },
         view: 'createNote'
       });

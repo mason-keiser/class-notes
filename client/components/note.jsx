@@ -29,7 +29,7 @@ class Note extends React.Component {
           noteDifficulty: '',
           noteResource: [],
           noteCode: {},
-          noteTags: []
+          noteTags: ['']
         },
         view: 'createNote'
       });
@@ -219,10 +219,10 @@ class Note extends React.Component {
               })
             }
             <Button className="add-button"><i className="fas fa-plus"></i></Button>
-            <div className="d-flex flex-row align-items-center justify-content-center mt-4">
+            {/* <div className="d-flex flex-row align-items-center justify-content-center mt-4">
               <Button className="solid-button mr-4">Add</Button>
               <Button className="solid-button" onClick={() => this.setState({ view: 'viewNote' })}>Cancel</Button>
-            </div>
+            </div> */}
           </>
         );
         break;

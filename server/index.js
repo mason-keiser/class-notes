@@ -141,13 +141,15 @@ app.post('/api/notes', (req, res, next) => {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
   const noteTags = req.body.noteTags;
+  const noteResource = JSON.stringify(req.body.noteResource);
+  const noteCode = JSON.stringify(req.body.noteCode);
   const noteValues = [
     req.body.notebookId,
     req.body.noteTitle,
     req.body.noteContent,
     req.body.noteDifficulty,
-    req.body.noteResource,
-    req.body.noteCode
+    noteResource,
+    noteCode
   ];
 
   const tagsArray = [];
@@ -169,7 +171,7 @@ app.post('/api/notes', (req, res, next) => {
         on conflict ("tagName")
         do update
         set "updatedAt" = now()
-        returning*
+        returning *
     ), "insertedTagRelations" as (
         insert into "tagRelations" ("itemId", "tagId", "type")
         select "noteId", "tagId", 'note' as "type"
@@ -184,7 +186,7 @@ app.post('/api/notes', (req, res, next) => {
   db.query(noteSQL)
     .then(response => {
       const newNote = response.rows[0];
-      newNote.tags = noteTags;
+      newNote.noteTags = noteTags;
       res.status(201).json(response.rows[0]);
     })
     .catch(err => next(err));

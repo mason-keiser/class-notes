@@ -213,6 +213,10 @@ div.col-2 > h6 {
   height: 60vh;
 }
 
+.note-list-item-body:hover {
+  filter: brightness(110%)
+}
+
 .note-list-item-body {
   background-color: #333333;
 }

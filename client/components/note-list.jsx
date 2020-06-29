@@ -9,7 +9,7 @@ function NoteListItem(props) {
     <div className="my-y pb-3 note-list-item mb-5" id={noteId}>
       <div className="card h-100">
         <div className="card-body m-0 p-0 note-list-item-body rounded-0 h-100">
-          <Link to={{ pathname: '/notes/' + noteId }}>
+          <Link to={{ pathname: '/notes/' + noteId }} style={{ textDecoration: 'none' }}>
             <p className="card-title text-left note-list-item-title">{noteListItem.noteTitle}</p>
             <p className="card-text text-left note-list-item-content mb-3">{noteListItem.noteContent}</p>
           </Link>

@@ -110,10 +110,11 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
   }
 
   const sql = `
-  select *
+  select "notes"."noteTitle", "notes"."noteContent","notes"."noteId"
   from "notes"
   join "notebooks" using ("notebookId")
-  where "notebookId" = $1;`;
+  where "notebookId" = $1
+  order by "notes"."noteId"`;
 
   db.query(sql, [notebookId])
     .then(result => res.status(200).json(result.rows))

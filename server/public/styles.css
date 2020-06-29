@@ -276,14 +276,6 @@ div.col-2 > h6 {
 
 
 /* note page */
-.note-main {
-  display: flex;
-  color:#24997F;
-  justify-content: space-between;
-  padding: 30px 30px;
-  height: calc(100vh - 90px);
-}
-
 .difficulty {
   margin-left: 15px;
   width: 25px;
@@ -361,10 +353,6 @@ div.col-2 > h6 {
   width: 55%;
 }
 
-.cancel-btn {
-  margin-left: calc((100% - 95px)/2);
-}
-
 .add-button {
   background-color: #24997F;
   border: none;
@@ -393,6 +381,10 @@ textarea.note-content {
 }
 
 .note-page-container {
+  display: flex;
+  color:#24997F;
+  justify-content: space-between;
+  padding: 30px 30px;
   height: calc(100vh - 80px);
   background-color: #333333;
 }

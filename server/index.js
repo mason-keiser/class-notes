@@ -227,9 +227,6 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
 // UPDATE A NOTE BY PROVIDING A NOTE ID
 
 app.put('/api/notes/:noteId', (req, res, next) => {
-  console.log(req.body);
-  console.log(req.params.noteId);
-
   const noteId = parseInt(req.params.noteId);
   if (!Number.isInteger(noteId) || noteId <= 0) {
     return res.status(400).json({ error: 'noteId must be a positive integer' });
@@ -240,13 +237,15 @@ app.put('/api/notes/:noteId', (req, res, next) => {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
   const noteTags = req.body.noteTags;
+  const noteResource = JSON.stringify(req.body.noteResource);
+  const noteCode = JSON.stringify(req.body.noteCode);
   const newNoteValues = [
     req.body.notebookId,
     req.body.noteTitle,
     req.body.noteContent,
     req.body.noteDifficulty,
-    req.body.noteResource,
-    req.body.noteCode,
+    noteResource,
+    noteCode,
     noteId
   ];
   const tagsArray = [];

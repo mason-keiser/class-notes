@@ -132,10 +132,13 @@ class Note extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
-        this.setState({
-          note: data,
-          view: 'viewNote'
-        });
+        // what uzair said
+        // this.setState({
+        //   // note: data,
+
+        //   view: 'viewNote'
+        // });
+        // this.props.history.push(`/notes/${data.noteId}`);
       })
       .catch(error => console.error(error));
   }
@@ -146,7 +149,7 @@ class Note extends React.Component {
     console.log(rest);
     fetch(`/api/notes/${noteId}`, {
       method: 'PUT',
-      header: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(rest)
     })
       .then(res => res.json())

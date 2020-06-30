@@ -303,7 +303,7 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
   const sql = `
   SELECT "noteTitle", "noteId", "noteDifficulty", "createdAt", "noteContent"
   FROM  "notes"
-  WHERE to_tsvector("noteTitle") @@ to_tsquery($1)
+  WHERE to_tsvector("noteTitle"|| ' ' || "noteContent") @@ to_tsquery($1)
   `;
   const title = [noteTitle];
   db.query(sql, title)

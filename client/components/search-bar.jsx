@@ -50,14 +50,19 @@ export default class SearchBar extends React.Component {
       if (event.target.id === 'searchNotes') {
         fetch(`/api/notes/search/${this.state.searchValue}`)
           .then(res => res.json())
-          .then(data => this.setState({ notes: data }))
-          .catch(error => console.error(error));
+          .then(data => {
+            this.setState({ notes: data });
+          })
+          .catch(error => {
+            this.setState({ notes: [{ noteTitle: 'no results found' }] });
+            console.error(error);
+          });
       }
       if (event.target.id === 'searchTags') {
-        console.log('yo');
+        console.log('need endpoint for searching Tags');
       }
       if (event.target.id === 'searchDifficulty') {
-        console.log('yo');
+        console.log('need endpoint for searchiing Difficulty');
       }
     }
   }

@@ -125,7 +125,7 @@ export default class SearchBar extends React.Component {
             </div>
             <i className="fas fa-times fa-2x" onClick={this.handleX}></i>
           </div>
-          <div>
+          <div className='search-results-list'>
             {this.state.notes.map(note => <SearchItem key={note.noteId} noteId={note.noteId} noteTitle = {note.noteTitle} noteContent={note.noteContent}/>)}
           </div>
         </div>

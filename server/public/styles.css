@@ -190,7 +190,6 @@ div.col-2 > h6 {
   border: none;
 }
 
-
 /* note-list */
 .note-list-container {
   background-color: #333333;
@@ -263,17 +262,6 @@ div.col-2 > h6 {
     background-repeat: repeat-y;
     background-size: contain;
 }
-
-
-/* General */
-.theme-green {
-  color: #24997F;
-}
-
-.color-white {
-  color: white;
-}
-
 
 /* note page */
 .difficulty {
@@ -348,11 +336,11 @@ div.col-2 > h6 {
 }
 
 .resource {
-  width: 40%;
+  width: 35%;
 }
 
 .resource-link {
-  width: 55%;
+  width: 50%;
 }
 
 .add-button {
@@ -367,6 +355,19 @@ div.col-2 > h6 {
   align-items: center;
   margin-bottom: 150px;
   margin-left: calc((100% - 45px)/2);
+  cursor: pointer;
+}
+
+.minus-button {
+  background-color: #24997F;
+  color:white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
 }
 
@@ -528,4 +529,21 @@ textarea.note-content {
 .progress-bar-container {
   position: relative;
   top: 10%;
+}
+
+/* General */
+.theme-green {
+  color: #24997F;
+}
+
+.color-white {
+  color: white;
+}
+
+.height-10 {
+  height: 10%;
+}
+
+.height-90 {
+  height: 90%
 }

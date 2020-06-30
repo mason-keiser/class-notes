@@ -13,6 +13,10 @@ class Note extends React.Component {
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.addOneResource = this.addOneResource.bind(this);
+    this.deleteOneResource = this.deleteOneResource.bind(this);
+    this.handleResourceName = this.handleResourceName.bind(this);
+    this.handleResourceLink = this.handleResourceLink.bind(this);
   }
 
   componentDidMount() {
@@ -64,6 +68,59 @@ class Note extends React.Component {
     });
   }
 
+  handleResourceName(index, event) {
+    const resourceArray = [...this.state.note.noteResource];
+    const newName = {
+      name: event.target.value,
+      link: resourceArray[index].link
+    };
+    resourceArray.splice(index, 1, newName);
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteResource: resourceArray
+      }
+    });
+  }
+
+  handleResourceLink(index, event) {
+    const resourceArray = [...this.state.note.noteResource];
+    const newName = {
+      name: resourceArray[index].name,
+      link: event.target.value
+    };
+    resourceArray.splice(index, 1, newName);
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteResource: resourceArray
+      }
+    });
+  }
+
+  addOneResource() {
+    const resource = { link: '', name: '' };
+    const resourceArray = [...this.state.note.noteResource];
+    resourceArray.push(resource);
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteResource: resourceArray
+      }
+    });
+  }
+
+  deleteOneResource(index) {
+    const resourceArray = [...this.state.note.noteResource];
+    resourceArray.splice(index, 1);
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteResource: resourceArray
+      }
+    });
+  }
+
   handleEdit() {
     fetch(`/api/notes/${this.state.note.noteId}`, {
       method: 'PATCH',
@@ -105,7 +162,7 @@ class Note extends React.Component {
     const note = this.state.note;
     const view = this.state.view;
     const element = this.state.element;
-    const justifyContent = element ? 'justify-content-star' : 'justify-content-between';
+    const justifyContent = element ? 'justify-content-between' : 'justify-content-end';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
     let elementRow, rightColumn;
 
@@ -128,7 +185,7 @@ class Note extends React.Component {
     switch (element) {
       case 'flashcard':
         elementRow = (
-          <>
+          <div className="height-90">
             <FormGroup className="mb-4">
               <Label for="flashcardQuestion" className="note-font-1">Enter Question:</Label>
               <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion" />
@@ -147,42 +204,45 @@ class Note extends React.Component {
               </FormGroup>
               <Button className="solid-button-large ml-4">Make Flashcard</Button>
             </div>
-          </>
+          </div>
         );
         break;
       case 'resource':
         elementRow = (
-          <>
+          <div className="height-90">
             {
               note.noteResource.map((item, index) => {
                 return (
                   <div key={index} className="d-flex flex-row align-items-center justify-content-between mb-2">
                     <FormGroup className="resource">
                       <Label for="resourceName">Resource Name</Label>
-                      <Input type="text" name="resourceName" id="resourceName" placeholder="Name" defaultValue={item.name} />
+                      <Input type="text" name="resourceName" id="resourceName" placeholder="Name"
+                        defaultValue={item.name} onChange={() => this.handleResourceName(index, event)}/>
                     </FormGroup>
-                    <FormGroup className="resource-link">
+                    <FormGroup className="resource-link ml-4">
                       <Label for="resourceLink">Link</Label>
-                      <Input type="text" name="resourceLink" id="resourceLink" placeholder="Name" defaultValue={item.link} />
+                      <Input type="text" name="resourceLink" id="resourceLink" placeholder="Name"
+                        defaultValue={item.link} onChange={() => this.handleResourceLink(index, event)}/>
                     </FormGroup>
+                    <div className="minus-button ml-4" onClick={() => this.deleteOneResource(index)}><i className="fas fa-minus"></i></div>
                   </div>
                 );
               })
             }
-            <div className="add-button"><i className="fas fa-plus"></i></div>
-          </>
+            <div className="add-button" onClick={this.addOneResource}><i className="fas fa-plus"></i></div>
+          </div>
         );
         break;
       case 'code':
         elementRow = (
-          <>
+          <div className="height-90">
             <h3>HTML</h3>
             <p>{note.noteCode.html}</p>
             <h3>CSS</h3>
             <p>{note.noteCode.css}</p>
             <h3>JavaScript</h3>
             <p>{note.noteCode.javascript}</p>
-          </>
+          </div>
         );
         break;
     }
@@ -190,9 +250,9 @@ class Note extends React.Component {
     switch (view) {
       case 'viewNote':
         rightColumn = (
-          <div className="d-flex flex-column justify-content-between">
+          <div className={`d-flex flex-column height-90 ${justifyContent}`}>
             {elementRow}
-            <div className="d-flex flex-row align-items-center justify-content-center">
+            <div className="height-10 d-flex align-items-end justify-content-center ">
               <Button type="submit" className="solid-button">Update</Button>
               <Button type="reset" className="solid-button ml-4">Cancel</Button>
               <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
@@ -202,9 +262,9 @@ class Note extends React.Component {
         break;
       case 'createNote':
         rightColumn = (
-          <div className="d-flex flex-column justify-content-between">
+          <div className={`d-flex flex-column height-90 ${justifyContent}`}>
             {elementRow}
-            <div className="d-flex flex-row align-items-center justify-content-center">
+            <div className="height-10 d-flex align-items-end justify-content-center">
               <Button type="submit" className="solid-button">Create</Button>
               <Button type="reset" className="solid-button ml-4">Cancel</Button>
             </div>
@@ -283,8 +343,8 @@ class Note extends React.Component {
                 onChange={this.handleContentChange}></textarea>
             </FormGroup>
           </div>
-          <div className={`h-100 col-5 d-flex flex-column ${justifyContent}`}>
-            <div className="note-top-button-group mb-4">
+          <div className={'col-5 d-flex flex-column h-100'}>
+            <div className="height-10">
               <Button
                 className="solid-button"
                 onClick={() => this.setState({ element: 'flashcard' })}>Flashcard</Button>

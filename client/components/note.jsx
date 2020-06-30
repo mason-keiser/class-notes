@@ -5,16 +5,23 @@ import { Link } from 'react-router-dom';
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { note: null, view: 'viewNote' };
+    this.state = { note: null, view: 'viewNote', notebooks: [] };
     this.deleteNote = this.deleteNote.bind(this);
     this.handleDifficultyChange = this.handleDifficultyChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.getAllNoteData = this.getAllNoteData.bind(this);
+    this.getNotebooks = this.getNotebooks.bind(this);
   }
 
   componentDidMount() {
+    this.getAllNoteData();
+    this.getNotebooks();
+  }
+
+  getAllNoteData() {
     if (this.props.match.params.noteId) {
       fetch(`/api/notes/${this.props.match.params.noteId}`)
         .then(res => res.json())
@@ -30,15 +37,28 @@ class Note extends React.Component {
           noteResource: [],
           noteCode: {},
           noteTags: [''],
-          notebookName: ''
+          notebookName: '',
+          studentId: ''
         },
         view: 'createNote'
       });
     }
   }
 
-  // getNotebooks() {
-  // }
+  getNotebooks() {
+    if (this.props.match.params.noteId) {
+      fetch('/api/students/1')
+        .then(res => res.json())
+        .then(notebookData => this.setState({
+          notebooks: notebookData.notebooks
+        }))
+        .catch(error => console.error(error));
+    } else {
+      this.setState({
+        notebooks: []
+      });
+    }
+  }
 
   handleTitleChange(event) {
     this.setState({
@@ -105,6 +125,9 @@ class Note extends React.Component {
   }
 
   render() {
+    if (this.state === null) {
+      return null;
+    }
     const note = this.state.note;
     const view = this.state.view;
     let rightColumn = null;
@@ -296,8 +319,13 @@ class Note extends React.Component {
             <FormGroup className="mb-4">
               <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
               <Input type="select" name="notebookName" id="notebookName">
-                <option defaultValue>{note.noteId}</option>
-                <option>Create New Notebook</option>
+                {
+                  this.state.notebooks.map(notebook => {
+                    // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
+                    return (notebook.notebookId === this.state.note.notebookId)
+                      ? (<option key={notebook.notebookId} defaultValue>{note.notebookName}</option>)
+                      : (<option key={notebook.notebookId}>{notebook.notebookName}</option>);
+                  })}
               </Input>
             </FormGroup>
             <FormGroup>

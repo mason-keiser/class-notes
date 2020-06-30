@@ -14,12 +14,17 @@ export default class SearchBar extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleX = this.handleX.bind(this);
 
   }
 
   handleChange(event) {
     if (event.target.id === 'searchNotes') {
       this.setState({ searchValue: event.target.value });
+      // fetch(`/api/notes/search/${event.target.value}`)
+      //   .then(res => res.json())
+      //   .then(data => this.setState({ notes: data }))
+      //   .catch(error => console.error(error));
     }
     if (event.target.id === 'searchTags') {
       this.setState({ tagValue: event.target.value });
@@ -28,6 +33,16 @@ export default class SearchBar extends React.Component {
       this.setState({ difficultyValue: event.target.value });
     }
 
+  }
+
+  handleX() {
+    this.setState({
+      searchValue: 'Keyword',
+      tagValue: 'Tags',
+      difficultyValue: 'Difficulty',
+      notes: []
+    });
+    this.props.closeXClicked();
   }
 
   handleKeyPress(event) {
@@ -73,7 +88,7 @@ export default class SearchBar extends React.Component {
                   id="searchDifficulty" value={this.state.difficultyValue} onChange={this.handleChange} />
               </FormGroup>
             </div>
-            <i className="fas fa-times fa-2x" onClick={this.props.closeXClicked}></i>
+            <i className="fas fa-times fa-2x" onClick={this.handleX}></i>
           </div>
         </div>
       );
@@ -103,7 +118,7 @@ export default class SearchBar extends React.Component {
                   id="searchDifficulty" value={this.state.difficultyValue} onChange={this.handleChange} />
               </FormGroup>
             </div>
-            <i className="fas fa-times fa-2x" onClick={this.props.closeXClicked}></i>
+            <i className="fas fa-times fa-2x" onClick={this.handleX}></i>
           </div>
           <div>
             {this.state.notes.map(note => <SearchItem key={note.noteId} noteId={note.noteId} noteTitle = {note.noteTitle} noteContent={note.noteContent}/>)}

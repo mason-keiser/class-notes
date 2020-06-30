@@ -8,6 +8,8 @@ class Note extends React.Component {
     super(props);
     this.state = { note: null, view: 'viewNote', element: null, notebooks: [] };
     this.deleteNote = this.deleteNote.bind(this);
+    this.editNote = this.editNote.bind(this);
+    this.createNewNote = this.createNewNote.bind(this);
     this.handleDifficultyChange = this.handleDifficultyChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -19,6 +21,8 @@ class Note extends React.Component {
     this.deleteOneResource = this.deleteOneResource.bind(this);
     this.handleResourceName = this.handleResourceName.bind(this);
     this.handleResourceLink = this.handleResourceLink.bind(this);
+    this.addOneResource = this.addOneResource.bind(this);
+    this.deleteOneResource = this.deleteOneResource.bind(this);
   }
 
   componentDidMount() {
@@ -145,17 +149,6 @@ class Note extends React.Component {
     });
   }
 
-  handleEdit() {
-    fetch(`/api/notes/${this.state.note.noteId}`, {
-      method: 'PATCH',
-      header: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(this.state.note)
-    })
-      .then(res => res.json())
-      .then(data => this.setState({ note: this.state.note }))
-      .catch(error => console.error(error));
-  }
-
   createNewNote(event) {
     event.preventDefault();
     const newNote = this.state.note;
@@ -166,10 +159,30 @@ class Note extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
-        this.setState({
-          note: data,
-          view: 'viewNote'
-        });
+        // what uzair said
+        // this.setState({
+        //   // note: data,
+
+        //   view: 'viewNote'
+        // });
+        // this.props.history.push(`/notes/${data.noteId}`);
+      })
+      .catch(error => console.error(error));
+  }
+
+  editNote(event) {
+    event.preventDefault();
+    const { notebookName, noteId, ...rest } = this.state.note;
+    console.log(rest);
+    fetch(`/api/notes/${noteId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(rest)
+    })
+      .then(res => res.json())
+      .then(update => {
+        console.log(update);
+        // this.setState({ note: update });
       })
       .catch(error => console.error(error));
   }
@@ -189,7 +202,6 @@ class Note extends React.Component {
     const justifyContent = element ? 'justify-content-between' : 'justify-content-end';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
     let elementRow, rightColumn;
-    
     if (view === 'deleteSuccess') {
       return (
         <>
@@ -277,7 +289,7 @@ class Note extends React.Component {
           <div className={`d-flex flex-column height-90 ${justifyContent}`}>
             {elementRow}
             <div className="height-10 d-flex align-items-end justify-content-center ">
-              <Button type="submit" className="solid-button">Update</Button>
+              <Button type="submit" className="solid-button" onClick={this.editNote}>Update</Button>
               <Button type="reset" className="solid-button ml-4">Cancel</Button>
               <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
             </div>
@@ -289,7 +301,7 @@ class Note extends React.Component {
           <div className={`d-flex flex-column height-90 ${justifyContent}`}>
             {elementRow}
             <div className="height-10 d-flex align-items-end justify-content-center">
-              <Button type="submit" className="solid-button">Create</Button>
+              <Button type="submit" className="solid-button" onClick={this.createNewNote}>Create</Button>
               <Button type="reset" className="solid-button ml-4">Cancel</Button>
             </div>
           </div>
@@ -298,7 +310,7 @@ class Note extends React.Component {
     }
 
     return note === null ? (null) : (
-      <Form onSubmit={this.createNewNote}>
+      <Form>
         <header className="header-container d-flex flex-row justify-content-between">
           <div className="d-flex flex-row align-items-center col">
             <Link to="/" className="d-flex flex-row align-items-center">

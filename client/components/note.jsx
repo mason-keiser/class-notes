@@ -14,7 +14,6 @@ class Note extends React.Component {
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
     this.getAllNoteData = this.getAllNoteData.bind(this);
     this.getNotebooks = this.getNotebooks.bind(this);
     this.addOneResource = this.addOneResource.bind(this);
@@ -173,6 +172,7 @@ class Note extends React.Component {
   editNote(event) {
     event.preventDefault();
     const { notebookName, noteId, ...rest } = this.state.note;
+    // eslint-disable-next-line no-console
     console.log(rest);
     fetch(`/api/notes/${noteId}`, {
       method: 'PUT',
@@ -181,6 +181,7 @@ class Note extends React.Component {
     })
       .then(res => res.json())
       .then(update => {
+        // eslint-disable-next-line no-console
         console.log(update);
         // this.setState({ note: update });
       })

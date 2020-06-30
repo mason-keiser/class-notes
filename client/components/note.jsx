@@ -34,7 +34,8 @@ class Note extends React.Component {
           noteDifficulty: '',
           noteResource: [],
           noteCode: {},
-          noteTags: ['']
+          noteTags: [''],
+          notebookName: ''
         },
         view: 'createNote'
       });
@@ -165,7 +166,7 @@ class Note extends React.Component {
     const justifyContent = element ? 'justify-content-between' : 'justify-content-end';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
     let elementRow, rightColumn;
-
+    
     if (view === 'deleteSuccess') {
       return (
         <>

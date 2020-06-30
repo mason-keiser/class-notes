@@ -61,7 +61,7 @@ app.get('/api/students/:studentId', (req, res, next) => {
 
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
-  SELECT "notes"."noteId", "notes"."notebookId", "notes"."createdAt", "notes"."noteTitle",
+  SELECT "notes"."noteId", "notes"."notebookId", "notes"."noteTitle",
          "notes"."noteContent", "notes"."noteDifficulty", "notes"."noteResource",
          "notes"."noteCode", "notebooks"."notebookName"
   FROM  "notes"
@@ -227,6 +227,8 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
 // UPDATE A NOTE BY PROVIDING A NOTE ID
 
 app.put('/api/notes/:noteId', (req, res, next) => {
+  console.log(req.body);
+  console.log(req.params.noteId);
 
   const noteId = parseInt(req.params.noteId);
   if (!Number.isInteger(noteId) || noteId <= 0) {

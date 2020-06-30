@@ -6,16 +6,15 @@ export default class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
-      searchValue: 'Keyword',
-      tagValue: 'Tags',
-      difficultyValue: 'Difficulty',
+      searchValue: '',
+      tagValue: '',
+      difficultyValue: '',
       notes: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleX = this.handleX.bind(this);
-
+    this.handleChangeField = this.handleChangeField.bind(this);
   }
 
   handleChange(event) {
@@ -32,17 +31,25 @@ export default class SearchBar extends React.Component {
     if (event.target.id === 'searchDifficulty') {
       this.setState({ difficultyValue: event.target.value });
     }
-
   }
 
   handleX() {
     this.setState({
-      searchValue: 'Keyword',
-      tagValue: 'Tags',
-      difficultyValue: 'Difficulty',
+      searchValue: '',
+      tagValue: '',
+      difficultyValue: '',
       notes: []
     });
     this.props.closeXClicked();
+  }
+
+  handleChangeField() {
+    this.setState({
+      searchValue: '',
+      tagValue: '',
+      difficultyValue: '',
+      notes: []
+    });
   }
 
   handleKeyPress(event) {
@@ -62,7 +69,15 @@ export default class SearchBar extends React.Component {
         console.log('need endpoint for searching Tags');
       }
       if (event.target.id === 'searchDifficulty') {
-        console.log('need endpoint for searchiing Difficulty');
+        fetch(`/api/notes/search/difficulty/${this.state.difficultyValue}`)
+          .then(res => res.json())
+          .then(data => {
+            this.setState({ notes: data });
+          })
+          .catch(error => {
+            this.setState({ notes: [{ noteTitle: 'No results found.' }] });
+            console.error(error);
+          });
       }
     }
   }
@@ -79,18 +94,22 @@ export default class SearchBar extends React.Component {
               <FormGroup className="mb-4">
                 <Label for="searchNotes" className="note-font-1"></Label>
                 <Input type="text" name="searchNotes" className="search-input"
-                  id="searchNotes" value={this.state.searchValue} onChange={this.handleChange}
-                  onKeyPress={this.handleKeyPress} />
+                  id="searchNotes" placeholder="Keyword"
+                  value={this.state.searchValue} onChange={this.handleChange}
+                  onKeyPress={this.handleKeyPress} onClick={this.handleChangeField}/>
               </FormGroup>
               <FormGroup className="mb-4">
                 <Label for="searchTags" className="note-font-1"></Label>
                 <Input type="text" name="searchTags" className="search-input"
-                  id="searchTags" value={this.state.tagValue} onChange={this.handleChange} />
+                  id="searchTags" placeholder="Tags"
+                  value={this.state.tagValue} onChange={this.handleChange} onClick={this.handleChangeField}/>
               </FormGroup>
               <FormGroup className="mb-4">
                 <Label for="searchTags" className="note-font-1"></Label>
                 <Input type="text" name="searchTags" className="search-input"
-                  id="searchDifficulty" value={this.state.difficultyValue} onChange={this.handleChange} />
+                  id="searchDifficulty" placeholder="Difficulty"
+                  value={this.state.difficultyValue} onChange={this.handleChange}
+                  onKeyPress={this.handleKeyPress} onClick={this.handleChangeField}/>
               </FormGroup>
             </div>
             <i className="fas fa-times fa-2x" onClick={this.handleX}></i>
@@ -101,7 +120,6 @@ export default class SearchBar extends React.Component {
       const searchBarClass = this.props.isOpened ? 'search-container search-container-end'
         : 'search-container search-container-start';
       return (
-
         <div className={searchBarClass}>
           <div className='search-top'>
             <div className='search-form'>
@@ -110,17 +128,19 @@ export default class SearchBar extends React.Component {
                 <Label for="searchNotes" className="note-font-1"></Label>
                 <Input type="text" name="searchNotes" className="search-input"
                   id="searchNotes" value={this.state.searchValue} onChange={this.handleChange}
-                  onKeyPress={this.handleKeyPress} />
+                  onKeyPress={this.handleKeyPress} onClick={this.handleChangeField}/>
               </FormGroup>
               <FormGroup className="mb-4">
                 <Label for="searchTags" className="note-font-1"></Label>
                 <Input type="text" name="searchTags" className="search-input"
-                  id="searchTags" value={this.state.tagValue} onChange={this.handleChange} />
+                  id="searchTags" value={this.state.tagValue} onChange={this.handleChange}
+                  onClick={this.handleChangeField}/>
               </FormGroup>
               <FormGroup className="mb-4">
                 <Label for="searchTags" className="note-font-1"></Label>
                 <Input type="text" name="searchTags" className="search-input"
-                  id="searchDifficulty" value={this.state.difficultyValue} onChange={this.handleChange} />
+                  id="searchDifficulty" value={this.state.difficultyValue} onChange={this.handleChange}
+                  onKeyPress={this.handleKeyPress} onClick={this.handleChangeField}/>
               </FormGroup>
             </div>
             <i className="fas fa-times fa-2x" onClick={this.handleX}></i>
@@ -129,7 +149,6 @@ export default class SearchBar extends React.Component {
             {this.state.notes.map(note => <SearchItem key={note.noteId} noteId={note.noteId} noteTitle = {note.noteTitle} noteContent={note.noteContent}/>)}
           </div>
         </div>
-
       );
 
     }

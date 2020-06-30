@@ -324,6 +324,32 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
     });
 });
 
+// SEARCH FOR A NOTE BY PROVIDING THE NOTE DIFFICULTY
+app.get('/api/notes/search/difficulty/:noteDifficulty', (req, res, next) => {
+  const noteDifficulty = parseInt(req.params.noteDifficulty, 10);
+  if (!Number.isInteger(noteDifficulty) || noteDifficulty <= 0 || noteDifficulty > 5) {
+    return res.status(400).json({ error: 'Difficulty must be whole number from 1 to 5.' });
+  }
+  const sql = `
+  SELECT "noteTitle", "noteId", "noteContent"
+  FROM  "notes"
+  WHERE "noteDifficulty" =$1
+  `;
+  const params = [noteDifficulty];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        return res.status(404).json({ error: `Cannot find note with "difficulty ${params}` });
+      } else {
+        return res.status(200).json(result.rows);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+});
+
 // USER CAN VIEW INDIVIDUAL FLASHCARD
 app.get('/api/flashcards/:fcId', (req, res, next) => {
   const fcId = req.params.fcId;
@@ -461,7 +487,6 @@ app.post('/api/flashcards', (req, res, next) => {
 });
 
 // USER CAN SEARCH FLASHCARDS BY A SINGLE TAG, NOT CASE SENSITIVE
-// Note: can make this more robust by only showing flashcards from a certain deckId
 // Note: can make this more robust by only showing flashcards from a certain deckId
 //   and student Id
 app.get('/api/flashcards/search/:fcTag', (req, res, next) => {

@@ -61,8 +61,11 @@ app.get('/api/students/:studentId', (req, res, next) => {
 
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
-  SELECT *
+  SELECT "notes"."noteId", "notes"."notebookId", "notes"."noteTitle",
+         "notes"."noteContent", "notes"."noteDifficulty", "notes"."noteResource",
+         "notes"."noteCode", "notebooks"."notebookName", "notebooks"."studentId"
   FROM  "notes"
+   JOIN "notebooks" using ("notebookId")
   WHERE "noteId" = $1
   `;
   const noteParam = [req.params.noteId];
@@ -224,7 +227,6 @@ app.delete('/api/notes/:noteId', (req, res, next) => {
 // UPDATE A NOTE BY PROVIDING A NOTE ID
 
 app.put('/api/notes/:noteId', (req, res, next) => {
-
   const noteId = parseInt(req.params.noteId);
   if (!Number.isInteger(noteId) || noteId <= 0) {
     return res.status(400).json({ error: 'noteId must be a positive integer' });
@@ -235,13 +237,15 @@ app.put('/api/notes/:noteId', (req, res, next) => {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
   const noteTags = req.body.noteTags;
+  const noteResource = JSON.stringify(req.body.noteResource);
+  const noteCode = JSON.stringify(req.body.noteCode);
   const newNoteValues = [
     req.body.notebookId,
     req.body.noteTitle,
     req.body.noteContent,
     req.body.noteDifficulty,
-    req.body.noteResource,
-    req.body.noteCode,
+    noteResource,
+    noteCode,
     noteId
   ];
   const tagsArray = [];

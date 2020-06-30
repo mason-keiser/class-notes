@@ -183,9 +183,6 @@ class Note extends React.Component {
   }
 
   render() {
-    if (this.state === null) {
-      return null;
-    }
     const note = this.state.note;
     const view = this.state.view;
     const element = this.state.element;

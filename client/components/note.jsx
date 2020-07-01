@@ -159,11 +159,10 @@ class Note extends React.Component {
       .then(res => res.json())
       .then(data => {
         // what uzair said
-        // this.setState({
-        //   // note: data,
-
-        //   view: 'viewNote'
-        // });
+        this.setState({
+          note: data,
+          view: 'viewNote'
+        });
         // this.props.history.push(`/notes/${data.noteId}`);
       })
       .catch(error => console.error(error));

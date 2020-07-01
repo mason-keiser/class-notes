@@ -331,7 +331,33 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
   db.query(sql, title)
     .then(result => {
       if (!result.rows[0]) {
-        return res.status(404).json({ error: `Cannot find note with "noteTitle ${noteTitle}` });
+        return res.status(200).json({ message: `No notes contain: ${noteTitle}` });
+      } else {
+        return res.status(200).json(result.rows);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+});
+
+// SEARCH FOR A NOTE BY PROVIDING THE NOTE DIFFICULTY
+app.get('/api/notes/search/difficulty/:noteDifficulty', (req, res, next) => {
+  const noteDifficulty = parseInt(req.params.noteDifficulty, 10);
+  if (!Number.isInteger(noteDifficulty) || noteDifficulty <= 0 || noteDifficulty > 5) {
+    return res.status(400).json({ error: 'Difficulty must be whole number from 1 to 5.' });
+  }
+  const sql = `
+  SELECT "noteTitle", "noteId", "noteContent"
+  FROM  "notes"
+  WHERE "noteDifficulty" =$1
+  `;
+  const params = [noteDifficulty];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        return res.status(404).json({ error: `Cannot find note with "difficulty ${params}` });
       } else {
         return res.status(200).json(result.rows);
       }
@@ -350,10 +376,11 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
     return res.status(400).json({ error: '"fcId" must be a positive integer' });
   }
   const sql = `
-  SELECT *
-  FROM  "fcDeck"
-  JOIN  "fcItem" USING ("fcDeckId")
-  WHERE "fcId" = $1
+  select *
+  from "fcItem"
+  join "fcDeck" using ("fcDeckId")
+  join "notebooks" using ("notebookId")
+  where "fcId" = $1
   `;
   const id = [fcId];
   db.query(sql, id)
@@ -425,7 +452,7 @@ app.get('/api/flashcards-review/:fcDeckId', (req, res, next) => {
 });
 
 // CREATE A NEW FLASHCARD
-app.post('/api/flashcards', (req, res, next) => {
+app.post('/api/flashcards/create', (req, res, next) => {
   const fcQuestion = req.body.fcQuestion;
   const fcAnswer = req.body.fcAnswer;
   const fcDeckId = req.body.fcDeckId;
@@ -479,7 +506,6 @@ app.post('/api/flashcards', (req, res, next) => {
 });
 
 // USER CAN SEARCH FLASHCARDS BY A SINGLE TAG, NOT CASE SENSITIVE
-// Note: can make this more robust by only showing flashcards from a certain deckId
 // Note: can make this more robust by only showing flashcards from a certain deckId
 //   and student Id
 app.get('/api/flashcards/search/:fcTag', (req, res, next) => {

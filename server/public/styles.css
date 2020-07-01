@@ -636,13 +636,13 @@ margin-bottom: 5px;
 .modal-hide {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s .5s, opacity .3s linear;
+  transition: visibility 0s .1s, opacity .1s linear;
 }
 
 .modal-visible {
   visibility: visible;
   opacity: 1;
-  transition: opacity .3s linear;
+  transition: opacity .1s linear;
 }
 
 .cancel-note-modal-main, .update-note-modal-main {

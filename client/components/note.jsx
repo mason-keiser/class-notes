@@ -300,7 +300,7 @@ class Note extends React.Component {
       this.setState({
         cancelModal: 'hidden'
       });
-    }, 2000);
+    }, 500);
   }
 
   showUpdateModal() {
@@ -311,7 +311,7 @@ class Note extends React.Component {
       this.setState({
         updateModal: 'hidden'
       });
-    }, 2000);
+    }, 500);
   }
 
   render() {

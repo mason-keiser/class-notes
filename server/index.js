@@ -313,7 +313,7 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
   db.query(sql, title)
     .then(result => {
       if (!result.rows[0]) {
-        return res.status(404).json({ error: `Cannot find note with "noteTitle ${noteTitle}` });
+        return res.status(200).json({ message: `No notes contain: ${noteTitle}` });
       } else {
         return res.status(200).json(result.rows);
       }

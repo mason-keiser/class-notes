@@ -62,19 +62,13 @@ class Note extends React.Component {
     if (this.props.match.params.noteId) {
       fetch(`/api/notes/${this.props.match.params.noteId}`)
         .then(res => res.json())
-        .then(data => this.setState({
-          note: {
-            notebookId: data.notebookId,
-            noteTitle: data.noteTitle,
-            noteContent: data.noteContent,
-            noteDifficulty: data.noteDifficulty,
-            noteResource: data.noteResource,
-            noteCode: data.noteCode,
-            noteTags: data.noteTags.join(' ')
-          }, 
-          flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
+        .then(data => {
+          this.setState({
+            note: data,
+            flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
 
-        }))
+          });
+        })
         .catch(error => console.error(error));
     } else {
       this.setState({
@@ -212,7 +206,7 @@ class Note extends React.Component {
   createNewNote(event) {
     event.preventDefault();
     const newNote = this.state.note;
-    newNote.noteTags = newNote.noteTags.split(' ');
+    // newNote.noteTags = newNote.noteTags.split(' ');
     fetch('/api/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -231,7 +225,6 @@ class Note extends React.Component {
   editNote(event) {
     event.preventDefault();
     const { notebookName, noteId, ...rest } = this.state.note;
-    rest.noteTags = rest.noteTags.split(' ');
     fetch(`/api/notes/${this.props.match.params.noteId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

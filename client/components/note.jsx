@@ -206,7 +206,6 @@ class Note extends React.Component {
   createNewNote(event) {
     event.preventDefault();
     const newNote = this.state.note;
-    // newNote.noteTags = newNote.noteTags.split(' ');
     fetch('/api/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

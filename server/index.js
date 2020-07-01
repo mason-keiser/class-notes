@@ -152,7 +152,7 @@ app.post('/api/notes', (req, res, next) => {
   if (!req.body.noteCode) {
     return res.status(400).json({ error: 'all notes must have noteCode' });
   }
-  if (!req.body.noteTags) {
+  if (!req.body.noteTags && req.body.noteTags !== '') {
     return res.status(400).json({ error: 'all notes must have noteTags' });
   }
   const noteTags = req.body.noteTags.split(' ');

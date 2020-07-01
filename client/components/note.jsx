@@ -20,15 +20,53 @@ function CancelModal(props) {
   );
 }
 
+function UpdateModal(props) {
+  let modalDisplay;
+  if (props.modal === 'hidden') {
+    modalDisplay = 'update-note-modal modal-hide';
+  }
+  if (props.modal === 'visible') {
+    modalDisplay = 'update-note-modal modal-visible';
+  }
+  return (
+    <div className={modalDisplay}>
+      <div className="update-note-modal-main">
+        <p>Note has been updated</p>
+      </div>
+    </div>
+  );
+}
+
+function CreateModal(props) {
+  let modalDisplay;
+  if (props.modal === 'hidden') {
+    modalDisplay = 'create-note-modal modal-hide';
+  }
+  if (props.modal === 'visible') {
+    modalDisplay = 'create-note-modal modal-visible';
+  }
+  return (
+    <div className={modalDisplay}>
+      <div className="create-note-modal-main">
+        <p>Note has been created</p>
+      </div>
+    </div>
+  );
+}
+
 class Note extends React.Component {
   constructor(props) {
     super(props);
+    // this.state = { note: null, view: 'viewNote', element: null, notebooks: [], cancelModal: 'hidden', updateModal: 'hidden', createModal: 'hidden' };
     this.state = {
       note: null,
       view: 'viewNote',
       element: null,
       notebooks: [],
-      flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' }
+      flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
+      cancelModal: 'hidden',
+      updateModal: 'hidden',
+      createModal: 'hidden'
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
@@ -46,11 +84,12 @@ class Note extends React.Component {
     this.handleResourceLink = this.handleResourceLink.bind(this);
     this.addOneResource = this.addOneResource.bind(this);
     this.deleteOneResource = this.deleteOneResource.bind(this);
+    this.showCancelModal = this.showCancelModal.bind(this);
+    this.showUpdateModal = this.showUpdateModal.bind(this);
+    this.showCreateModal = this.showCreateModal.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
     this.flashCardQuestion = this.flashCardQuestion.bind(this);
     this.flashCardAnswer = this.flashCardAnswer.bind(this);
-    this.showModal = this.showModal.bind(this);
-
   }
 
   componentDidMount() {
@@ -66,7 +105,6 @@ class Note extends React.Component {
           this.setState({
             note: data,
             flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
-
           });
         })
         .catch(error => console.error(error));
@@ -205,6 +243,20 @@ class Note extends React.Component {
 
   createNewNote(event) {
     event.preventDefault();
+    const noteTitle = this.state.note.noteTitle;
+    const noteContent = this.state.note.noteContent;
+    if (!noteTitle && !noteContent) {
+      alert('Error: The note must have a title and content entered before creating it.');
+      return;
+    }
+    if (!noteTitle) {
+      alert('Error: The note must have a title entered before creating it.');
+      return;
+    }
+    if (!noteContent) {
+      alert('Error: The note must a note entered before creating it.');
+      return;
+    }
     const newNote = this.state.note;
     fetch('/api/notes', {
       method: 'POST',
@@ -216,6 +268,7 @@ class Note extends React.Component {
         this.setState({
           view: 'viewNote'
         });
+        this.showCreateModal();
         this.props.history.push(`/notes/${data.noteId}`);
       })
       .catch(error => console.error(error));
@@ -264,15 +317,37 @@ class Note extends React.Component {
       .catch(error => console.error(error));
   }
 
-  showModal() {
+  showCancelModal() {
     this.setState({
-      modal: 'visible'
+      cancelModal: 'visible'
     });
     setTimeout(() => {
       this.setState({
-        modal: 'hidden'
+        cancelModal: 'hidden'
       });
-    }, 2000);
+    }, 500);
+  }
+
+  showUpdateModal() {
+    this.setState({
+      updateModal: 'visible'
+    });
+    setTimeout(() => {
+      this.setState({
+        updateModal: 'hidden'
+      });
+    }, 500);
+  }
+
+  showCreateModal() {
+    this.setState({
+      createModal: 'visible'
+    });
+    setTimeout(() => {
+      this.setState({
+        createModal: 'hidden'
+      });
+    }, 500);
   }
 
   render() {
@@ -371,11 +446,15 @@ class Note extends React.Component {
           <div className={`d-flex flex-column height-90 ${justifyContent}`}>
             {elementRow}
             <div className="height-10 d-flex align-items-end justify-content-center ">
-              <Button type="submit" className="solid-button" onClick={this.editNote}>Update</Button>
+              <Button type="submit" className="solid-button"
+                onClick={() => {
+                  this.editNote(event);
+                  this.showUpdateModal();
+                }}>Update</Button>
               <Button type="reset" className="solid-button ml-4"
                 onClick={() => {
                   this.getAllNoteData();
-                  this.showModal();
+                  this.showCancelModal();
                 }}>Cancel</Button>
               <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
             </div>
@@ -394,7 +473,7 @@ class Note extends React.Component {
               <Button type="reset" className="solid-button ml-4"
                 onClick={() => {
                   this.getAllNoteData();
-                  this.showModal();
+                  this.showCancelModal();
                 }}>Cancel</Button>
             </div>
           </div>
@@ -474,7 +553,11 @@ class Note extends React.Component {
                 onChange={this.handleContentChange}></textarea>
             </FormGroup>
             <CancelModal
-              modal={this.state.modal} />
+              modal={this.state.cancelModal} />
+            <UpdateModal
+              modal={this.state.updateModal} />
+            <CreateModal
+              modal={this.state.createModal} />
           </div>
           <div className={'col-5 d-flex flex-column h-100'}>
             <div className="height-10">

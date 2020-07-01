@@ -41,12 +41,10 @@ class Note extends React.Component {
           notebookId: 1,
           noteTitle: '',
           noteContent: '',
-          noteDifficulty: '',
+          noteDifficulty: 1,
           noteResource: [],
           noteCode: {},
-          noteTags: [''],
-          notebookName: '',
-          studentId: ''
+          noteTags: ['']
         },
         view: 'createNote'
       });
@@ -54,18 +52,12 @@ class Note extends React.Component {
   }
 
   getNotebooks() {
-    if (this.props.match.params.noteId) {
-      fetch('/api/students/1')
-        .then(res => res.json())
-        .then(notebookData => this.setState({
-          notebooks: notebookData.notebooks
-        }))
-        .catch(error => console.error(error));
-    } else {
-      this.setState({
-        notebooks: []
-      });
-    }
+    fetch('/api/students/1')
+      .then(res => res.json())
+      .then(notebookData => this.setState({
+        notebooks: notebookData.notebooks
+      }))
+      .catch(error => console.error(error));
   }
 
   handleTitleChange(event) {
@@ -158,13 +150,10 @@ class Note extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
-        // what uzair said
-        // this.setState({
-        //   // note: data,
-
-        //   view: 'viewNote'
-        // });
-        // this.props.history.push(`/notes/${data.noteId}`);
+        this.setState({
+          view: 'viewNote'
+        });
+        this.props.history.push(`/notes/${data.noteId}`);
       })
       .catch(error => console.error(error));
   }
@@ -172,8 +161,6 @@ class Note extends React.Component {
   editNote(event) {
     event.preventDefault();
     const { notebookName, noteId, ...rest } = this.state.note;
-    // eslint-disable-next-line no-console
-    console.log(rest);
     fetch(`/api/notes/${noteId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -181,9 +168,6 @@ class Note extends React.Component {
     })
       .then(res => res.json())
       .then(update => {
-        // eslint-disable-next-line no-console
-        console.log(update);
-        // this.setState({ note: update });
       })
       .catch(error => console.error(error));
   }
@@ -254,12 +238,12 @@ class Note extends React.Component {
                     <FormGroup className="resource">
                       <Label for="resourceName">Resource Name</Label>
                       <Input type="text" name="resourceName" id="resourceName" placeholder="Name"
-                        defaultValue={item.name} onChange={() => this.handleResourceName(index, event)}/>
+                        defaultValue={item.name} onChange={() => this.handleResourceName(index, event)} />
                     </FormGroup>
                     <FormGroup className="resource-link ml-4">
                       <Label for="resourceLink">Link</Label>
                       <Input type="text" name="resourceLink" id="resourceLink" placeholder="Name"
-                        defaultValue={item.link} onChange={() => this.handleResourceLink(index, event)}/>
+                        defaultValue={item.link} onChange={() => this.handleResourceLink(index, event)} />
                     </FormGroup>
                     <div className="minus-button ml-4" onClick={() => this.deleteOneResource(index)}><i className="fas fa-minus"></i></div>
                   </div>
@@ -302,7 +286,10 @@ class Note extends React.Component {
           <div className={`d-flex flex-column height-90 ${justifyContent}`}>
             {elementRow}
             <div className="height-10 d-flex align-items-end justify-content-center">
-              <Button type="submit" className="solid-button" onClick={this.createNewNote}>Create</Button>
+              <Button type="submit" className="solid-button"
+                onClick={() => {
+                  this.createNewNote(event);
+                }}>Create</Button>
               <Button type="reset" className="solid-button ml-4">Cancel</Button>
             </div>
           </div>
@@ -368,9 +355,12 @@ class Note extends React.Component {
                 {
                   this.state.notebooks.map(notebook => {
                     // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
-                    return (notebook.notebookId === this.state.note.notebookId)
-                      ? (<option key={notebook.notebookId} defaultValue>{note.notebookName}</option>)
-                      : (<option key={notebook.notebookId}>{notebook.notebookName}</option>);
+                    // return (notebook.notebookId === this.state.note.notebookId)
+                    //   ? (<option key={notebook.notebookId} defaultValue>{note.notebookName}</option>)
+                    //   : (<option key={notebook.notebookId}>{notebook.notebookName}</option>);
+                    return (
+                      <option key={notebook.notebookId}>{notebook.notebookName}</option>
+                    );
                   })}
               </Input>
             </FormGroup>
@@ -382,6 +372,7 @@ class Note extends React.Component {
                 name="noteContent"
                 id="noteContent"
                 defaultValue={note.noteContent}
+                placeholder="Enter note here"
                 onChange={this.handleContentChange}></textarea>
             </FormGroup>
           </div>

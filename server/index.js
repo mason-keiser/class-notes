@@ -61,11 +61,8 @@ app.get('/api/students/:studentId', (req, res, next) => {
 
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
-  SELECT "notes"."noteId", "notes"."notebookId", "notes"."noteTitle",
-         "notes"."noteContent", "notes"."noteDifficulty", "notes"."noteResource",
-         "notes"."noteCode", "notebooks"."notebookName", "notebooks"."studentId"
+  SELECT *
   FROM  "notes"
-   JOIN "notebooks" using ("notebookId")
   WHERE "noteId" = $1
   `;
   const noteParam = [req.params.noteId];
@@ -137,11 +134,32 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
 // CREATE A NEW NOTE
 
 app.post('/api/notes', (req, res, next) => {
-  if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
-    !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode ||
-    !req.body.noteTags) {
-    return res.status(400).json({ error: 'all notes must have complete data' });
+  if (!req.body.notebookId) {
+    return res.status(400).json({ error: 'all notes must have notebookId' });
   }
+  if (!req.body.noteTitle) {
+    return res.status(400).json({ error: 'all notes must have noteTitle' });
+  }
+  if (!req.body.noteContent) {
+    return res.status(400).json({ error: 'all notes must have noteContent' });
+  }
+  if (!req.body.noteDifficulty) {
+    return res.status(400).json({ error: 'all notes must have noteDifficulty' });
+  }
+  if (!req.body.noteResource) {
+    return res.status(400).json({ error: 'all notes must have noteResource' });
+  }
+  if (!req.body.noteCode) {
+    return res.status(400).json({ error: 'all notes must have noteCode' });
+  }
+  if (!req.body.noteTags) {
+    return res.status(400).json({ error: 'all notes must have noteTags' });
+  }
+  // if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
+  //   !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode ||
+  //   !req.body.noteTags) {
+  //   return res.status(400).json({ error: 'all notes must have complete data' });
+  // }
   const noteTags = req.body.noteTags;
   const noteResource = JSON.stringify(req.body.noteResource);
   const noteCode = JSON.stringify(req.body.noteCode);

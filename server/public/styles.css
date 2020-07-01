@@ -607,10 +607,6 @@ border-radius: 0;
 
 }
 
-.form-group{
-  margin-left: 30px;
-}
-
 .search-input:focus{
 background-color: #24997F;
 color: #C4C4C4;
@@ -652,5 +648,3 @@ margin-bottom: 5px;
   color: #C4C4C4;
   margin-bottom: 0;
 }
-
-

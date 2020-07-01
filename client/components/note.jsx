@@ -31,7 +31,7 @@ function UpdateModal(props) {
   return (
     <div className={modalDisplay}>
       <div className="update-note-modal-main">
-        <p>Note have been updated</p>
+        <p>Note has been updated</p>
       </div>
     </div>
   );

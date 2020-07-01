@@ -4,7 +4,6 @@ import { Button, Form, FormGroup, Input } from 'reactstrap';
 
 function FcListItem(props) {
   const fcListItem = props.flashcard;
-  // const fcId = fcListItem.fcId;
   const fcDeckId = fcListItem.fcDeckId;
   return (
     <div className="">
@@ -21,9 +20,22 @@ function FcDeckItems(props) {
   const fcItem = props.flashcard
   const fcId = fcItem.fcDeckId
   return (
-    <div>
-      <div>{fcItem.fcQuestion}</div>
-      <div>{fcItem.fcAnswer}</div>
+    <div className='d-flex flex-row justify-content-center pt-5'>
+      <div className='fcQ mr-5 d-flex pt-4' style={{
+        border: '1px solid #3F3F3D',
+        color:'#24997F',
+        width: '45%',
+        height: '100px',
+        justifyContent: 'center',
+        fontSize: '20px'
+      }}>{fcItem.fcQuestion}</div>
+      <div className='fcA d-flex pt-4' style={{
+        border: '1px solid #3F3F3D',
+        color:'#24997F',
+        width: '40%',
+        justifyContent: 'center',
+        fontSize: '20px'
+      }}>{fcItem.fcAnswer}</div>
     </div>
   )
 }
@@ -72,13 +84,12 @@ export default class FcList extends React.Component {
         backgroundColor: '#333333',
         display: 'flex',
         flex: 'row',
-        justifyContent: 'space-evenly'
-        
+        justifyContent: 'space-evenly',
        }}>
       <div className = "fc-list-container d-flex flex-column align-content-center justify-content-center">
-        <div className="fc-list fc-list-container-border mt-5" style= {{ height: '100vh', width: '100%'}}>
-          <div id ="fccard">
-            <div id='cardTitle'>
+        <div className="fc-list " style= {{ height: '100vh', width: '100%'}}>
+          <div id ="fccard" style={{ border: 'solid 1px #3F3F3D'}}>
+            <div id='cardTitle' style={{ border: '1px solid #c4c4c4' }}>
               <h1 id='notebookName'className=" snotebook-name mb-5 mt-2" style={{
                     color: '#24997F',
                     fontSize: '35x',
@@ -96,8 +107,23 @@ export default class FcList extends React.Component {
           </div>
         </div>
       </div>
-       <div className="flashcardDeck d-flex flex-row col-3 justify-content-center mb-5 mt-5">
-         <div className='fcLists fc-list-container-border' style={{ height: '100vh', width: '100%'}}>
+       <div className="flashcardDeck d-flex flex-row col ml-3 mr-4 mb-5 mt-5 cl cr-0 pl-0 pr-0" style={{ 
+          height: '100vh',
+          width: '100%',
+          backgroundColor: '#333333',
+          overflowY: 'auto'
+          }}>
+         <div className='fcLists qa-list-container-border mt-6.6' style={{ height: '745px', width: '100%' }}>
+         <div className='pt-3' style={{
+              backgroundColor: '#3F3F3D',
+              width: '100%',
+              height: '10%',
+              color: '#24997F',
+              display: 'flex',
+              justifyContent: 'center',
+              fontSize: '25px',
+              border: '1px solid #c4c4c4',
+          }}>View all available flashcards</div>
           <div>
             {this.state.flashcards.map(fcItem => {
               return(
@@ -107,7 +133,6 @@ export default class FcList extends React.Component {
               );
             
           })}</div>
-             <div></div>
          </div>
      </div>
      </div>

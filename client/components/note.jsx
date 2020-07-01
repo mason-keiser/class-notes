@@ -3,13 +3,37 @@ import NotebookHeader from './notebook-header';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
+function CancelModal(props) {
+  let modalDisplay;
+  if (props.modal === 'hidden') {
+    modalDisplay = 'cancel-note-modal modal-hide';
+  }
+  if (props.modal === 'visible') {
+    modalDisplay = 'cancel-note-modal modal-visible';
+  }
+  return (
+    <div className={modalDisplay}>
+      <div className="cancel-note-modal-main">
+        <p>Changes have been cancelled</p>
+      </div>
+    </div>
+  );
+}
+
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { note: null, view: 'viewNote', element: null, notebooks: [] };
+    this.state = {
+      note: null,
+      view: 'viewNote',
+      element: null,
+      notebooks: [],
+      flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' }
+    };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
+    this.createFlashcard = this.createFlashcard.bind(this);
     this.handleDifficultyChange = this.handleDifficultyChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -23,6 +47,10 @@ class Note extends React.Component {
     this.addOneResource = this.addOneResource.bind(this);
     this.deleteOneResource = this.deleteOneResource.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
+    this.flashCardQuestion = this.flashCardQuestion.bind(this);
+    this.flashCardAnswer = this.flashCardAnswer.bind(this);
+    this.showModal = this.showModal.bind(this);
+
   }
 
   componentDidMount() {
@@ -43,7 +71,9 @@ class Note extends React.Component {
             noteResource: data.noteResource,
             noteCode: data.noteCode,
             noteTags: data.noteTags.join(' ')
-          }
+          }, 
+          flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
+
         }))
         .catch(error => console.error(error));
     } else {
@@ -57,7 +87,8 @@ class Note extends React.Component {
           noteCode: {},
           noteTags: ''
         },
-        view: 'createNote'
+        view: 'createNote',
+        flashcard: { ...this.state.flashcard, fcDeckId: 1 }
       });
     }
   }
@@ -160,6 +191,24 @@ class Note extends React.Component {
     });
   }
 
+  flashCardQuestion(event) {
+    this.setState({
+      flashcard: {
+        ...this.state.flashcard,
+        fcQuestion: event.target.value
+      }
+    });
+  }
+
+  flashCardAnswer(event) {
+    this.setState({
+      flashcard: {
+        ...this.state.flashcard,
+        fcAnswer: event.target.value
+      }
+    });
+  }
+
   createNewNote(event) {
     event.preventDefault();
     const newNote = this.state.note;
@@ -202,6 +251,38 @@ class Note extends React.Component {
       .catch(error => console.error(error));
   }
 
+  createFlashcard(event) {
+    event.preventDefault();
+    fetch('/api/flashcards/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state.flashcard)
+    })
+      .then(res => res.json())
+      .then(() => {
+        this.setState({
+          flashcard: {
+            ...this.state.flashcard,
+            fcTags: [''],
+            fcQuestion: '',
+            fcAnswer: ''
+          }
+        });
+      })
+      .catch(error => console.error(error));
+  }
+
+  showModal() {
+    this.setState({
+      modal: 'visible'
+    });
+    setTimeout(() => {
+      this.setState({
+        modal: 'hidden'
+      });
+    }, 2000);
+  }
+
   render() {
     const note = this.state.note;
     const view = this.state.view;
@@ -231,11 +312,13 @@ class Note extends React.Component {
           <div className="height-90">
             <FormGroup className="mb-4">
               <Label for="flashcardQuestion" className="note-font-1">Enter Question:</Label>
-              <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion" />
+              <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion"
+                value={this.state.flashcard.fcQuestion} onChange={this.flashCardQuestion}/>
             </FormGroup>
             <FormGroup className="mb-4">
               <Label for="flashcardAnswer" className="note-font-1">Enter Answer:</Label>
-              <Input type="textarea" name="flashcardAnswer" id="flashcardAnswer" />
+              <Input type="textarea" name="flashcardAnswer" id="flashcardAnswer"
+                value={this.state.flashcard.fcAnswer} onChange={this.flashCardAnswer}/>
             </FormGroup>
             <div className="d-flex flex-row align-items-center justify-content-between">
               <FormGroup className="mb-5 flashcard-select-tag">
@@ -245,7 +328,7 @@ class Note extends React.Component {
                   <option>Create new tag</option>
                 </Input>
               </FormGroup>
-              <Button className="solid-button-large ml-4">Make Flashcard</Button>
+              <Button className="solid-button-large ml-4" onClick={this.createFlashcard}>Make Flashcard</Button>
             </div>
           </div>
         );
@@ -297,7 +380,11 @@ class Note extends React.Component {
             {elementRow}
             <div className="height-10 d-flex align-items-end justify-content-center ">
               <Button type="submit" className="solid-button" onClick={this.editNote}>Update</Button>
-              <Button type="reset" className="solid-button ml-4">Cancel</Button>
+              <Button type="reset" className="solid-button ml-4"
+                onClick={() => {
+                  this.getAllNoteData();
+                  this.showModal();
+                }}>Cancel</Button>
               <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
             </div>
           </div>
@@ -312,7 +399,11 @@ class Note extends React.Component {
                 onClick={() => {
                   this.createNewNote(event);
                 }}>Create</Button>
-              <Button type="reset" className="solid-button ml-4">Cancel</Button>
+              <Button type="reset" className="solid-button ml-4"
+                onClick={() => {
+                  this.getAllNoteData();
+                  this.showModal();
+                }}>Cancel</Button>
             </div>
           </div>
         );
@@ -390,6 +481,8 @@ class Note extends React.Component {
                 placeholder="Enter note here"
                 onChange={this.handleContentChange}></textarea>
             </FormGroup>
+            <CancelModal
+              modal={this.state.modal} />
           </div>
           <div className={'col-5 d-flex flex-column h-100'}>
             <div className="height-10">

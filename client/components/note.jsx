@@ -249,8 +249,8 @@ class Note extends React.Component {
         });
       })
       .catch(error => console.error(error));
-}
-        
+  }
+
   showModal() {
     this.setState({
       modal: 'visible'

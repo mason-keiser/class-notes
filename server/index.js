@@ -374,7 +374,7 @@ app.get('/api/notes/search/difficulty/:noteDifficulty', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       if (!result.rows[0]) {
-        return res.status(404).json({ error: `Cannot find note with "difficulty ${params}` });
+        return res.status(200).json({ message: 'Cannot find note for this difficulty level.' });
       } else {
         return res.status(200).json(result.rows);
       }

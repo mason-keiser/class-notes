@@ -48,7 +48,7 @@ function CreateModal(props) {
   return (
     <div className={modalDisplay}>
       <div className="create-note-modal-main">
-        <p>Note has been created</p>
+        <p>Creation Complete</p>
       </div>
     </div>
   );
@@ -57,7 +57,6 @@ function CreateModal(props) {
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = { note: null, view: 'viewNote', element: null, notebooks: [], cancelModal: 'hidden', updateModal: 'hidden', createModal: 'hidden' };
     this.state = {
       note: null,
       view: 'viewNote',
@@ -101,19 +100,12 @@ class Note extends React.Component {
     if (this.props.match.params.noteId) {
       fetch(`/api/notes/${this.props.match.params.noteId}`)
         .then(res => res.json())
-        .then(data => this.setState({
-          note: {
-            notebookId: data.notebookId,
-            noteTitle: data.noteTitle,
-            noteContent: data.noteContent,
-            noteDifficulty: data.noteDifficulty,
-            noteResource: data.noteResource,
-            noteCode: data.noteCode,
-            noteTags: data.noteTags.join(' ')
-          },
-          flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
-
-        }))
+        .then(data => {
+          this.setState({
+            note: data,
+            flashcard: { fcTags: [''], fcQuestion: '', fcAnswer: '', fcDeckId: data.notebookId }
+          });
+        })
         .catch(error => console.error(error));
     } else {
       this.setState({
@@ -127,7 +119,7 @@ class Note extends React.Component {
           noteTags: ''
         },
         view: 'createNote',
-        flashcard: { ...this.state.flashcard, fcDeckId: 1 }
+        flashcard: { fcTags: [''], fcQuestion: '', fcAnswer: '', fcDeckId: 1 }
       });
     }
   }
@@ -265,7 +257,6 @@ class Note extends React.Component {
       return;
     }
     const newNote = this.state.note;
-    newNote.noteTags = newNote.noteTags.split(' ');
     fetch('/api/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -285,7 +276,6 @@ class Note extends React.Component {
   editNote(event) {
     event.preventDefault();
     const { notebookName, noteId, ...rest } = this.state.note;
-    rest.noteTags = rest.noteTags.split(' ');
     fetch(`/api/notes/${this.props.match.params.noteId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -307,13 +297,17 @@ class Note extends React.Component {
 
   createFlashcard(event) {
     event.preventDefault();
+    if (!this.state.flashcard.fcQuestion && !this.state.flashcard.fcAnswer) {
+      alert('Error: Please enter a valid question and answer.');
+      return;
+    }
     fetch('/api/flashcards/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state.flashcard)
     })
       .then(res => res.json())
-      .then(() => {
+      .then(data => {
         this.setState({
           flashcard: {
             ...this.state.flashcard,
@@ -322,6 +316,9 @@ class Note extends React.Component {
             fcAnswer: ''
           }
         });
+        if (!data.error) {
+          this.showCreateModal();
+        }
       })
       .catch(error => console.error(error));
   }

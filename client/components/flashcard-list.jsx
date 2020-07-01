@@ -6,13 +6,7 @@ function FcListItem(props) {
   const fcListItem = props.flashcard;
   const fcDeckId = fcListItem.fcDeckId;
   return (
-    <div className="">
-      <Link to={{ pathname: '/flashcards-review/' + fcDeckId }}>
-        <p className="card-text text-left fc-list-item-content q h-75">{fcListItem.fcQuestion}</p>
-        <p className="card-text text-left fc-list-item-content h-75 mb-4">{fcListItem.fcAnswer}</p>
-        <button color="success" className="fc-list-item-content study-button">Study</button>
-      </Link>
-    </div>
+    null
   );
 }
 
@@ -104,6 +98,11 @@ export default class FcList extends React.Component {
                   flashcard={fcListItem} />
               );
             })}
+            <div className="">
+              <Link to={{ pathname: '/flashcards-review/1' }}>
+                <button color="success" className="fc-list-item-content study-button">Study</button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -46,6 +46,7 @@ class Note extends React.Component {
     this.handleResourceLink = this.handleResourceLink.bind(this);
     this.addOneResource = this.addOneResource.bind(this);
     this.deleteOneResource = this.deleteOneResource.bind(this);
+    this.handleTagChange = this.handleTagChange.bind(this);
     this.flashCardQuestion = this.flashCardQuestion.bind(this);
     this.flashCardAnswer = this.flashCardAnswer.bind(this);
     this.showModal = this.showModal.bind(this);
@@ -62,8 +63,17 @@ class Note extends React.Component {
       fetch(`/api/notes/${this.props.match.params.noteId}`)
         .then(res => res.json())
         .then(data => this.setState({
-          note: data,
+          note: {
+            notebookId: data.notebookId,
+            noteTitle: data.noteTitle,
+            noteContent: data.noteContent,
+            noteDifficulty: data.noteDifficulty,
+            noteResource: data.noteResource,
+            noteCode: data.noteCode,
+            noteTags: data.noteTags.join(' ')
+          }, 
           flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
+
         }))
         .catch(error => console.error(error));
     } else {
@@ -75,7 +85,7 @@ class Note extends React.Component {
           noteDifficulty: 1,
           noteResource: [],
           noteCode: {},
-          noteTags: ['']
+          noteTags: ''
         },
         view: 'createNote',
         flashcard: { ...this.state.flashcard, fcDeckId: 1 }
@@ -115,6 +125,15 @@ class Note extends React.Component {
       note: {
         ...this.state.note,
         noteContent: event.target.value
+      }
+    });
+  }
+
+  handleTagChange(event) {
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteTags: event.target.value
       }
     });
   }
@@ -193,6 +212,7 @@ class Note extends React.Component {
   createNewNote(event) {
     event.preventDefault();
     const newNote = this.state.note;
+    newNote.noteTags = newNote.noteTags.split(' ');
     fetch('/api/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -211,7 +231,8 @@ class Note extends React.Component {
   editNote(event) {
     event.preventDefault();
     const { notebookName, noteId, ...rest } = this.state.note;
-    fetch(`/api/notes/${noteId}`, {
+    rest.noteTags = rest.noteTags.split(' ');
+    fetch(`/api/notes/${this.props.match.params.noteId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(rest)
@@ -408,16 +429,9 @@ class Note extends React.Component {
             </FormGroup>
           </div>
           <div className="d-flex flex-row align-items-center justify-content-between col-md-3">
-            <Input type="select" name="noteTags" id="noteTags" className="col">
-              {
-                note.noteTags.map((item, index) => {
-                  return (
-                    <option key={index}>{item}</option>
-                  );
-                })
-              }
-              <option>Create new tag</option>
-            </Input>
+            <Input type="text" name="noteTags" id="noteTags" className="col"
+              value={this.state.note.noteTags} onChange={this.handleTagChange}/>
+
             <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
             <Link to={{ pathname: closeButton }}>
               <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">

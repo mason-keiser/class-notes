@@ -6,13 +6,7 @@ function FcListItem(props) {
   const fcListItem = props.flashcard;
   const fcDeckId = fcListItem.fcDeckId;
   return (
-    <div className="">
-      <Link to={{ pathname: '/flashcards-review/' + fcDeckId }}>
-        <p className="card-text text-left fc-list-item-content q h-75">{fcListItem.fcQuestion}</p>
-        <p className="card-text text-left fc-list-item-content h-75 mb-4">{fcListItem.fcAnswer}</p>
-        <button color="success" className="fc-list-item-content study-button">Study</button>
-      </Link>
-    </div>
+    null
   );
 }
 
@@ -24,17 +18,19 @@ function FcDeckItems(props) {
       <div className='fcQ mr-5 d-flex pt-4' style={{
         border: '1px solid #3F3F3D',
         color:'#24997F',
-        width: '45%',
+        width: '40%',
         height: '100px',
         justifyContent: 'center',
-        fontSize: '20px'
+        fontSize: '20px',
+        padding: '7px'
       }}>{fcItem.fcQuestion}</div>
       <div className='fcA d-flex pt-4' style={{
         border: '1px solid #3F3F3D',
         color:'#24997F',
         width: '40%',
         justifyContent: 'center',
-        fontSize: '20px'
+        fontSize: '20px',
+        padding: '7px'
       }}>{fcItem.fcAnswer}</div>
     </div>
   )
@@ -80,17 +76,17 @@ export default class FcList extends React.Component {
 
   render() {
     return (
-      <div className="d-flex flex-row mainFcCont" style={{ 
+      <div className="d-flex flex-row mainFcCont pt-0" style={{ 
         backgroundColor: '#333333',
         display: 'flex',
         flex: 'row',
         justifyContent: 'space-evenly',
        }}>
-      <div className = "fc-list-container d-flex flex-column align-content-center justify-content-center">
-        <div className="fc-list " style= {{ height: '100vh', width: '100%'}}>
-          <div id ="fccard" style={{ border: 'solid 1px #3F3F3D'}}>
+      <div className = "fc-list-container d-flex flex-column pt-0">
+        <div className="fc-list pt-0" style= {{ height: '100vh', width: '100%'}}>
+          <div id ="fccard" className='pt-0' style={{ border: 'solid 1px #3F3F3D'}}>
             <div id='cardTitle' style={{ border: '1px solid #c4c4c4' }}>
-              <h1 id='notebookName'className=" snotebook-name mb-5 mt-2" style={{
+              <h1 id='notebookName'className="pt-3 notebook-name mb-5 " style={{
                     color: '#24997F',
                     fontSize: '35x',
                     margin: '10px 0px 0px 0px'
@@ -104,6 +100,11 @@ export default class FcList extends React.Component {
                   flashcard={fcListItem} />
               );
             })}
+            <div className="">
+              <Link to={{ pathname: '/flashcards-review/1' }}>
+                <button color="success" className="fc-list-item-content study-button">Study</button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

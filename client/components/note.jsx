@@ -231,6 +231,20 @@ class Note extends React.Component {
 
   createNewNote(event) {
     event.preventDefault();
+    const noteTitle = this.state.note.noteTitle;
+    const noteContent = this.state.note.noteContent;
+    if (!noteTitle && !noteContent) {
+      alert('Error: The note must have a title and content entered before creating it.');
+      return;
+    }
+    if (!noteTitle) {
+      alert('Error: The note must have a title entered before creating it.');
+      return;
+    }
+    if (!noteContent) {
+      alert('Error: The note must a note entered before creating it.');
+      return;
+    }
     const newNote = this.state.note;
     newNote.noteTags = newNote.noteTags.split(' ');
     fetch('/api/notes', {

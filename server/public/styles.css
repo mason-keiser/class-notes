@@ -643,3 +643,9 @@ textarea.note-content {
   color: #C4C4C4;
   margin-bottom: 0;
 }
+
+.no-results-message{
+text-align: center;
+background-color: #333333;
+color: red;
+}

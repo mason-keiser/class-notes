@@ -628,7 +628,7 @@ margin-bottom: 5px;
 
 
 /* cancel note modal */
-.cancel-note-modal, .update-note-modal {
+.cancel-note-modal, .update-note-modal, .create-note-modal {
   position: fixed;
   background: rgba(0, 0, 0, 0.6);
 }
@@ -645,7 +645,7 @@ margin-bottom: 5px;
   transition: opacity .1s linear;
 }
 
-.cancel-note-modal-main, .update-note-modal-main {
+.cancel-note-modal-main, .update-note-modal-main, .create-note-modal-main {
   margin-top: 10px;
   padding: 10px 17px 10px 17px;
   position: fixed;
@@ -655,7 +655,7 @@ margin-bottom: 5px;
   border-radius: 4px;
 }
 
-.cancel-note-modal-main p, .update-note-modal-main p {
+.cancel-note-modal-main p, .update-note-modal-main p, .create-note-modal-main p {
   margin: 0;
   color: #24997F;
   font-size: 20px;

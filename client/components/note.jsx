@@ -37,10 +37,27 @@ function UpdateModal(props) {
   );
 }
 
+function CreateModal(props) {
+  let modalDisplay;
+  if (props.modal === 'hidden') {
+    modalDisplay = 'create-note-modal modal-hide';
+  }
+  if (props.modal === 'visible') {
+    modalDisplay = 'create-note-modal modal-visible';
+  }
+  return (
+    <div className={modalDisplay}>
+      <div className="create-note-modal-main">
+        <p>Note has been created</p>
+      </div>
+    </div>
+  );
+}
+
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { note: null, view: 'viewNote', element: null, notebooks: [], cancelModal: 'hidden', updateModal: 'hidden' };
+    // this.state = { note: null, view: 'viewNote', element: null, notebooks: [], cancelModal: 'hidden', updateModal: 'hidden', createModal: 'hidden' };
     this.state = {
       note: null,
       view: 'viewNote',
@@ -48,7 +65,8 @@ class Note extends React.Component {
       notebooks: [],
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
       cancelModal: 'hidden',
-      updateModal: 'hidden'
+      updateModal: 'hidden',
+      createModal: 'hidden'
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
@@ -68,6 +86,7 @@ class Note extends React.Component {
     this.deleteOneResource = this.deleteOneResource.bind(this);
     this.showCancelModal = this.showCancelModal.bind(this);
     this.showUpdateModal = this.showUpdateModal.bind(this);
+    this.showCreateModal = this.showCreateModal.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
     this.flashCardQuestion = this.flashCardQuestion.bind(this);
     this.flashCardAnswer = this.flashCardAnswer.bind(this);
@@ -257,6 +276,7 @@ class Note extends React.Component {
         this.setState({
           view: 'viewNote'
         });
+        this.showCreateModal();
         this.props.history.push(`/notes/${data.noteId}`);
       })
       .catch(error => console.error(error));
@@ -324,6 +344,17 @@ class Note extends React.Component {
     setTimeout(() => {
       this.setState({
         updateModal: 'hidden'
+      });
+    }, 500);
+  }
+
+  showCreateModal() {
+    this.setState({
+      createModal: 'visible'
+    });
+    setTimeout(() => {
+      this.setState({
+        createModal: 'hidden'
       });
     }, 500);
   }
@@ -534,6 +565,8 @@ class Note extends React.Component {
               modal={this.state.cancelModal} />
             <UpdateModal
               modal={this.state.updateModal} />
+            <CreateModal
+              modal={this.state.createModal} />
           </div>
           <div className={'col-5 d-flex flex-column h-100'}>
             <div className="height-10">

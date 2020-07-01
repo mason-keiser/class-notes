@@ -30,6 +30,7 @@ export default class App extends React.Component {
           <Route path="/" exact component={MainPage}/>
           <Route path="/notebook" exact component={Notebook}/>
           <Route path="/flashcards" exact component={Flashcards}/>
+          <Route path="/flashcards/create" exact component={Flashcards}/>
           <Route path="/notes/create" component={Note}/>
           <Route path="/notes/:noteId" component={Note} />
           <Route path="/flashcards-review/:fcDeckId" exact component={FlashcardsReview}/>

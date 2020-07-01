@@ -3,36 +3,27 @@ import NotebookHeader from './notebook-header';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-// modal functionality is commented out.  they are being kept in in case I am able to work on modals for when a user
-// creates a new note and when a user updates a note.  --John
-
-// function CreateNoteModal(props) {
-//   if (props.modal === 'hidden') {
-//     return null;
-//   }
-//   if (props.modal === 'visible') {
-//     return (
-//       <div className="create-note-modal">
-//         <div className="create-note-modal-main">
-//           <h1>You created a note!</h1>
-//           <p>Would you like to go to your created note, or go back to the List of Notes?</p>
-//           {/* this.props.history.push(`/notes/${data.noteId}`); */}
-//           <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">
-//             <p>Go to created note</p>
-//           </Button>
-//           <Button>
-//             <p>Go to note-list</p>
-//           </Button>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
+function CancelModal(props) {
+  let modalDisplay;
+  if (props.modal === 'hidden') {
+    modalDisplay = 'cancel-note-modal modal-hide';
+  }
+  if (props.modal === 'visible') {
+    modalDisplay = 'cancel-note-modal modal-visible';
+  }
+  return (
+    <div className={modalDisplay}>
+      <div className="cancel-note-modal-main">
+        <p>Changes have been cancelled</p>
+      </div>
+    </div>
+  );
+}
 
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { note: null, view: 'viewNote', element: null, notebooks: [] };
+    this.state = { note: null, view: 'viewNote', element: null, notebooks: [], modal: 'hidden' };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
@@ -48,8 +39,7 @@ class Note extends React.Component {
     this.handleResourceLink = this.handleResourceLink.bind(this);
     this.addOneResource = this.addOneResource.bind(this);
     this.deleteOneResource = this.deleteOneResource.bind(this);
-    // this.showModal = this.showModal.bind(this);
-    // this.hideModal = this.hideModal.bind(this);
+    this.showModal = this.showModal.bind(this);
   }
 
   componentDidMount() {
@@ -208,17 +198,16 @@ class Note extends React.Component {
       .catch(error => console.error(error));
   }
 
-  // showModal() {
-  //   this.setState({
-  //     modal: 'visible'
-  //   });
-  // }
-
-  // hideModal() {
-  //   this.setState({
-  //     modal: 'hidden'
-  //   });
-  // }
+  showModal() {
+    this.setState({
+      modal: 'visible'
+    });
+    setTimeout(() => {
+      this.setState({
+        modal: 'hidden'
+      });
+    }, 2000);
+  }
 
   render() {
     const note = this.state.note;
@@ -315,7 +304,11 @@ class Note extends React.Component {
             {elementRow}
             <div className="height-10 d-flex align-items-end justify-content-center ">
               <Button type="submit" className="solid-button" onClick={this.editNote}>Update</Button>
-              <Button type="reset" className="solid-button ml-4">Cancel</Button>
+              <Button type="reset" className="solid-button ml-4"
+                onClick={() => {
+                  this.getAllNoteData();
+                  this.showModal();
+                }}>Cancel</Button>
               <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
             </div>
           </div>
@@ -329,12 +322,13 @@ class Note extends React.Component {
               <Button type="submit" className="solid-button"
                 onClick={() => {
                   this.createNewNote(event);
-                  // this.showModal();
                 }}>Create</Button>
-              <Button type="reset" className="solid-button ml-4">Cancel</Button>
+              <Button type="reset" className="solid-button ml-4"
+                onClick={() => {
+                  this.getAllNoteData();
+                  this.showModal();
+                }}>Cancel</Button>
             </div>
-            {/* <CreateNoteModal
-              modal={this.state.modal} /> */}
           </div>
         );
         break;
@@ -418,6 +412,8 @@ class Note extends React.Component {
                 placeholder="Enter note here"
                 onChange={this.handleContentChange}></textarea>
             </FormGroup>
+            <CancelModal
+              modal={this.state.modal} />
           </div>
           <div className={'col-5 d-flex flex-column h-100'}>
             <div className="height-10">

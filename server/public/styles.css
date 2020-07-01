@@ -647,31 +647,37 @@ margin-bottom: 5px;
   margin-bottom: 0;
 }
 
-/* create note modal */
+/* cancel note modal */
 
-/* .create-note-modal {
+.cancel-note-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background: rgba(0, 0, 0, 0.6);
 }
 
-.create-note-modal-main {
+.modal-hide {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s .75s, opacity .3s linear;
+}
+
+.modal-visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .3s linear;
+}
+
+.cancel-note-modal-main {
+  margin-top: 10px;
+  padding: 10px 17px 10px 17px;
   position: fixed;
-  background: white;
-  width: 80%;
+  background: #3F3F3D;
+  width: auto;
   height: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  border-radius: 4px;
 }
 
-.create-note-modal-display-block {
-  display: block
+.cancel-note-modal-main p {
+  margin: 0;
+  color: #24997F;
+  font-size: 20px;
 }
-
-.create-note-modal-display-none {
-  display: none;
-} */

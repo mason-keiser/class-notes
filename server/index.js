@@ -155,11 +155,6 @@ app.post('/api/notes', (req, res, next) => {
   if (!req.body.noteTags) {
     return res.status(400).json({ error: 'all notes must have noteTags' });
   }
-  // if (!req.body.notebookId || !req.body.noteTitle || !req.body.noteContent ||
-  //   !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode ||
-  //   !req.body.noteTags) {
-  //   return res.status(400).json({ error: 'all notes must have complete data' });
-  // }
   const noteTags = req.body.noteTags;
   const noteResource = JSON.stringify(req.body.noteResource);
   const noteCode = JSON.stringify(req.body.noteCode);

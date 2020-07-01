@@ -82,9 +82,7 @@ export default class NoteList extends React.Component {
                   {
                     names.map(item => {
                       return (
-                        <Link to={{ pathname: '/notebook/' + item.notebookId }} key={item.notebookId}>
-                          <option key={item.notebookId}>{item.notebookName}</option>
-                        </Link>
+                        <option key={item.notebookId}>{item.notebookName}</option>
                       );
                     })
                   }

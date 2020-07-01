@@ -591,6 +591,7 @@ font-weight: 100;
 border: none;
 border-bottom: #FFFFFF solid 1px;
 border-radius: 0;
+}
 
 .search-form {
   display: flex;
@@ -658,6 +659,7 @@ margin-bottom: 5px;
   margin: 0;
   color: #24997F;
   font-size: 20px;
+}
 
 .no-results-message{
   text-align: center;

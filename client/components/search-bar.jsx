@@ -39,7 +39,8 @@ export default class SearchBar extends React.Component {
       searchValue: '',
       tagValue: '',
       difficultyValue: '',
-      notes: []
+      notes: [],
+      message: ''
     });
     this.props.closeXClicked();
   }
@@ -77,7 +78,25 @@ export default class SearchBar extends React.Component {
           });
       }
       if (event.target.id === 'searchTags') {
-        console.log('need endpoint for searching Tags');
+        fetch(`/api/notes/search-tags/${this.state.tagValue}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.message) {
+              return this.setState({
+                message: data.message,
+                notes: []
+              });
+            }
+            this.setState({
+              notes: data,
+              message: ''
+            });
+          })
+          .catch(error => {
+
+            console.error(error);
+          });
+
       }
       if (event.target.id === 'searchDifficulty') {
         fetch(`/api/notes/search/difficulty/${this.state.difficultyValue}`)
@@ -113,7 +132,7 @@ export default class SearchBar extends React.Component {
                 <Label for="searchTags" className="note-font-1"></Label>
                 <Input type="text" name="searchTags" className="search-input"
                   id="searchTags" placeholder="Tags"
-                  value={this.state.tagValue} onChange={this.handleChange} onClick={this.handleChangeField}/>
+                  value={this.state.tagValue} onKeyPress={this.handleKeyPress} onChange={this.handleChange} onClick={this.handleChangeField}/>
               </FormGroup>
               <FormGroup className="mb-4">
                 <Label for="searchTags" className="note-font-1"></Label>

@@ -607,11 +607,12 @@ textarea.note-content {
   border-radius: 0;
 }
 
-.search-results-list{
+.search-results-list {
   background-color: #3F3F3D;
   padding: 30px 45px;
+}
 
-.search-form{
+.search-form {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -647,5 +648,4 @@ textarea.note-content {
 text-align: center;
 background-color: #333333;
 color: red;
-
 }

@@ -91,7 +91,7 @@ class Note extends React.Component {
             noteResource: data.noteResource,
             noteCode: data.noteCode,
             noteTags: data.noteTags.join(' ')
-          }, 
+          },
           flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
 
         }))
@@ -271,7 +271,7 @@ class Note extends React.Component {
       .catch(error => console.error(error));
   }
 
-createFlashcard(event) {
+  createFlashcard(event) {
     event.preventDefault();
     fetch('/api/flashcards/create', {
       method: 'POST',
@@ -291,7 +291,7 @@ createFlashcard(event) {
       })
       .catch(error => console.error(error));
   }
-      
+
   showCancelModal() {
     this.setState({
       cancelModal: 'visible'
@@ -300,7 +300,7 @@ createFlashcard(event) {
       this.setState({
         cancelModal: 'hidden'
       });
-    }, 2000);
+    }, 500);
   }
 
   showUpdateModal() {
@@ -311,7 +311,7 @@ createFlashcard(event) {
       this.setState({
         updateModal: 'hidden'
       });
-    }, 2000);
+    }, 500);
   }
 
   render() {

@@ -337,6 +337,28 @@ app.get('/api/notes/search/:noteTitle', (req, res, next) => {
     });
 });
 
+// SEARCH NOTES BY PROVIDING NOTE TAG
+app.get('/api/notes/search-tags/:tag', (req, res, next) => {
+  const tagToSearch = req.params.tag;
+  const sql = `
+    select "noteTitle", "noteId", "noteDifficulty", "noteContent"
+    from  "notes"
+    join "tagRelations" on "notes"."noteId" = "tagRelations"."itemId"
+    join "tagTable" using ("tagId")
+    where to_tsvector("tagName") @@ to_tsquery($1);`;
+
+  db.query(sql, [tagToSearch])
+    .then(result => {
+      if (!result.rows[0]) {
+        return res.status(200).json({ message: `No notes are tagged: ${tagToSearch}` });
+      } else {
+        return res.status(200).json(result.rows);
+      }
+    })
+    .catch(err => next(err));
+
+});
+
 // SEARCH FOR A NOTE BY PROVIDING THE NOTE DIFFICULTY
 app.get('/api/notes/search/difficulty/:noteDifficulty', (req, res, next) => {
   const noteDifficulty = parseInt(req.params.noteDifficulty, 10);

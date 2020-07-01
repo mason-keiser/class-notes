@@ -51,7 +51,8 @@ export default class SearchBar extends React.Component {
     this.setState({
       searchValue: '',
       tagValue: '',
-      notes: []
+      notes: [],
+      message: ''
     });
     this.props.closeXClicked();
   }
@@ -87,9 +88,39 @@ export default class SearchBar extends React.Component {
             console.error(error);
           });
       }
-      // if (event.target.id === 'searchTags') {
-      //   console.log('need endpoint for searching Tags');
-      // }
+      if (event.target.id === 'searchTags') {
+        fetch(`/api/notes/search-tags/${this.state.tagValue}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.message) {
+              return this.setState({
+                message: data.message,
+                notes: []
+              });
+            }
+            this.setState({
+              notes: data,
+              message: ''
+            });
+          })
+          .catch(error => {
+
+            console.error(error);
+          });
+
+      }
+      if (event.target.id === 'searchDifficulty') {
+        fetch(`/api/notes/search/difficulty/${this.state.difficultyValue}`)
+          .then(res => res.json())
+          .then(data => {
+            this.setState({ notes: data });
+          })
+          .catch(error => {
+            this.setState({ notes: [{ noteTitle: 'No results found.' }] });
+            console.error(error);
+          });
+      }
+
     }
   }
 
@@ -113,7 +144,7 @@ export default class SearchBar extends React.Component {
                 <Label for="searchTags" className="note-font-1"></Label>
                 <Input type="text" name="searchTags" className="search-input font-18"
                   id="searchTags" placeholder="Tags"
-                  value={this.state.tagValue} onChange={this.handleChange} onClick={this.handleChangeField}/>
+                  value={this.state.tagValue} onKeyPress={this.handleKeyPress} onChange={this.handleChange} onClick={this.handleChangeField}/>
               </FormGroup>
               <div className="ml-4 d-flex">
                 <div className="color-white mr-2 font-18">Difficulty:</div>

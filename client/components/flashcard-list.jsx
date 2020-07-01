@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
 
 function FcListItem(props) {
   const fcListItem = props.flashcard;
@@ -14,6 +15,17 @@ function FcListItem(props) {
       </Link>
     </div>
   );
+}
+
+function FcDeckItems(props) {
+  const fcItem = props.flashcard
+  const fcId = fcItem.fcDeckId
+  return (
+    <div>
+      <div>{fcItem.fcQuestion}</div>
+      <div>{fcItem.fcAnswer}</div>
+    </div>
+  )
 }
 
 export default class FcList extends React.Component {
@@ -56,8 +68,15 @@ export default class FcList extends React.Component {
 
   render() {
     return (
-      <div className="fc-list-container d-flex justify-content-centers">
-        <div className=" d-flex flex-wrap card-deck fc-list-container-border">
+      <div className="d-flex flex-row mainFcCont" style={{ 
+        backgroundColor: '#333333',
+        display: 'flex',
+        flex: 'row',
+        justifyContent: 'space-evenly'
+        
+       }}>
+      <div className = "fc-list-container d-flex flex-column align-content-center justify-content-center">
+        <div className="fc-list fc-list-container-border mt-5" style= {{ height: '100vh', width: '100%'}}>
           <div id ="fccard">
             <div id='cardTitle'>
               <h1 id='notebookName'className=" snotebook-name mb-5 mt-2" style={{
@@ -77,6 +96,22 @@ export default class FcList extends React.Component {
           </div>
         </div>
       </div>
+       <div className="flashcardDeck d-flex flex-row col-3 justify-content-center mb-5 mt-5">
+         <div className='fcLists fc-list-container-border' style={{ height: '100vh', width: '100%'}}>
+          <div>
+            {this.state.flashcards.map(fcItem => {
+              return(
+              <FcDeckItems
+                key={fcItem.fcDeckId}
+                flashcard={fcItem} />
+              );
+            
+          })}</div>
+             <div></div>
+         </div>
+     </div>
+     </div>
+
     );
   }
 }

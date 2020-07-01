@@ -48,7 +48,7 @@ function CreateModal(props) {
   return (
     <div className={modalDisplay}>
       <div className="create-note-modal-main">
-        <p>Note has been created</p>
+        <p>Creation Complete</p>
       </div>
     </div>
   );
@@ -57,7 +57,6 @@ function CreateModal(props) {
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = { note: null, view: 'viewNote', element: null, notebooks: [], cancelModal: 'hidden', updateModal: 'hidden', createModal: 'hidden' };
     this.state = {
       note: null,
       view: 'viewNote',
@@ -111,7 +110,7 @@ class Note extends React.Component {
             noteCode: data.noteCode,
             noteTags: data.noteTags.join(' ')
           },
-          flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
+          flashcard: { fcTags: [''], fcQuestion: '', fcAnswer: '', fcDeckId: data.notebookId }
 
         }))
         .catch(error => console.error(error));
@@ -127,7 +126,7 @@ class Note extends React.Component {
           noteTags: ''
         },
         view: 'createNote',
-        flashcard: { ...this.state.flashcard, fcDeckId: 1 }
+        flashcard: { fcTags: [''], fcQuestion: '', fcAnswer: '', fcDeckId: 1 }
       });
     }
   }
@@ -307,13 +306,17 @@ class Note extends React.Component {
 
   createFlashcard(event) {
     event.preventDefault();
+    if (!this.state.flashcard.fcQuestion && !this.state.flashcard.fcAnswer) {
+      alert('Error: Please enter a valid question and answer.');
+      return;
+    }
     fetch('/api/flashcards/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state.flashcard)
     })
       .then(res => res.json())
-      .then(() => {
+      .then(data => {
         this.setState({
           flashcard: {
             ...this.state.flashcard,
@@ -322,6 +325,9 @@ class Note extends React.Component {
             fcAnswer: ''
           }
         });
+        if (!data.error) {
+          this.showCreateModal();
+        }
       })
       .catch(error => console.error(error));
   }

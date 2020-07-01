@@ -41,9 +41,19 @@ class Note extends React.Component {
   constructor(props) {
     super(props);
     this.state = { note: null, view: 'viewNote', element: null, notebooks: [], cancelModal: 'hidden', updateModal: 'hidden' };
+    this.state = {
+      note: null,
+      view: 'viewNote',
+      element: null,
+      notebooks: [],
+      flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
+      cancelModal: 'hidden',
+      updateModal: 'hidden'
+    };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
+    this.createFlashcard = this.createFlashcard.bind(this);
     this.handleDifficultyChange = this.handleDifficultyChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -58,6 +68,9 @@ class Note extends React.Component {
     this.deleteOneResource = this.deleteOneResource.bind(this);
     this.showCancelModal = this.showCancelModal.bind(this);
     this.showUpdateModal = this.showUpdateModal.bind(this);
+    this.handleTagChange = this.handleTagChange.bind(this);
+    this.flashCardQuestion = this.flashCardQuestion.bind(this);
+    this.flashCardAnswer = this.flashCardAnswer.bind(this);
   }
 
   componentDidMount() {
@@ -69,7 +82,19 @@ class Note extends React.Component {
     if (this.props.match.params.noteId) {
       fetch(`/api/notes/${this.props.match.params.noteId}`)
         .then(res => res.json())
-        .then(data => this.setState({ note: data }))
+        .then(data => this.setState({
+          note: {
+            notebookId: data.notebookId,
+            noteTitle: data.noteTitle,
+            noteContent: data.noteContent,
+            noteDifficulty: data.noteDifficulty,
+            noteResource: data.noteResource,
+            noteCode: data.noteCode,
+            noteTags: data.noteTags.join(' ')
+          }, 
+          flashcard: { ...this.state.flashcard, fcDeckId: data.notebookId }
+
+        }))
         .catch(error => console.error(error));
     } else {
       this.setState({
@@ -80,9 +105,10 @@ class Note extends React.Component {
           noteDifficulty: 1,
           noteResource: [],
           noteCode: {},
-          noteTags: ['']
+          noteTags: ''
         },
-        view: 'createNote'
+        view: 'createNote',
+        flashcard: { ...this.state.flashcard, fcDeckId: 1 }
       });
     }
   }
@@ -119,6 +145,15 @@ class Note extends React.Component {
       note: {
         ...this.state.note,
         noteContent: event.target.value
+      }
+    });
+  }
+
+  handleTagChange(event) {
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteTags: event.target.value
       }
     });
   }
@@ -176,9 +211,28 @@ class Note extends React.Component {
     });
   }
 
+  flashCardQuestion(event) {
+    this.setState({
+      flashcard: {
+        ...this.state.flashcard,
+        fcQuestion: event.target.value
+      }
+    });
+  }
+
+  flashCardAnswer(event) {
+    this.setState({
+      flashcard: {
+        ...this.state.flashcard,
+        fcAnswer: event.target.value
+      }
+    });
+  }
+
   createNewNote(event) {
     event.preventDefault();
     const newNote = this.state.note;
+    newNote.noteTags = newNote.noteTags.split(' ');
     fetch('/api/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -197,7 +251,8 @@ class Note extends React.Component {
   editNote(event) {
     event.preventDefault();
     const { notebookName, noteId, ...rest } = this.state.note;
-    fetch(`/api/notes/${noteId}`, {
+    rest.noteTags = rest.noteTags.split(' ');
+    fetch(`/api/notes/${this.props.match.params.noteId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(rest)
@@ -216,6 +271,29 @@ class Note extends React.Component {
       .catch(error => console.error(error));
   }
 
+createFlashcard(event) {
+    event.preventDefault();
+    fetch('/api/flashcards/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state.flashcard)
+    })
+      .then(res => res.json())
+      .then(() => {
+        this.setState({
+          flashcard: {
+            ...this.state.flashcard,
+            fcTags: [''],
+            fcQuestion: '',
+            fcAnswer: ''
+          }
+        });
+      })
+      .catch(error => console.error(error));
+  }
+
+  showModal() {
+      
   showCancelModal() {
     this.setState({
       cancelModal: 'visible'
@@ -267,11 +345,13 @@ class Note extends React.Component {
           <div className="height-90">
             <FormGroup className="mb-4">
               <Label for="flashcardQuestion" className="note-font-1">Enter Question:</Label>
-              <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion" />
+              <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion"
+                value={this.state.flashcard.fcQuestion} onChange={this.flashCardQuestion}/>
             </FormGroup>
             <FormGroup className="mb-4">
               <Label for="flashcardAnswer" className="note-font-1">Enter Answer:</Label>
-              <Input type="textarea" name="flashcardAnswer" id="flashcardAnswer" />
+              <Input type="textarea" name="flashcardAnswer" id="flashcardAnswer"
+                value={this.state.flashcard.fcAnswer} onChange={this.flashCardAnswer}/>
             </FormGroup>
             <div className="d-flex flex-row align-items-center justify-content-between">
               <FormGroup className="mb-5 flashcard-select-tag">
@@ -281,7 +361,7 @@ class Note extends React.Component {
                   <option>Create new tag</option>
                 </Input>
               </FormGroup>
-              <Button className="solid-button-large ml-4">Make Flashcard</Button>
+              <Button className="solid-button-large ml-4" onClick={this.createFlashcard}>Make Flashcard</Button>
             </div>
           </div>
         );
@@ -386,16 +466,9 @@ class Note extends React.Component {
             </FormGroup>
           </div>
           <div className="d-flex flex-row align-items-center justify-content-between col-md-3">
-            <Input type="select" name="noteTags" id="noteTags" className="col">
-              {
-                note.noteTags.map((item, index) => {
-                  return (
-                    <option key={index}>{item}</option>
-                  );
-                })
-              }
-              <option>Create new tag</option>
-            </Input>
+            <Input type="text" name="noteTags" id="noteTags" className="col"
+              value={this.state.note.noteTags} onChange={this.handleTagChange}/>
+
             <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
             <Link to={{ pathname: closeButton }}>
               <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">

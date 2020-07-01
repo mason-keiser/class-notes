@@ -380,10 +380,11 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
     return res.status(400).json({ error: '"fcId" must be a positive integer' });
   }
   const sql = `
-  SELECT *
-  FROM  "fcDeck"
-  JOIN  "fcItem" USING ("fcDeckId")
-  WHERE "fcId" = $1
+  select *
+  from "fcItem"
+  join "fcDeck" using ("fcDeckId")
+  join "notebooks" using ("notebookId")
+  where "fcId" = $1
   `;
   const id = [fcId];
   db.query(sql, id)
@@ -455,7 +456,7 @@ app.get('/api/flashcards-review/:fcDeckId', (req, res, next) => {
 });
 
 // CREATE A NEW FLASHCARD
-app.post('/api/flashcards', (req, res, next) => {
+app.post('/api/flashcards/create', (req, res, next) => {
   const fcQuestion = req.body.fcQuestion;
   const fcAnswer = req.body.fcAnswer;
   const fcDeckId = req.body.fcDeckId;

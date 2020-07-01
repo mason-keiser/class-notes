@@ -54,20 +54,6 @@ function ProgressBar(props) {
   );
 }
 
-// keep below code in case it needs to be reused.  remove before production
-// function Indicator(props) {
-//   return (
-//     <div className={
-//       props.index <= props.activeIndex
-//         ? 'flashcards-review-indicator-focused'
-//         : 'flashcards-review-indicator-unfocused'
-//     }
-//     key={props.index}>
-//       <i className="fa fa-circle mx-1"></i>
-//     </div>
-//   );
-// }
-
 function Flashcard(props) {
   return (
     <div className={

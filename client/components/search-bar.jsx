@@ -16,6 +16,7 @@ export default class SearchBar extends React.Component {
     this.handleX = this.handleX.bind(this);
     this.handleChangeField = this.handleChangeField.bind(this);
     this.handleSearchDifficulty = this.handleSearchDifficulty.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleChange(event) {
@@ -103,6 +104,52 @@ export default class SearchBar extends React.Component {
     }
   }
 
+  handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      if (event.target.id === 'searchNotes') {
+        fetch(`/api/notes/search/${this.state.searchValue}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.message) {
+              return this.setState({
+                message: data.message,
+                notes: []
+              });
+            }
+            this.setState({
+              notes: data,
+              message: ''
+            });
+          })
+          .catch(error => {
+
+            console.error(error);
+          });
+      }
+      if (event.target.id === 'searchTags') {
+        fetch(`/api/notes/search-tags/${this.state.tagValue}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.message) {
+              return this.setState({
+                message: data.message,
+                notes: []
+              });
+            }
+            this.setState({
+              notes: data,
+              message: ''
+            });
+          })
+          .catch(error => {
+
+            console.error(error);
+          });
+
+      }
+    }
+  }
+
   render() {
     const searchBarClass = this.props.isOpened ? 'search-container search-container-end'
       : 'search-container search-container-start';
@@ -116,13 +163,13 @@ export default class SearchBar extends React.Component {
               <FormGroup className="mb-4 ml-4">
                 <Label for="searchNotes" className="note-font-1"></Label>
                 <Input type="text" name="searchNotes" className="search-input font-18"
-                  id="searchNotes" placeholder="Keyword"
+                  id="searchNotes" placeholder="Keyword" onKeyPress={this.handleKeyPress}
                   value={this.state.searchValue} onChange={this.handleChange} onClick={this.handleChangeField}/>
               </FormGroup>
               <FormGroup className="mb-4 ml-4">
                 <Label for="searchTags" className="note-font-1"></Label>
                 <Input type="text" name="searchTags" className="search-input font-18"
-                  id="searchTags" placeholder="Tags"
+                  id="searchTags" placeholder="Tags" onKeyPress={this.handleKeyPress}
                   value={this.state.tagValue} onChange={this.handleChange} onClick={this.handleChangeField}/>
               </FormGroup>
               <Button className="search-bar-button ml-5 mr-5" onClick={this.handleSearchButton}>Search</Button>

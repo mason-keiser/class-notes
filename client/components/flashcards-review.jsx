@@ -127,13 +127,6 @@ export default class FlashcardsReview extends React.Component {
                 side={this.state.side}
                 setSide={() => this.setSide()} />
             )}
-            {/* keep below code in case it needs to be reused.  remove before production
-            {this.state.flashcards.map((flashcard, index) =>
-              <Indicator
-                key={index}
-                index={index}
-                activeIndex={this.state.activeIndex} />
-            )} */}
             <NextArrow
               goToNextFlashcard={() => this.goToNextFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />

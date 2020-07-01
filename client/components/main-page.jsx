@@ -29,7 +29,7 @@ export default class MainPage extends React.Component {
             <div className="search-deco"></div>
           </div>
           <div className="title-block">
-            <Link to="/notebook" className="notebooks-link">
+            <Link to="/notebook/" className="notebooks-link">
               <h3>Notebook</h3>
             </Link>
             <Link to="/notes/create">

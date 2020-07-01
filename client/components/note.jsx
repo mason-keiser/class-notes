@@ -291,8 +291,6 @@ createFlashcard(event) {
       })
       .catch(error => console.error(error));
   }
-
-  showModal() {
       
   showCancelModal() {
     this.setState({

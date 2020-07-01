@@ -551,7 +551,6 @@ textarea.note-content {
 
 .height-90 {
   height: 90%
-
 }
 
 .font-18 {
@@ -611,7 +610,6 @@ textarea.note-content {
 .search-results-list{
   background-color: #3F3F3D;
   padding: 30px 45px;
-}
 
 .search-form{
   display: flex;
@@ -643,4 +641,11 @@ textarea.note-content {
   font-weight: 100;
   color: #C4C4C4;
   margin-bottom: 0;
+}
+
+.no-results-message{
+text-align: center;
+background-color: #333333;
+color: red;
+
 }

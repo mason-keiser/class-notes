@@ -8,6 +8,7 @@ export default class SearchBar extends React.Component {
     this.state = {
       searchValue: '',
       tagValue: '',
+      message: '',
       notes: []
     };
     this.handleChange = this.handleChange.bind(this);
@@ -34,7 +35,7 @@ export default class SearchBar extends React.Component {
   }
 
   handleSearchDifficulty(number) {
-    this.setState({ searchValue: '', tagValue: '' });
+    this.setState({ searchValue: '', tagValue: ''});
     fetch(`/api/notes/search/difficulty/${number}`)
       .then(res => res.json())
       .then(data => {
@@ -50,7 +51,6 @@ export default class SearchBar extends React.Component {
     this.setState({
       searchValue: '',
       tagValue: '',
-      difficultyValue: '',
       notes: []
     });
     this.props.closeXClicked();
@@ -60,7 +60,8 @@ export default class SearchBar extends React.Component {
     this.setState({
       searchValue: '',
       tagValue: '',
-      notes: []
+      notes: [],
+      message: ''
     });
   }
 
@@ -70,10 +71,19 @@ export default class SearchBar extends React.Component {
         fetch(`/api/notes/search/${this.state.searchValue}`)
           .then(res => res.json())
           .then(data => {
-            this.setState({ notes: data });
+            if (data.message) {
+              return this.setState({
+                message: data.message,
+                notes: []
+              });
+            }
+            this.setState({
+              notes: data,
+              message: ''
+            });
           })
           .catch(error => {
-            this.setState({ notes: [{ noteTitle: 'no results found' }] });
+
             console.error(error);
           });
       }
@@ -120,6 +130,9 @@ export default class SearchBar extends React.Component {
               </div>
             </div>
             <i className="fas fa-times fa-2x" onClick={this.handleX}></i>
+          </div>
+          <div className='no-results-message'>
+            <p>{this.state.message}</p>
           </div>
         </div>
       );

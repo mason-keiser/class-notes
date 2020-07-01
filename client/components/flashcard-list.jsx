@@ -21,7 +21,7 @@ export default class FcList extends React.Component {
     super(props);
     this.state = {
       flashcards: [],
-      notebookName: []
+      notebookName: ''
     };
     this.getFlashcards = this.getFlashcards.bind(this);
     this.getNotebookName = this.getNotebookName.bind(this);
@@ -44,11 +44,11 @@ export default class FcList extends React.Component {
   }
 
   getNotebookName() {
-    fetch('api/notebooks/1')
+    fetch('api/flashcards/1')
       .then(response => response.json())
       .then(notebookData => {
         this.setState({
-          notebookName: notebookData[0].notebookName
+          notebookName: notebookData.notebookName
         });
       })
       .catch(err => console.error('getNotebookName() fetch failed:', err));
@@ -60,7 +60,11 @@ export default class FcList extends React.Component {
         <div className=" d-flex flex-wrap card-deck fc-list-container-border">
           <div id ="fccard">
             <div id='cardTitle'>
-              <h1 id='notebookName'className="col-1 text-center notebook-name mb-5 mt-2">{this.state.notebookName}</h1>
+              <h1 id='notebookName'className=" snotebook-name mb-5 mt-2" style={{
+                    color: '#24997F',
+                    fontSize: '35x',
+                    margin: '10px 0px 0px 0px'
+                  }}>{this.state.notebookName}</h1>
               <h4 id='deckLength' className="">{this.state.flashcards.length + ' card(s)'}</h4>
             </div>
             {this.state.flashcards.map(fcListItem => {

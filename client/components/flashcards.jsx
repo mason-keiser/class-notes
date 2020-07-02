@@ -97,7 +97,7 @@ export default class Flashcards extends React.Component {
             {notebookInfo.notebooks.map(item => {
               return (
                 <div key={item.notebookId}
-                  className="d-flex flex-row flashcard-general-info">
+                  className="d-flex flex-row flashcard-general-info mb-5">
                   <div className="d-flex flex-column justify-content-between">
                     <div className="d-flex flex-row align-items-center">
                       <h2>{item.notebookName}</h2>

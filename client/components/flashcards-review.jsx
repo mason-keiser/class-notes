@@ -113,11 +113,13 @@ export default class FlashcardsReview extends React.Component {
     return (
       <>
         <FlashcardsHeader />
-        <div className="flashcard-review-container col-12">
-          <div className="flashcard-container col-10 offset-1 d-flex align-items-center justify-content-center">
+        <div className="flashcard-review-container col-12 d-flex align-items-center justify-content-center">
+          <div className="flashcard-review-back-arrow-container col-1 d-flex justify-content-end">
             <BackArrow
               goToPrevFlashcard={() => this.goToPrevFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />
+          </div>
+          <div className="flashcard-container d-flex flex-row justify-content-center col-10">
             {this.state.flashcards.map((flashcard, index) =>
               <Flashcard
                 key={index}
@@ -127,6 +129,8 @@ export default class FlashcardsReview extends React.Component {
                 side={this.state.side}
                 setSide={() => this.setSide()} />
             )}
+          </div>
+          <div className="flashcard-review-next-arrow-container col-1">
             <NextArrow
               goToNextFlashcard={() => this.goToNextFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />

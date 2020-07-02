@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function NextArrow(props) {
   return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-next-arrow ml-5"
+    <Link to="#" className="flashcards-review-next-arrow"
       style={{ textDecoration: 'none' }}
       onClick={() => {
         props.goToNextFlashcard();
@@ -16,7 +16,7 @@ function NextArrow(props) {
 
 function BackArrow(props) {
   return (
-    <Link to="#" className="d-flex flex-row align-items-center flashcards-review-back-arrow mr-5"
+    <Link to="#" className="flashcards-review-back-arrow"
       style={{ textDecoration: 'none' }}
       onClick={() => {
         props.goToPrevFlashcard();
@@ -38,7 +38,8 @@ function ProgressBar(props) {
     height: '100%',
     width: `${percentageIndicator}%`,
     backgroundColor: '#24997F',
-    textAlign: 'right'
+    textAlign: 'right',
+    transition: '.2s linear'
   };
   return (
     <div className="progress-bar-container" style={containerStyling}>

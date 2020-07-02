@@ -2,7 +2,7 @@
 * {
   box-sizing: border-box;
   font-family: 'Palanquin', sans-serif;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 /* Main Page */
@@ -403,7 +403,6 @@ textarea.note-content {
 }
 
 .flashcard-container {
-  top: 7%;
   height: 80%;
   width: 100%;
 }
@@ -419,10 +418,11 @@ textarea.note-content {
 .flashcards-review-next-arrow, .flashcards-review-back-arrow {
   height: 50px;
   width: 50px;
+  opacity: .5;
 }
 
 .flashcards-review-next-arrow:hover, .flashcards-review-back-arrow:hover {
-  opacity: .5;
+  opacity: 1;
 }
 
 .flashcards-review-flashcard:hover {

@@ -458,8 +458,9 @@ class Note extends React.Component {
       <Form>
         <header className="header-container d-flex flex-row justify-content-between">
           <div className="d-flex flex-row align-items-center col">
-            <Link to="/" className="d-flex flex-row align-items-center">
-              <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i>
+            <Link to="/" className="d-flex flex-row align-items-center" style={{ textDecoration: 'none' }}>
+              {/* <i className="fa fa-home theme-green fa-2x header-hamburger-icon"></i> */}
+              <img src="/images/code-note-icon.png" alt="Code Note Icon"/>
             </Link>
             <FormGroup className="ml-5 mb-0">
               <Label for="noteTile"></Label>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 
 function NextArrow(props) {
   return (
@@ -66,4 +67,14 @@ function Flashcard(props) {
   );
 }
 
-export { NextArrow, BackArrow, Flashcard, ProgressBar };
+function NavToFlashcards() {
+  return (
+    <div className="nav-to-flashcards">
+      <Link to={{ pathname: '/flashcards' }}>
+        <Button className="solid-button mt-4 mr-4">Back</Button>
+      </Link>
+    </div>
+  );
+}
+
+export { NextArrow, BackArrow, Flashcard, ProgressBar, NavToFlashcards };

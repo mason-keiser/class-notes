@@ -28,8 +28,9 @@ export default class NotebookHeader extends React.Component {
         <SearchBar searchClicked={this.searchClicked} closeXClicked={this.closeXClicked} isOpened={this.state.searchOpened} />
         <header className="header-container d-flex flex-row justify-content-between">
           <div className="col-4">
-            <Link to="/">
-              <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+              <img src="/images/code-note-icon.png" alt="Code Note Icon" />
+              {/* <i className="fa fa-home theme-green fa-2x header-hamburger-icon"></i> */}
             </Link>
           </div>
           <div className="d-flex flex-row justify-content-center col-4">

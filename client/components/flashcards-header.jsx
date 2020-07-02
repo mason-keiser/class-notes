@@ -8,7 +8,8 @@ export default class FlashcardsHeader extends React.Component {
       <header className="header-container d-flex justify-content-between">
         <div className="col-4">
           <Link to="/">
-            <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i>
+            <img src="/images/code-note-icon.png" alt="Code Note Icon" />
+            {/* <i className="fa fa-bars theme-green fa-2x header-hamburger-icon"></i> */}
           </Link>
         </div>
         <div className="d-flex flex-row justify-content-center col-4">

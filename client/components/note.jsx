@@ -3,80 +3,33 @@ import NotebookHeader from './notebook-header';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-// function Modal(props) {
-//   let modalContent;
-//   let modalStyle;
-//   if (props === 'cancel') {
-//     modalContent = 'Changes have been cancelled';
-//     modalStyle = 'modal-visible';
-//   }
-//   if (props === 'update') {
-//     modalContent = 'Note has been updated';
-//     modalStyle = 'modal-visible';
-//   }
-//   if (props === 'create') {
-//     modalContent = 'Note has been created';
-//     modalStyle = 'modal-visible';
-//   }
-//   if (props === 'flashcard') {
-//     modalContent = 'flashcard has been created';
-//     modalStyle = 'modal-visible';
-//   }
-//   return (
-//     <div className="note-modal modal-hidden">
-//       <div className="modal-hidden">
-//         <p>{modalContent}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
-function CancelModal(props) {
-  let modalDisplay;
-  if (props.modal === 'hidden') {
-    modalDisplay = 'cancel-note-modal modal-hide';
+function Modal(props) {
+  let modalContent;
+  let modalStyle;
+  if (props.modal === 'cancel') {
+    modalContent = 'Changes have been cancelled';
+    modalStyle = 'note-modal modal-visible';
   }
-  if (props.modal === 'visible') {
-    modalDisplay = 'cancel-note-modal modal-visible';
+  if (props.modal === 'update') {
+    modalContent = 'Note has been updated';
+    modalStyle = 'note-modal modal-visible';
+  }
+  if (props.modal === 'create') {
+    modalContent = 'Note has been created';
+    modalStyle = 'note-modal modal-visible';
+  }
+  if (props.modal === 'flashcard') {
+    modalContent = 'flashcard has been created';
+    modalStyle = 'note-modal modal-visible';
+  }
+  if (props.modal === 'hidden') {
+    modalContent = '';
+    modalStyle = 'note-modal modal-hidden';
   }
   return (
-    <div className={modalDisplay}>
-      <div className="cancel-note-modal-main">
-        <p>Changes have been cancelled</p>
-      </div>
-    </div>
-  );
-}
-
-function UpdateModal(props) {
-  let modalDisplay;
-  if (props.modal === 'hidden') {
-    modalDisplay = 'update-note-modal modal-hide';
-  }
-  if (props.modal === 'visible') {
-    modalDisplay = 'update-note-modal modal-visible';
-  }
-  return (
-    <div className={modalDisplay}>
-      <div className="update-note-modal-main">
-        <p>Note has been updated</p>
-      </div>
-    </div>
-  );
-}
-
-function CreateModal(props) {
-  let modalDisplay;
-  if (props.modal === 'hidden') {
-    modalDisplay = 'create-note-modal modal-hide';
-  }
-  if (props.modal === 'visible') {
-    modalDisplay = 'create-note-modal modal-visible';
-  }
-  return (
-    <div className={modalDisplay}>
-      <div className="create-note-modal-main">
-        <p>Creation Complete</p>
+    <div className={modalStyle}>
+      <div className="note-modal-main d-flex justify-content-center align-items-center">
+        <p>{modalContent}</p>
       </div>
     </div>
   );
@@ -91,9 +44,7 @@ class Note extends React.Component {
       element: null,
       notebooks: [],
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
-      cancelModal: 'hidden',
-      updateModal: 'hidden',
-      createModal: 'hidden'
+      modal: 'hidden'
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
@@ -111,9 +62,7 @@ class Note extends React.Component {
     this.handleResourceLink = this.handleResourceLink.bind(this);
     this.addOneResource = this.addOneResource.bind(this);
     this.deleteOneResource = this.deleteOneResource.bind(this);
-    this.showCancelModal = this.showCancelModal.bind(this);
-    this.showUpdateModal = this.showUpdateModal.bind(this);
-    this.showCreateModal = this.showCreateModal.bind(this);
+    this.showModal = this.showModal.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
     this.flashCardQuestion = this.flashCardQuestion.bind(this);
     this.flashCardAnswer = this.flashCardAnswer.bind(this);
@@ -295,7 +244,7 @@ class Note extends React.Component {
         this.setState({
           view: 'viewNote'
         });
-        this.showCreateModal();
+        this.showModal('create');
         this.props.history.push(`/notes/${data.noteId}`);
       })
       .catch(error => console.error(error));
@@ -345,41 +294,36 @@ class Note extends React.Component {
           }
         });
         if (!data.error) {
-          this.showCreateModal();
+          this.showModal('flashcard');
         }
       })
       .catch(error => console.error(error));
   }
 
-  showCancelModal() {
-    this.setState({
-      cancelModal: 'visible'
-    });
-    setTimeout(() => {
+  showModal(string) {
+    if (string === 'cancel') {
       this.setState({
-        cancelModal: 'hidden'
+        modal: 'cancel'
       });
-    }, 500);
-  }
-
-  showUpdateModal() {
-    this.setState({
-      updateModal: 'visible'
-    });
-    setTimeout(() => {
+    }
+    if (string === 'update') {
       this.setState({
-        updateModal: 'hidden'
+        modal: 'update'
       });
-    }, 500);
-  }
-
-  showCreateModal() {
-    this.setState({
-      createModal: 'visible'
-    });
+    }
+    if (string === 'create') {
+      this.setState({
+        modal: 'create'
+      });
+    }
+    if (string === 'flashcard') {
+      this.setState({
+        modal: 'flashcard'
+      });
+    }
     setTimeout(() => {
       this.setState({
-        createModal: 'hidden'
+        modal: 'hidden'
       });
     }, 500);
   }
@@ -483,12 +427,12 @@ class Note extends React.Component {
               <Button type="submit" className="solid-button"
                 onClick={() => {
                   this.editNote(event);
-                  this.showUpdateModal();
+                  this.showModal('update');
                 }}>Update</Button>
               <Button type="reset" className="solid-button ml-4"
                 onClick={() => {
                   this.getAllNoteData();
-                  this.showCancelModal();
+                  this.showModal('cancel');
                 }}>Cancel</Button>
               <Button className="solid-button ml-4" onClick={() => this.deleteNote(note.noteId)}>Delete</Button>
             </div>
@@ -507,7 +451,7 @@ class Note extends React.Component {
               <Button type="reset" className="solid-button ml-4"
                 onClick={() => {
                   this.getAllNoteData();
-                  this.showCancelModal();
+                  this.showModal('cancel');
                 }}>Cancel</Button>
             </div>
           </div>
@@ -586,12 +530,8 @@ class Note extends React.Component {
                 placeholder="Enter note here"
                 onChange={this.handleContentChange}></textarea>
             </FormGroup>
-            <CancelModal
-              modal={this.state.cancelModal} />
-            <UpdateModal
-              modal={this.state.updateModal} />
-            <CreateModal
-              modal={this.state.createModal} />
+            <Modal
+              modal={this.state.modal} />
           </div>
           <div className={'col-5 d-flex flex-column h-100'}>
             <div className="height-10">

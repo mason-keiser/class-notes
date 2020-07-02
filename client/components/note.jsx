@@ -358,17 +358,19 @@ class Note extends React.Component {
             <FormGroup className="mb-4">
               <Label for="flashcardQuestion" className="note-font-1">Enter Question:</Label>
               <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion"
-                value={this.state.flashcard.fcQuestion} onChange={this.flashCardQuestion}/>
+                className="note-input" value={this.state.flashcard.fcQuestion}
+                onChange={this.flashCardQuestion}/>
             </FormGroup>
             <FormGroup className="mb-4">
               <Label for="flashcardAnswer" className="note-font-1">Enter Answer:</Label>
               <Input type="textarea" name="flashcardAnswer" id="flashcardAnswer"
-                value={this.state.flashcard.fcAnswer} onChange={this.flashCardAnswer}/>
+                className="note-input" value={this.state.flashcard.fcAnswer}
+                onChange={this.flashCardAnswer}/>
             </FormGroup>
             <div className="d-flex flex-row align-items-center justify-content-between">
               <FormGroup className="mb-5 flashcard-select-tag">
                 <Label for="flashcardTag">Flashcard Tag:</Label>
-                <Input type="select" name="flashcardTag" id="flashcardTag">
+                <Input type="select" name="flashcardTag" id="flashcardTag" className="note-input">
                   <option defaultValue>Select a Tag</option>
                   <option>Create new tag</option>
                 </Input>
@@ -387,12 +389,12 @@ class Note extends React.Component {
                   <div key={index} className="d-flex flex-row align-items-center justify-content-between mb-2">
                     <FormGroup className="resource">
                       <Label for="resourceName">Resource Name</Label>
-                      <Input type="text" name="resourceName" id="resourceName" placeholder="Name"
+                      <Input type="text" name="resourceName" id="resourceName" placeholder="Name" className="note-input"
                         defaultValue={item.name} onChange={() => this.handleResourceName(index, event)} />
                     </FormGroup>
                     <FormGroup className="resource-link ml-4">
                       <Label for="resourceLink">Link</Label>
-                      <Input type="text" name="resourceLink" id="resourceLink" placeholder="Name"
+                      <Input type="text" name="resourceLink" id="resourceLink" placeholder="Name" className="note-input"
                         defaultValue={item.link} onChange={() => this.handleResourceLink(index, event)} />
                     </FormGroup>
                     <div className="minus-button ml-4" onClick={() => this.deleteOneResource(index)}><i className="fas fa-minus"></i></div>
@@ -478,7 +480,7 @@ class Note extends React.Component {
             </FormGroup>
           </div>
           <div className="d-flex flex-row align-items-center justify-content-between col-md-3">
-            <Input type="text" name="noteTags" id="noteTags" className="col"
+            <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
               value={this.state.note.noteTags} onChange={this.handleTagChange}/>
             <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
             <Link to={{ pathname: closeButton }}>
@@ -505,7 +507,7 @@ class Note extends React.Component {
             </div>
             <FormGroup className="mb-4">
               <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
-              <Input type="select" name="notebookName" id="notebookName">
+              <Input type="select" name="notebookName" id="notebookName" className="note-input">
                 {
                   this.state.notebooks.map(notebook => {
                     // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
@@ -521,7 +523,7 @@ class Note extends React.Component {
             <FormGroup>
               <Label for="noteContent" className="note-font-1">Enter Note:</Label>
               <textarea
-                className="form-control note-content"
+                className="form-control note-content note-input"
                 type="textarea"
                 name="noteContent"
                 id="noteContent"

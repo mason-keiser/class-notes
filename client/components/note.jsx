@@ -339,7 +339,7 @@ class Note extends React.Component {
       return (
         <>
           <NotebookHeader />
-          <div className="note-page-container">
+          <div className="page-container">
             <div className="note-delete">
               <h3>Your note has been deleted.</h3>
               <Link to="/notebook" className="notebooks-link">
@@ -480,7 +480,6 @@ class Note extends React.Component {
           <div className="d-flex flex-row align-items-center justify-content-between col-md-3">
             <Input type="text" name="noteTags" id="noteTags" className="col"
               value={this.state.note.noteTags} onChange={this.handleTagChange}/>
-
             <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
             <Link to={{ pathname: closeButton }}>
               <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">
@@ -489,7 +488,7 @@ class Note extends React.Component {
             </Link>
           </div>
         </header>
-        <main className="note-page-container">
+        <main className="page-container">
           <div className="col-6">
             <div className="d-flex flex-row align-items-center mb-4">
               <div className="note-font-1">Difficulty:</div>

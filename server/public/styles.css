@@ -72,10 +72,6 @@
   top: calc((100vh - 20% - 45px)/2)
 }
 
-div.main-page-left > a {
-  color: #24997F;
-}
-
 .main-page-right {
   height: 10%;
   display: flex;
@@ -87,14 +83,6 @@ div.main-page-left > a {
   top: calc((100vh - 45px - 10%)/2)
 }
 
-.main-page-footer {
-  height: 45px;
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-  display: flex;
-}
-
 div.title-block > a:hover, div.main-page-left > a:hover {
   color: #c4c4c4;
   text-decoration: none;
@@ -104,25 +92,8 @@ div.main-page-left > h5:hover, div.search-block:hover, div.main-page-right:hover
   cursor: pointer;
 }
 
-.main-page-footer > div:first-child {
-  background-color: #24997F;
-  color: #3F3F3D;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-div.col-2 > h6 {
-  margin: 0;
-}
-
-.main-page-footer > div:nth-child(2) {
-  background-color: #3F3F3D;
-}
-
 .main-page-container {
-  height: 100vh;
+  height: calc(100vh - 40px);
   padding: 30px 30px 0 30px;
   background-color: #333333;
   position: relative;
@@ -362,30 +333,10 @@ textarea.note-content {
   padding: 10px 15px;
 }
 
-.note-page-container {
-  display: flex;
-  color:#24997F;
-  justify-content: space-between;
-  padding: 30px 30px;
-  height: calc(100vh - 80px);
-  background-color: #333333;
-}
-
 .note-delete {
   padding: 45px;
   color: white;
   background-color: #333333;
-}
-
-/* flashcard page */
-.fc-list-container {
-  background-color: #333333;
-  height: 100vh;
-  padding: 30px 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .fc-list-container-border {
@@ -399,25 +350,15 @@ textarea.note-content {
   flex-direction: column;
 }
 
-.fc-list {
-  height: 100vh;
-  width: 100%
-}
-
-.notebook-name {
-  font-size: 30px;
-  color: #24997F;
-  margin-bottom: 10px 0px 0px 0px;
-}
-
-.fccard {
+.flashcard-general-info {
   background-color: #333333;
-  margin-top: 5rem;
-  margin-bottom: 0;
   border: 1px solid #c4c4c4;
-  width: 500px;
-  height: fit-content;
+  padding: 25px;
+  width: 100%;
+  height: 20%;
   border-radius: 5px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .fc-list-item {
@@ -443,17 +384,9 @@ textarea.note-content {
   height: fit-content;
 }
 
-
-.deckLength {
-  color:#24997F;
-  width: 9rem;
-  margin-left: 4rem;
-
-}
-
 .flashcard-review-container {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 80px - 40px);
   background-color: #333333;
 }
 
@@ -465,6 +398,7 @@ textarea.note-content {
 
 .flashcards-review-flashcard {
   border: 3px solid #3F3F3D;
+  border-radius: 10px;
   height: 100%;
   color: #24997F;
   background-color: #333333;
@@ -490,46 +424,38 @@ textarea.note-content {
   top: 10%;
 }
 
-.main-fc-cont {
-  background-color:#333333;
+.fc-card {
   display: flex;
-  flex: row;
-  justify-content: space-evenly
-}
-
-.fc-q-a {
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
   border: 1px solid #3F3F3C;
-  color: #24997F;
-  width: 45%;
-  height: 100px;
-  justify-content: center;
-  font-size: 20px
+  border-radius: 10px;
+  vertical-align: middle;
+  width: 40%;
+  font-size: 18px;
+  box-shadow: 5px 5px 5px rgba(59, 59, 59, 0.5);
 }
 
-.flashcardDeck {
-  display: flex;
-  margin: 20px;
+.show-flashcard {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
   padding: 0;
-  height: 100vh;
-  width: 100%;
-  background-color: #333333;
-  overflow-y: auto;
 }
 
-.flashcard-som {
-  background-color: #3F3F3D;
-  width: 100%;
-  height: 10%;
-  color: #24997F;
+.show-flashcard-title {
+  background-color: #3F3F3C;
   display: flex;
+  align-items: center;
   justify-content: center;
-  font-size: 25px;
-  border: 1px solid #c4c4c4
+  height: 10%;
+  text-align: center;
 }
 
-.fcLists {
-  height: 745px;
-  width: 100%
+.show-flashcard-content {
+  height: 90%;
+  padding: 35px 0px;
+  overflow-y: auto;
 }
 
 /* SEARCH COMPONENT */
@@ -631,8 +557,8 @@ border: solid 1px white;
 border-radius: 10px;
 padding: 10px 20px;
 margin-bottom: 5px;
-
 }
+
 .search-item > h5{
   font-weight: 100;
   margin-bottom: 0;
@@ -716,6 +642,47 @@ margin-bottom: 5px;
 
 .font-18 {
   font-size: 18px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.page-container {
+  display: flex;
+  color:#24997F;
+  justify-content: space-between;
+  padding: 45px 30px;
+  height: calc(100vh - 80px);
+  background-color: #333333;
+}
+
+.page-container-footer {
+  display: flex;
+  color:#24997F;
+  justify-content: space-between;
+  padding: 45px 30px;
+  height: calc(100vh - 80px - 40px);
+  background-color: #333333;
+}
+
+.footer {
+  height: 40px;
+  width: 100%;
+  display: flex;
+}
+
+.footer > div:first-child {
+  background-color: #24997F;
+  color: #3F3F3D;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer > div:nth-child(2) {
+  background-color: #3F3F3D;
 }
 
 ::-webkit-scrollbar,

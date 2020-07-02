@@ -1,5 +1,5 @@
 import React from 'react';
-import FlashcardsReviewHeader from './flashcards-review-header';
+import FlashcardsHeader from './flashcards-header';
 import { NextArrow, BackArrow, Flashcard, ProgressBar } from './flashcards-review-ui-components';
 
 export default class FlashcardsReview extends React.Component {
@@ -20,7 +20,7 @@ export default class FlashcardsReview extends React.Component {
 
   getFlashcards() {
     const fcDeckId = this.props.match.params.fcDeckId;
-    fetch(`/api/flashcards-review/${fcDeckId}`)
+    fetch(`/api/flashcards/deck/${fcDeckId}`)
       .then(response => response.json())
       .then(flashcardsData => {
         this.setState(state => ({
@@ -112,7 +112,7 @@ export default class FlashcardsReview extends React.Component {
     }
     return (
       <>
-        <FlashcardsReviewHeader />
+        <FlashcardsHeader />
         <div className="flashcard-review-container col-12">
           <div className="flashcard-container col-10 offset-1 d-flex align-items-center justify-content-center">
             <BackArrow
@@ -131,10 +131,10 @@ export default class FlashcardsReview extends React.Component {
               goToNextFlashcard={() => this.goToNextFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />
           </div>
-          <ProgressBar
-            progressBarPercentageIndicator={this.progressBarPercentageIndicator()}
-            flashcards={this.state.flashcards} />
         </div>
+        <ProgressBar
+          progressBarPercentageIndicator={this.progressBarPercentageIndicator()}
+          flashcards={this.state.flashcards} />
       </>
     );
   }

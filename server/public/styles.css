@@ -76,7 +76,6 @@ div.main-page-left > a {
   color: #24997F;
 }
 
-
 .main-page-right {
   height: 10%;
   display: flex;
@@ -128,7 +127,6 @@ div.col-2 > h6 {
   background-color: #333333;
   position: relative;
 }
-
 
 /* header */
 .header-container {
@@ -252,7 +250,6 @@ div.col-2 > h6 {
   border: 0.5px solid #C4C4C4;
   cursor: pointer;
 }
-
 
 .diff-status {
   width: 38px;
@@ -385,6 +382,10 @@ textarea.note-content {
   background-color: #333333;
   height: 100vh;
   padding: 30px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .fc-list-container-border {
@@ -398,13 +399,18 @@ textarea.note-content {
   flex-direction: column;
 }
 
-#notebook-name {
-  font-size: 30px;
-  color: #24997F;
-  margin-bottom: 0em;
+.fc-list {
+  height: 100vh;
+  width: 100%
 }
 
-#fccard {
+.notebook-name {
+  font-size: 30px;
+  color: #24997F;
+  margin-bottom: 10px 0px 0px 0px;
+}
+
+.fccard {
   background-color: #333333;
   margin-top: 5rem;
   margin-bottom: 0;
@@ -426,28 +432,9 @@ textarea.note-content {
   color:#24997F;
   align-items: center;
   justify-content: center;
-
 }
 
-.study-button {
-  color:#24997F;
-  font-size: 20px;
-  width: 140px;
-  height: 45px;
-  padding: 0;
-  background-color: #333333;
-  margin-left: 11rem;
-  margin-bottom: 2rem;
-  align-self: center;
-}
-
-.study-button:hover {
-  background-color: #24997F;
-  border-color: #24997F;
-  color: #3F3F3C;
-}
-
-#cardTitle {
+.cardTitle {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -456,19 +443,13 @@ textarea.note-content {
   height: fit-content;
 }
 
-.q{
-  margin-top: 10px;
-  font-size: larger;
-}
 
-#deckLength {
+.deckLength {
   color:#24997F;
   width: 9rem;
   margin-left: 4rem;
 
 }
-
-/* Review Flashcards */
 
 .flashcard-review-container {
   width: 100%;
@@ -508,8 +489,50 @@ textarea.note-content {
   position: relative;
   top: 10%;
 }
-/* SEARCH COMPONENT */
 
+.main-fc-cont {
+  background-color:#333333;
+  display: flex;
+  flex: row;
+  justify-content: space-evenly
+}
+
+.fc-q-a {
+  border: 1px solid #3F3F3C;
+  color: #24997F;
+  width: 45%;
+  height: 100px;
+  justify-content: center;
+  font-size: 20px
+}
+
+.flashcardDeck {
+  display: flex;
+  margin: 20px;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: #333333;
+  overflow-y: auto;
+}
+
+.flashcard-som {
+  background-color: #3F3F3D;
+  width: 100%;
+  height: 10%;
+  color: #24997F;
+  display: flex;
+  justify-content: center;
+  font-size: 25px;
+  border: 1px solid #c4c4c4
+}
+
+.fcLists {
+  height: 745px;
+  width: 100%
+}
+
+/* SEARCH COMPONENT */
 .search-container{
 background-color: #24997F;
 padding: .5rem 5rem;
@@ -565,32 +588,29 @@ padding: .5rem 5rem;
 }
 
 .search-text{
-color: #FFFEFE;
-font-family: 'Palanquin';
-font-style: normal;
-font-weight: 100;
-font-size: 40px;
-
+  color: #FFFEFE;
+  font-family: 'Palanquin';
+  font-style: normal;
+  font-weight: 100;
+  font-size: 40px;
 }
 
 .search-input {
-background-color: #24997F;
-color: #C4C4C4;
-font-weight: 100;
-border: none;
-border-bottom: #FFFFFF solid 1px;
-border-radius: 0;
-/* padding-left: 60px; */
-
+  background-color: #24997F;
+  color: #C4C4C4;
+  font-weight: 100;
+  border: none;
+  border-bottom: #FFFFFF solid 1px;
+  border-radius: 0;
 }
 
 .search-input:focus{
-background-color: #24997F;
-color: #C4C4C4;
-font-weight: 100;
-border: none;
-border-bottom: #FFFFFF solid 1px;
-border-radius: 0;
+  background-color: #24997F;
+  color: #C4C4C4;
+  font-weight: 100;
+  border: none;
+  border-bottom: #FFFFFF solid 1px;
+  border-radius: 0;
 }
 
 .search-form {

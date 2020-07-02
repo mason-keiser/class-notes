@@ -436,6 +436,12 @@ textarea.note-content {
   top: 10%;
 }
 
+.nav-to-flashcards {
+  position: fixed;
+  top: 9%;
+  left: 2.2%;
+}
+
 .fc-card {
   display: flex;
   justify-content: center;

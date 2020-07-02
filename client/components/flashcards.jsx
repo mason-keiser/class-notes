@@ -103,12 +103,12 @@ export default class Flashcards extends React.Component {
                       <h2>{item.notebookName}</h2>
                       <h4 className="ml-5">{this.state.flashcards.length + ' card(s)'}</h4>
                     </div>
-                    <Link to={{ pathname: `/flashcards-review/${item.notebookId}` }}>
-                      <Button className="solid-button mt-4">Study</Button>
-                    </Link>
-                  </div>
-                  <div onClick={this.showFlashcard}>
-                    <i className="fas fa-chevron-right pointer"></i>
+                    <div className="flashcard-button-container d-flex">
+                      <Link to={{ pathname: `/flashcards-review/${item.notebookId}` }}>
+                        <Button className="solid-button mt-4 mr-4">Study</Button>
+                      </Link>
+                      <Button className="solid-button mt-4" onClick={this.showFlashcard}>View All</Button>
+                    </div>
                   </div>
                 </div>
               );

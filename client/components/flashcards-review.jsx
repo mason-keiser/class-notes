@@ -1,6 +1,6 @@
 import React from 'react';
 import FlashcardsHeader from './flashcards-header';
-import { NextArrow, BackArrow, Flashcard, ProgressBar } from './flashcards-review-ui-components';
+import { NextArrow, BackArrow, Flashcard, ProgressBar, NavToFlashcards } from './flashcards-review-ui-components';
 
 export default class FlashcardsReview extends React.Component {
   constructor(props) {
@@ -114,7 +114,8 @@ export default class FlashcardsReview extends React.Component {
       <>
         <FlashcardsHeader />
         <div className="flashcard-review-container col-12 d-flex align-items-center justify-content-center">
-          <div className="flashcard-review-back-arrow-container col-1 d-flex justify-content-end">
+          <div className="flashcard-left-container col-1 d-flex justify-content-end">
+            <NavToFlashcards />
             <BackArrow
               goToPrevFlashcard={() => this.goToPrevFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />
@@ -130,7 +131,7 @@ export default class FlashcardsReview extends React.Component {
                 setSide={() => this.setSide()} />
             )}
           </div>
-          <div className="flashcard-review-next-arrow-container col-1">
+          <div className="flashcard-right-container col-1">
             <NextArrow
               goToNextFlashcard={() => this.goToNextFlashcard()}
               setSideToQuestion={() => this.setSideToQuestion()} />

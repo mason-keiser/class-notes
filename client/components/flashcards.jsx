@@ -110,9 +110,6 @@ export default class Flashcards extends React.Component {
                       <Button className="solid-button mt-4" onClick={this.showFlashcard}>View All</Button>
                     </div>
                   </div>
-                  {/* <div onClick={this.showFlashcard}>
-                    <i className="fas fa-chevron-right pointer"></i>
-                  </div> */}
                 </div>
               );
             })}

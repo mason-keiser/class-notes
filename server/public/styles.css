@@ -720,3 +720,12 @@ margin-bottom: 5px;
     background-repeat: repeat-y;
     background-size: contain;
 }
+
+
+.tag-display{
+  color: #24997F;
+  border: 1px solid #24997F;
+  padding: 2px 1px;
+  margin: auto 5px;
+
+}

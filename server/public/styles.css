@@ -647,13 +647,14 @@ margin-bottom: 5px;
 }
 
 
-/* cancel note modal */
-.cancel-note-modal, .update-note-modal, .create-note-modal {
+/* note modal */
+
+.note-modal {
   position: fixed;
   background: rgba(0, 0, 0, 0.6);
 }
 
-.modal-hide {
+.modal-hidden {
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s .1s, opacity .1s linear;
@@ -665,17 +666,17 @@ margin-bottom: 5px;
   transition: opacity .1s linear;
 }
 
-.cancel-note-modal-main, .update-note-modal-main, .create-note-modal-main {
+.note-modal-main {
   margin-top: 10px;
   padding: 10px 17px 10px 17px;
   position: fixed;
   background: #3F3F3D;
-  width: auto;
-  height: auto;
+  width: 300px;
+  height: 50px;
   border-radius: 4px;
 }
 
-.cancel-note-modal-main p, .update-note-modal-main p, .create-note-modal-main p {
+.note-modal-main p {
   margin: 0;
   color: #24997F;
   font-size: 20px;

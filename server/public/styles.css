@@ -633,6 +633,11 @@ margin-bottom: 5px;
   background: rgba(0, 0, 0, 0.6);
 }
 
+.note-modal {
+    position: fixed;
+  background: rgba(0, 0, 0, 0.6);
+}
+
 .modal-hide {
   visibility: hidden;
   opacity: 0;

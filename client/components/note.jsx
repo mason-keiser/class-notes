@@ -3,6 +3,34 @@ import NotebookHeader from './notebook-header';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
+// function Modal(props) {
+//   let modalContent;
+//   let modalStyle;
+//   if (props === 'cancel') {
+//     modalContent = 'Changes have been cancelled';
+//     modalStyle = 'modal-visible';
+//   }
+//   if (props === 'update') {
+//     modalContent = 'Note has been updated';
+//     modalStyle = 'modal-visible';
+//   }
+//   if (props === 'create') {
+//     modalContent = 'Note has been created';
+//     modalStyle = 'modal-visible';
+//   }
+//   if (props === 'flashcard') {
+//     modalContent = 'flashcard has been created';
+//     modalStyle = 'modal-visible';
+//   }
+//   return (
+//     <div className="note-modal modal-hidden">
+//       <div className="modal-hidden">
+//         <p>{modalContent}</p>
+//       </div>
+//     </div>
+//   );
+// }
+
 function CancelModal(props) {
   let modalDisplay;
   if (props.modal === 'hidden') {

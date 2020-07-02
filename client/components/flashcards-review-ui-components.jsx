@@ -10,9 +10,6 @@ function NextArrow(props) {
         props.setSideToQuestion();
       }}>
       <i className="fa fa-angle-right fa-3x text-secondary" aria-hidden="true"></i>
-      {/* <Button>
-        Next
-      </Button> */}
     </Link>
   );
 }
@@ -26,9 +23,6 @@ function BackArrow(props) {
         props.setSideToQuestion();
       }}>
       <i className="fa fa-angle-left fa-3x text-secondary" aria-hidden="true"></i>
-      {/* <Button>
-        Back
-      </Button> */}
     </Link>
   );
 }
@@ -36,7 +30,7 @@ function BackArrow(props) {
 function ProgressBar(props) {
   const percentageIndicator = props.progressBarPercentageIndicator;
   const containerStyling = {
-    height: 10,
+    height: 40,
     width: '100%',
     backgroundColor: '#3F3F3D'
   };

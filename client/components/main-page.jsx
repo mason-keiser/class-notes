@@ -38,7 +38,7 @@ export default class MainPage extends React.Component {
             <h1 className="title">CODE NOTES</h1>
           </div>
           <div className="main-page-left">
-            <Link to="/flashcards" className="link">
+            <Link to="/flashcards" className="link theme-green">
               <h5>Flashcards</h5>
             </Link>
             <h5>Login</h5>
@@ -47,9 +47,9 @@ export default class MainPage extends React.Component {
             <h5>MOOD</h5>
           </div>
         </main>
-        <footer className="main-page-footer">
+        <footer className="footer">
           <div className="col-2">
-            <h6> &copy;All rights reserved</h6>
+            <h6 className="mb-0"> &copy;All rights reserved</h6>
           </div>
           <div className="col"></div>
         </footer>

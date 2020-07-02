@@ -45,14 +45,14 @@ export default class NoteList extends React.Component {
   render() {
     if (this.state.currentId === null || this.state.currentId === 0) {
       return (
-        <div className="note-page-container loading">
+        <div className="page-container loading">
           <h3 className="note-font-2">Loading...</h3>
         </div>
       );
     }
     if (!this.state.notes.length) {
       return (
-        <div className="note-page-container loading">
+        <div className="page-container loading">
           <h3 className="note-font-2 mb-4">Notebook</h3>
           <h5 className="color-white">You do not have any notebook.</h5>
           <h5 className="color-white">Please create one.</h5>

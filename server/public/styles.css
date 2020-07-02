@@ -213,6 +213,18 @@ div.main-page-left > h5:hover, div.search-block:hover, div.main-page-right:hover
 }
 
 /* note page */
+.note-input{
+  background-color: #333333;
+  border: solid 1px #C4C4C4;
+  color: #C4C4C4
+}
+
+.tag-input{
+   background-color: #3F3F3D;
+  border: solid 1px #C4C4C4;
+  color: #C4C4C4
+}
+
 .difficulty {
   margin-left: 15px;
   width: 25px;

@@ -144,13 +144,11 @@ class Note extends React.Component {
   }
 
   addTag(event) {
-
     if (event.key === 'Enter') {
       event.preventDefault();
-      const tagsArray = this.state.note.noteTags.splice();
+      const tagsArray = this.state.note.noteTags;
 
       tagsArray.push(event.target.value);
-      console.log(tagsArray);
       this.setState({
         note: {
           ...this.state.note,
@@ -488,9 +486,11 @@ class Note extends React.Component {
                 onChange={this.handleTitleChange} />
             </FormGroup>
           </div>
-          <div className="d-flex flex-row align-items-center justify-content-between col-md-3">
+          <div className="d-flex flex-row align-items-center justify-content-between col-md-4">
             {note.noteTags.map((tag, index) => {
-
+              if (tag === '') {
+                return;
+              }
               return <p key={index} className="tag-display">{tag}</p>;
 
             })}

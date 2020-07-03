@@ -91,7 +91,7 @@ app.get('/api/notes/:noteId', (req, res, next) => {
             return tagsArray;
           })
           .then(tagsArray => {
-            note.noteTags = tagsArray.join(' ');
+            note.noteTags = tagsArray;
             res.status(200).json(note);
           })
           .catch(err => next(err));
@@ -155,7 +155,7 @@ app.post('/api/notes', (req, res, next) => {
   if (!req.body.noteTags && req.body.noteTags !== '') {
     return res.status(400).json({ error: 'all notes must have noteTags' });
   }
-  const noteTags = req.body.noteTags.split(' ');
+  const noteTags = req.body.noteTags;
   const noteResource = JSON.stringify(req.body.noteResource);
   const noteCode = JSON.stringify(req.body.noteCode);
   const noteValues = [
@@ -249,7 +249,7 @@ app.put('/api/notes/:noteId', (req, res, next) => {
     !req.body.noteDifficulty || !req.body.noteResource || !req.body.noteCode || !req.body.noteTags) {
     return res.status(400).json({ error: 'all notes must have complete data' });
   }
-  const noteTags = req.body.noteTags.split(' ');
+  const noteTags = req.body.noteTags;
   const noteResource = JSON.stringify(req.body.noteResource);
   const noteCode = JSON.stringify(req.body.noteCode);
   const newNoteValues = [

@@ -44,7 +44,8 @@ class Note extends React.Component {
       element: null,
       notebooks: [],
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
-      modal: 'hidden'
+      modal: 'hidden',
+      tagInput: ''
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
@@ -63,9 +64,10 @@ class Note extends React.Component {
     this.addOneResource = this.addOneResource.bind(this);
     this.deleteOneResource = this.deleteOneResource.bind(this);
     this.showModal = this.showModal.bind(this);
-    this.handleTagChange = this.handleTagChange.bind(this);
     this.flashCardQuestion = this.flashCardQuestion.bind(this);
     this.flashCardAnswer = this.flashCardAnswer.bind(this);
+    this.handleTagInputChange = this.handleTagInputChange.bind(this);
+    this.addTag = this.addTag.bind(this);
   }
 
   componentDidMount() {
@@ -93,7 +95,7 @@ class Note extends React.Component {
           noteDifficulty: 1,
           noteResource: [],
           noteCode: {},
-          noteTags: ''
+          noteTags: ['']
         },
         view: 'createNote',
         flashcard: { fcTags: [''], fcQuestion: '', fcAnswer: '', fcDeckId: 1 }
@@ -137,13 +139,25 @@ class Note extends React.Component {
     });
   }
 
-  handleTagChange(event) {
-    this.setState({
-      note: {
-        ...this.state.note,
-        noteTags: event.target.value
-      }
-    });
+  handleTagInputChange(event) {
+    this.setState({ tagInput: event.target.value });
+  }
+
+  addTag(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const tagsArray = this.state.note.noteTags;
+
+      tagsArray.push(event.target.value);
+      this.setState({
+        note: {
+          ...this.state.note,
+          noteTags: tagsArray
+        },
+        tagInput: ''
+      });
+
+    }
   }
 
   handleResourceName(index, event) {
@@ -473,9 +487,19 @@ class Note extends React.Component {
                 onChange={this.handleTitleChange} />
             </FormGroup>
           </div>
-          <div className="d-flex flex-row align-items-center justify-content-between col-md-3">
-            <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
-              value={this.state.note.noteTags} onChange={this.handleTagChange}/>
+          <div className="d-flex flex-row align-items-center justify-content-end col-md-4">
+            {note.noteTags.map((tag, index) => {
+              if (tag === '') {
+                return;
+              }
+              return <p key={index} className="tag-display">{tag}</p>;
+
+            })}
+            <FormGroup className='tag-group'>
+              <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
+                placeholder='Add a tag' value={this.state.tagInput}
+                onChange={this.handleTagInputChange} onKeyPress={this.addTag}/>
+            </FormGroup>
             <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
             <Link to={{ pathname: closeButton }}>
               <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">

@@ -219,10 +219,23 @@ div.main-page-left > h5:hover, div.search-block:hover, div.main-page-right:hover
   color: #C4C4C4
 }
 
+.tag-group{
+  margin: 0 .5rem;
+}
+
 .tag-input{
    background-color: #3F3F3D;
   border: solid 1px #C4C4C4;
-  color: #C4C4C4
+  color: #C4C4C4;
+
+}
+
+.tag-display{
+  color: #24997F;
+  border: 1px solid #24997F;
+  padding: 2px 1px;
+  margin: auto 5px;
+
 }
 
 .difficulty {

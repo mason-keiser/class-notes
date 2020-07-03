@@ -486,7 +486,7 @@ class Note extends React.Component {
                 onChange={this.handleTitleChange} />
             </FormGroup>
           </div>
-          <div className="d-flex flex-row align-items-center justify-content-between col-md-4">
+          <div className="d-flex flex-row align-items-center justify-content-end col-md-4">
             {note.noteTags.map((tag, index) => {
               if (tag === '') {
                 return;
@@ -494,7 +494,7 @@ class Note extends React.Component {
               return <p key={index} className="tag-display">{tag}</p>;
 
             })}
-            <FormGroup>
+            <FormGroup className='tag-group'>
               <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
                 placeholder='Add a tag' value={this.state.tagInput}
                 onChange={this.handleTagInputChange} onKeyPress={this.addTag}/>

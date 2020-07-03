@@ -40,8 +40,8 @@ export default class Flashcards extends React.Component {
       .catch(err => console.error('getFlashcards() fetch failed:', err));
   }
 
-  showFlashcard() {
-    this.setState({ showCards: !this.state.showCards });
+  showFlashcard(value) {
+    this.setState({ showCards: value });
   }
 
   render() {
@@ -52,17 +52,17 @@ export default class Flashcards extends React.Component {
         <div className="show-flashcard col-7">
           <div className='show-flashcard-title'>
             <h4 className="mb-0">View all available flashcards</h4>
-            <Button className="solid-button ml-5" onClick={this.showFlashcard}>Close</Button>
+            <Button className="solid-button ml-5" onClick={() => this.showFlashcard(false)}>Close</Button>
           </div>
           <div className="show-flashcard-content">
             {this.state.flashcards.map(fcItem => {
               return (
                 <div key={fcItem.fcId} className='mb-4 d-flex flex-row justify-content-around'>
                   <div className='fc-card'>
-                    <h4>{fcItem.fcQuestion}</h4>
+                    <div>{fcItem.fcQuestion}</div>
                   </div>
                   <div className='fc-card'>
-                    <h4>{fcItem.fcAnswer}</h4>
+                    <div>{fcItem.fcAnswer}</div>
                   </div>
                 </div>
               );
@@ -93,22 +93,20 @@ export default class Flashcards extends React.Component {
       <>
         <FlashcardsHeader studentName={notebookInfo.firstName} />
         <main className="page-container-footer d-flex justify-content-between">
-          <div className="col-4">
+          <div className="col-4 flashcard-left-container">
             {notebookInfo.notebooks.map(item => {
               return (
                 <div key={item.notebookId}
-                  className="d-flex flex-row flashcard-general-info mb-5">
-                  <div className="d-flex flex-column justify-content-between">
-                    <div className="d-flex flex-row align-items-center">
-                      <h2>{item.notebookName}</h2>
-                      <h4 className="ml-5">{this.state.flashcards.length + ' card(s)'}</h4>
-                    </div>
-                    <div className="flashcard-button-container d-flex">
-                      <Link to={{ pathname: `/flashcards-review/${item.notebookId}` }}>
-                        <Button className="solid-button mt-4 mr-4">Study</Button>
-                      </Link>
-                      <Button className="solid-button mt-4" onClick={this.showFlashcard}>View All</Button>
-                    </div>
+                  className="d-flex flex-column flashcard-general-info mb-5">
+                  <div className="d-flex flex-row align-items-center">
+                    <h2>{item.notebookName}</h2>
+                    <h4 className="ml-5">{this.state.flashcards.length + ' card(s)'}</h4>
+                  </div>
+                  <div className="p-1 d-flex">
+                    <Link to={{ pathname: `/flashcards-review/${item.notebookId}` }}>
+                      <Button className="solid-button mr-4">Study</Button>
+                    </Link>
+                    <Button className="solid-button" onClick={() => this.showFlashcard(true)}>View All</Button>
                   </div>
                 </div>
               );

@@ -2,13 +2,14 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import SearchBar from './search-bar';
+import CodePlayground from './code-playground';
 
 export default class MainPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { searchOpened: false };
-    this.searchClicked = this.searchClicked.bind(this);
-    this.closeXClicked = this.closeXClicked.bind(this);
+    // this.state = { searchOpened: false };
+    // this.searchClicked = this.searchClicked.bind(this);
+    // this.closeXClicked = this.closeXClicked.bind(this);
   }
 
   searchClicked() {
@@ -21,8 +22,9 @@ export default class MainPage extends React.Component {
 
   render() {
     return (
-      <>
-        <SearchBar searchClicked={this.searchClicked} closeXClicked={this.closeXClicked} isOpened={this.state.searchOpened} />
+      <CodePlayground />
+
+    /* <SearchBar searchClicked={this.searchClicked} closeXClicked={this.closeXClicked} isOpened={this.state.searchOpened} />
         <main className="main-page-container">
           <div className="search-block" onClick={this.searchClicked}>
             <h5>Search</h5>
@@ -52,8 +54,8 @@ export default class MainPage extends React.Component {
             <h6 className="mb-0"> &copy;All rights reserved</h6>
           </div>
           <div className="col"></div>
-        </footer>
-      </>
+        </footer> */
+
     );
   }
 }

@@ -105,10 +105,13 @@ export default class Flashcards extends React.Component {
 
     return (
       <>
-        <FlashcardsHeader studentName={flashcardDecksInfo.firstName} />
+        <FlashcardsHeader studentName={flashcardDecksInfo[flashcardDecksInfo.length - 1].firstName} />
         <main className="page-container-footer d-flex justify-content-between">
           <div className="col-4">
             {flashcardDecksInfo.map(flashcardDeck => {
+              if (!(flashcardDeck.fcDeckId)) {
+                return;
+              }
               return (
                 <div key={flashcardDeck.fcDeckId}
                   className="d-flex flex-row flashcard-general-info mb-5">

@@ -120,8 +120,8 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// GET A COUNT FOR HOW MANY NOTES ARE IN EACH NOTEBOOK BELONGING TO A STUDENT TABLE BY PROVIDING
-// A STUDENT ID
+// GET A COUNT FOR HOW MANY NOTES ARE IN EACH NOTEBOOK BELONGING TO A STUDENT TABLE, AND THE
+// STUDENT'S NAME, BY PROVIDING A STUDENT ID
 
 app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
   const studentId = parseInt(req.params.studentId);

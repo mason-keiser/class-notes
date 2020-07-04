@@ -446,6 +446,64 @@ app.get('/api/flashcards/:fcId', (req, res, next) => {
 //     );
 // });
 
+// USER CAN VIEW A LIST OF FLASHCARD DECKS WITH A COUNT OF FLASHCARDS FOR EACH DECK
+// BY PROVIDING A STUDENT ID. It also includes student's first name for the Header.
+
+app.get('/api/flashcardDecks/:studentId', (req, res, next) => {
+  const studentId = parseInt(req.params.studentId);
+  const param = [req.params.studentId];
+  if (!Number.isInteger(studentId) || studentId <= 0) {
+    return res.status(400).json({ error: 'studentId must be a positive integer' });
+  }
+  const sql = `
+  select "fcDeck"."fcDeckId", "notebooks"."notebookName"
+  from "fcDeck"
+  join "notebooks" using ("notebookId")
+  where "notebooks"."studentId" = $1;
+  `;
+  db.query(sql, param)
+    .then(result => {
+      const fcDeckInfo = result.rows;
+      fcDeckInfo.map(fcDeck => {
+        fcDeck.fcCount = 0;
+      });
+      if (!fcDeckInfo) {
+        next(new ClientError(`Cannot find student with "studentId" ${studentId}`, 404));
+      } else {
+        const fcSQL = `
+        select "fcDeck"."fcDeckId", "fcItem"."fcId"
+        from "fcItem"
+        join "fcDeck" using ("fcDeckId")
+        join "notebooks" using ("notebookId")
+        where "studentId" = $1
+        `;
+        db.query(fcSQL, param)
+          .then(result => {
+            const countIncrementor = result.rows;
+            for (var fcDeckIndex = 0; fcDeckIndex < fcDeckInfo.length; fcDeckIndex++) {
+              for (var countIndex = 0; countIndex < countIncrementor.length; countIndex++) {
+                if (fcDeckInfo[fcDeckIndex].fcDeckId === countIncrementor[countIndex].fcDeckId) {
+                  fcDeckInfo[fcDeckIndex].fcCount++;
+                }
+              }
+            }
+            const nameSQL = `
+              select "firstName"
+              from "students"
+              where "students"."studentId" = $1;
+              `;
+            db.query(nameSQL, param)
+              .then(result => {
+                fcDeckInfo.push({ firstName: result.rows[0].firstName });
+                res.status(200).json(fcDeckInfo);
+              });
+          })
+          .catch(err => next(err));
+      }
+    })
+    .catch(err => next(err));
+});
+
 // USER CAN REVIEW FLASHCARDS BY DECK
 app.get('/api/flashcards/deck/:fcDeckId', (req, res, next) => {
   const fcDeckId = parseInt(req.params.fcDeckId);

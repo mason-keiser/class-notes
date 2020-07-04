@@ -7,26 +7,28 @@ export default class Flashcards extends React.Component {
     super(props);
     this.state = {
       flashcards: [],
-      notebook: null,
+      flashcardDecks: null,
       showCards: false
     };
     this.getFlashcards = this.getFlashcards.bind(this);
-    this.getNotebooks = this.getNotebooks.bind(this);
+    this.getFlashcardDecksInfo = this.getFlashcardDecksInfo.bind(this);
     this.showFlashcard = this.showFlashcard.bind(this);
   }
 
   componentDidMount() {
-    this.getNotebooks();
+    this.getFlashcardDecksInfo();
   }
 
-  getNotebooks() {
-    fetch('/api/students/1')
+  getFlashcardDecksInfo() {
+    fetch('/api/flashcardDecks/1')
       .then(res => res.json())
       .then(data => {
-        this.setState({ notebook: data });
-        this.getFlashcards(data.notebooks[0].notebookId);
+        this.setState({
+          flashcardDecks: data
+        });
+        this.getFlashcards(1);
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error('getFlashcardDecksInfo() fetch failed:', err));
   }
 
   getFlashcards(deckId) {
@@ -45,7 +47,7 @@ export default class Flashcards extends React.Component {
   }
 
   render() {
-    const notebookInfo = this.state.notebook;
+    const flashcardDecksInfo = this.state.flashcardDecks;
     let showFlashcards;
     if (this.state.showCards === true) {
       showFlashcards = (
@@ -72,7 +74,7 @@ export default class Flashcards extends React.Component {
       );
     }
 
-    if (notebookInfo === null || this.state.flashcards.length === 0) {
+    if (flashcardDecksInfo === null || this.state.flashcards.length === 0) {
       return (
         <>
           <FlashcardsHeader studentName="" />
@@ -91,22 +93,31 @@ export default class Flashcards extends React.Component {
 
     return (
       <>
-        <FlashcardsHeader studentName={notebookInfo.firstName} />
+        <FlashcardsHeader studentName={flashcardDecksInfo[flashcardDecksInfo.length - 1].firstName} />
         <main className="page-container-footer d-flex justify-content-between">
-          <div className="col-4 flashcard-left-container">
-            {notebookInfo.notebooks.map(item => {
+          <div className="col-4">
+            {flashcardDecksInfo.map(flashcardDeck => {
+              if (!(flashcardDeck.fcDeckId)) {
+                return;
+              }
               return (
-                <div key={item.notebookId}
-                  className="d-flex flex-column flashcard-general-info mb-5">
-                  <div className="d-flex flex-row align-items-center">
-                    <h2>{item.notebookName}</h2>
-                    <h4 className="ml-5">{this.state.flashcards.length + ' card(s)'}</h4>
-                  </div>
-                  <div className="p-1 d-flex">
-                    <Link to={{ pathname: `/flashcards-review/${item.notebookId}` }}>
-                      <Button className="solid-button mr-4">Study</Button>
-                    </Link>
-                    <Button className="solid-button" onClick={() => this.showFlashcard(true)}>View All</Button>
+                <div key={flashcardDeck.fcDeckId}
+                  className="d-flex flex-row flashcard-general-info mb-5">
+                  <div className="d-flex flex-column justify-content-between">
+                    <div className="d-flex flex-row align-items-center">
+                      <h2>{flashcardDeck.notebookName}</h2>
+                      <h4 className="ml-5">{flashcardDeck.fcCount + ' card(s)'}</h4>
+                    </div>
+                    <div className="flashcard-button-container d-flex">
+                      <Link to={{ pathname: `/flashcards-review/${flashcardDeck.fcDeckId}` }}>
+                        <Button className="solid-button mt-4 mr-4">Study</Button>
+                      </Link>
+                      <Button className="solid-button mt-4"
+                        onClick={() => {
+                          this.showFlashcard();
+                          this.getFlashcards(flashcardDeck.fcDeckId);
+                        }}>View All</Button>
+                    </div>
                   </div>
                 </div>
               );

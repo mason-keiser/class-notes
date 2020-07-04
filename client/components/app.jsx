@@ -5,6 +5,7 @@ import Notebook from './notebook';
 import Note from './note';
 import Flashcards from './flashcards';
 import FlashcardsReview from './flashcards-review';
+import NotebooksList from './notebook-list';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -28,7 +29,8 @@ export default class App extends React.Component {
       <Router>
         <Switch>
           <Route path="/" exact component={MainPage}/>
-          <Route path="/notebook" exact component={Notebook}/>
+          <Route path="/notebooks-list" exact component={NotebooksList} />
+          <Route path="/notebook/:notebookId" exact component={Notebook}/>
           <Route path="/flashcards" exact component={Flashcards}/>
           <Route path="/flashcards/create" exact component={Flashcards}/>
           <Route path="/notes/create" component={Note}/>

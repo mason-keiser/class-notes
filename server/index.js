@@ -120,19 +120,85 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// GET INFORMATION ABOUT ALL NOTES FOR ALL STUDENTS WITHIN THE NOTES TABLE
-// app.get('/api/notes', (req, res, next) => {
-//   const sql = `
-//   select "noteId" , "noteTitle", "noteContent"
-//   from "notes";
-//   `;
-//   db.query(sql)
-//     .then(result => res.status(200).json(result.rows))
-//     .catch(err => next(err));
-// });
+// GET A COUNT FOR HOW MANY NOTES ARE IN EACH NOTEBOOK BELONGING TO A STUDENT TABLE BY PROVIDING
+// A STUDENT ID
+
+app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
+  const studentId = parseInt(req.params.studentId);
+  const noteParam = [req.params.studentId];
+  if (!Number.isInteger(studentId) || studentId <= 0) {
+    return res.status(400).json({ error: 'studentId must be a positive integer' });
+  }
+  const sql = `
+  select "notebooks"."notebookId", "notebooks"."notebookName"
+  from "notebooks"
+  where "notebooks"."studentId" = $1;
+  `;
+  db.query(sql, noteParam)
+    .then(result => {
+      const notebooksInfo = result.rows;
+      notebooksInfo.map(notebook => {
+        notebook.noteCount = 0;
+      });
+      if (!notebooksInfo) {
+        next(new ClientError(`Cannot find student with "studentId" ${studentId}`, 404));
+      } else {
+        const notesSQL = `
+        select "notebooks"."notebookId"
+        from "notebooks" where "studentId" = $1
+        `;
+        db.query(notesSQL, noteParam)
+          .then(result => {
+            const countIncrementor = result.rows;
+            for (var notebooksIndex = 0; notebooksIndex < notebooksInfo.length; notebooksIndex++) {
+              for (var countIndex = 0; countIndex < countIncrementor.length; countIndex++) {
+                if (notebooksInfo[notebooksIndex].notebookId === countIncrementor[countIndex].notebookId) {
+                  notebooksInfo[notebooksIndex].noteCount++;
+                }
+              }
+            }
+            res.status(200).json(notebooksInfo);
+          })
+          .catch(err => next(err));
+      }
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/students/:studentId', (req, res, next) => {
+  const studentId = parseInt(req.params.studentId);
+  if (!Number.isInteger(studentId) || studentId <= 0) {
+    return res.status(400).json({ error: 'studentId must be a positive integer' });
+  }
+  const sql = `
+  select *
+  from "students"
+  join "notebooks" using ("studentId")
+  where "studentId" = $1;`;
+
+  db.query(sql, [studentId])
+    .then(result => {
+      const studentInfo = {
+        firstName: '',
+        lastName: '',
+        studentId: studentId,
+        notebooks: []
+      };
+      studentInfo.firstName = result.rows[0].firstName;
+      studentInfo.lastName = result.rows[0].lastName;
+      result.rows.map(notebookInfo => {
+        studentInfo.notebooks.push({
+          notebookId: notebookInfo.notebookId,
+          notebookName: notebookInfo.notebookName
+        });
+      });
+      res.status(200).json(studentInfo);
+    })
+    .catch(err => next(err));
+
+});
 
 // CREATE A NEW NOTE
-
 app.post('/api/notes', (req, res, next) => {
   if (!req.body.notebookId) {
     return res.status(400).json({ error: 'all notes must have notebookId' });

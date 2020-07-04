@@ -32,6 +32,9 @@ export default class MainPage extends React.Component {
             <Link to="/notebook/" className="notebooks-link">
               <h3>Notebook</h3>
             </Link>
+            <Link to="/notebook-list/" className="notebooks-list-link">
+              <h3>Notebooks List</h3>
+            </Link>
             <Link to="/notes/create">
               <Button outline color="success" className="outline-button">New Note</Button>
             </Link>

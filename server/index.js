@@ -144,8 +144,10 @@ app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
         next(new ClientError(`Cannot find student with "studentId" ${studentId}`, 404));
       } else {
         const notesSQL = `
-        select "notebooks"."notebookId"
-        from "notebooks" where "studentId" = $1
+        select "notebooks"."notebookId", "notes"."noteId"
+        from "notes"
+        join "notebooks" using ("notebookId")
+        where "studentId" = $1
         `;
         db.query(notesSQL, noteParam)
           .then(result => {
@@ -157,7 +159,16 @@ app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
                 }
               }
             }
-            res.status(200).json(notebooksInfo);
+            const nameSQL = `
+              select "firstName"
+              from "students"
+              where "students"."studentId" = $1;
+              `;
+            db.query(nameSQL, noteParam)
+              .then(result => {
+                notebooksInfo.push({ firstName: result.rows[0].firstName });
+                res.status(200).json(notebooksInfo);
+              });
           })
           .catch(err => next(err));
       }

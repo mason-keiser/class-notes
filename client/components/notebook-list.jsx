@@ -1,46 +1,47 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import FlashcardsHeader from './flashcards-header';
+import NotebookHeader from './notebook-header';
 
-function NoteListItem(props) {
-  const noteListItem = props.note;
-  const noteId = noteListItem.noteId;
-  return (
-    <div className="my-y pb-3 note-list-item mb-5" id={noteId}>
-      <div className="card h-100">
-        <div className="card-body m-0 p-0 note-list-item-body rounded-0 h-100">
-          <Link to={{ pathname: '/notes/' + noteId }} style={{ textDecoration: 'none' }}>
-            <p className="card-title text-left note-list-item-title">{noteListItem.noteTitle}</p>
-            <p className="card-text text-left note-list-item-content mb-3">{noteListItem.noteContent}</p>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
+// function Notebook(props) {
+//   const noteListItem = props.note;
+//   const noteId = noteListItem.noteId;
+//   return (
+//     <div className="my-y pb-3 note-list-item mb-5" id={noteId}>
+//       <div className="card h-100">
+//         <div className="card-body m-0 p-0 note-list-item-body rounded-0 h-100">
+//           <Link to={{ pathname: '/notes/' + noteId }} style={{ textDecoration: 'none' }}>
+//             <p className="card-title text-left note-list-item-title">{noteListItem.noteTitle}</p>
+//             <p className="card-text text-left note-list-item-content mb-3">{noteListItem.noteContent}</p>
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 export default class NotebooksList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      notebook: null
+      notebooks: null
     };
-    this.getNotebooks = this.getNotebooks.bind(this);
+    this.getNotebooksInfo = this.getNotebooksInfo.bind(this);
   }
 
   componentDidMount() {
-    this.getNotebooks();
+    this.getNotebooksInfo();
   }
 
-  getNotebooks() {
-    fetch('/api/students/1')
+  getNotebooksInfo() {
+    fetch('/api/notebooks/notes/1')
       .then(res => res.json())
       .then(data => {
-        this.setState({ notebook: data });
-        this.getFlashcards(data.notebooks[0].notebookId);
+        this.setState({
+          notebooks: data
+        });
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error('getNotebooksInfo() fetch failed:', err));
   }
 
   render() {
@@ -70,11 +71,11 @@ export default class NotebooksList extends React.Component {
     //     </div>
     //   );
     // }
-
-    if (notebookInfo === null) {
+    const notebooks = this.state.notebooks;
+    if (notebooks === null) {
       return (
         <>
-          <FlashcardsHeader studentName="" />
+          <NotebookHeader studentName="" />
           <div className="page-container-footer loading">
             <h3 className="note-font-2">Loading...</h3>
           </div>
@@ -90,30 +91,28 @@ export default class NotebooksList extends React.Component {
 
     return (
       <>
-        <FlashcardsHeader studentName={notebookInfo.firstName} />
+        <NotebookHeader studentName={notebooks.firstName} />
         <main className="page-container-footer d-flex justify-content-between">
           <div className="col-4">
-            {notebookInfo.notebooks.map(item => {
+            {notebooks.map(notebookItem => {
               return (
-                <div key={item.notebookId}
+                <div key={notebookItem.notebookId}
                   className="d-flex flex-row flashcard-general-info mb-5">
                   <div className="d-flex flex-column justify-content-between">
                     <div className="d-flex flex-row align-items-center">
-                      <h2>{item.notebookName}</h2>
-                      <h4 className="ml-5">{this.state.flashcards.length + ' card(s)'}</h4>
+                      <h2>{notebookItem.notebookName}</h2>
+                      <h4 className="ml-5">{notebookItem.noteCount + 'notes'}</h4>
                     </div>
                     <div className="flashcard-button-container d-flex">
-                      <Link to={{ pathname: `/flashcards-review/${item.notebookId}` }}>
+                      <Link to={{ pathname: `/note-list/${notebookItem.notebookId}` }}>
                         <Button className="solid-button mt-4 mr-4">Study</Button>
                       </Link>
-                      <Button className="solid-button mt-4" onClick={this.showFlashcard}>View All</Button>
                     </div>
                   </div>
                 </div>
               );
             })}
           </div>
-          {showFlashcards}
         </main>
         <footer className="footer">
           <div className="col-2">

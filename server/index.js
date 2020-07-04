@@ -176,6 +176,7 @@ app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// USER CAN GET STUDENT INFO BY PROVIDING STUDENTID
 app.get('/api/students/:studentId', (req, res, next) => {
   const studentId = parseInt(req.params.studentId);
   if (!Number.isInteger(studentId) || studentId <= 0) {
@@ -628,21 +629,16 @@ app.get('/api/flashcards/search/:fcTag', (req, res, next) => {
 
 // CREATE A NEW NOTEBOOK
 app.post('/api/notebooks', (req, res, next) => {
-  const studentId = parseInt(req.body.studentId);
   const notebookName = req.body.notebookName;
-  if (!studentId || !notebookName) {
+  if (!notebookName) {
     return res.status(400).json({ error: 'Notebook information is missing, please make sure to enter all required notebook data when creating it.' });
-  }
-  if (!Number.isInteger(studentId) || studentId <= 0) {
-    return res.status(400).json({ error: '"studentId" must be a positive integer' });
   }
   const createNotebookSQL = `
   insert into "notebooks" ("studentId", "notebookName")
-  values ($1, $2)
+  values (1, $1)
   returning *
   `;
   const createNotebookValues = [
-    studentId,
     notebookName
   ];
   db.query(createNotebookSQL, createNotebookValues)

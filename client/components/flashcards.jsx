@@ -7,27 +7,38 @@ export default class Flashcards extends React.Component {
     super(props);
     this.state = {
       flashcards: [],
-      notebook: null,
+      flashcardDecks: null,
       showCards: false
     };
     this.getFlashcards = this.getFlashcards.bind(this);
-    this.getNotebooks = this.getNotebooks.bind(this);
+    // this.getNotebooks = this.getNotebooks.bind(this);
+    this.getFlashcardDecksInfo = this.getFlashcardDecksInfo.bind(this);
     this.showFlashcard = this.showFlashcard.bind(this);
   }
 
   componentDidMount() {
-    this.getNotebooks();
+    this.getFlashcardDecksInfo();
   }
 
-  getNotebooks() {
-    fetch('/api/students/1')
+  // getNotebooks() {
+  //   fetch('/api/students/1')
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       this.setState({ notebook: data });
+  //       console.log(data);
+  //       this.getFlashcards(data.notebooks[1].notebookId);
+  //     })
+  //     .catch(err => console.error(err));
+  // }
+
+  getFlashcardDecksInfo() {
+    fetch('/api/flashcardDecks/1')
       .then(res => res.json())
       .then(data => {
-        this.setState({ notebook: data });
-        console.log(data);
-        this.getFlashcards(data.notebooks[1].notebookId);
-      })
-      .catch(err => console.error(err));
+        this.setState({
+
+        });
+      });
   }
 
   getFlashcards(deckId) {

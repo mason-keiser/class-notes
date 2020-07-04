@@ -42,8 +42,8 @@ export default class Flashcards extends React.Component {
       .catch(err => console.error('getFlashcards() fetch failed:', err));
   }
 
-  showFlashcard(value) {
-    this.setState({ showCards: value });
+  showFlashcard() {
+    this.setState({ showCards: !this.state.showCards });
   }
 
   render() {
@@ -54,17 +54,17 @@ export default class Flashcards extends React.Component {
         <div className="show-flashcard col-7">
           <div className='show-flashcard-title'>
             <h4 className="mb-0">View all available flashcards</h4>
-            <Button className="solid-button ml-5" onClick={() => this.showFlashcard(false)}>Close</Button>
+            <Button className="solid-button ml-5" onClick={this.showFlashcard}>Close</Button>
           </div>
           <div className="show-flashcard-content">
             {this.state.flashcards.map(fcItem => {
               return (
                 <div key={fcItem.fcId} className='mb-4 d-flex flex-row justify-content-around'>
                   <div className='fc-card'>
-                    <div>{fcItem.fcQuestion}</div>
+                    <h4>{fcItem.fcQuestion}</h4>
                   </div>
                   <div className='fc-card'>
-                    <div>{fcItem.fcAnswer}</div>
+                    <h4>{fcItem.fcAnswer}</h4>
                   </div>
                 </div>
               );

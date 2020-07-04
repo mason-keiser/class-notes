@@ -29,7 +29,7 @@ export default class App extends React.Component {
       <Router>
         <Switch>
           <Route path="/" exact component={MainPage}/>
-          <Route path="/notebook" exact component={Notebook}/>
+          <Route path="/notebook/:notebookId" exact component={Notebook}/>
           <Route path="/notebooks-list" exact component={NotebooksList}/>
           <Route path="/flashcards" exact component={Flashcards}/>
           <Route path="/flashcards/create" exact component={Flashcards}/>

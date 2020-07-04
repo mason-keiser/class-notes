@@ -24,7 +24,8 @@ export default class Flashcards extends React.Component {
       .then(res => res.json())
       .then(data => {
         this.setState({ notebook: data });
-        this.getFlashcards(data.notebooks[0].notebookId);
+        console.log(data);
+        this.getFlashcards(data.notebooks[1].notebookId);
       })
       .catch(err => console.error(err));
   }

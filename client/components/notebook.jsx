@@ -13,8 +13,7 @@ export default class Notebooks extends React.Component {
       .then(response => response.json())
       .then(data => {
         this.setState({ student: data });
-      }
-      )
+      })
       .catch(err => console.error('getStudentData() fetch failed:', err));
   }
 

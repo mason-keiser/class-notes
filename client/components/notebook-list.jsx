@@ -101,7 +101,7 @@ export default class NotebooksList extends React.Component {
                       <h4 className="ml-5">{notebookItem.noteCount + 'notes'}</h4>
                     </div>
                     <div className="flashcard-button-container d-flex">
-                      <Link to={{ pathname: `/notebook/${notebookItem.notebookId}`, notebookId: `${notebookItem.notebookId}` }}>
+                      <Link to={{ pathname: `/notebook/${notebookItem.notebookId}` }}>
                         <Button className="solid-button mt-4 mr-4">View</Button>
                       </Link>
                     </div>

@@ -45,13 +45,15 @@ class Note extends React.Component {
       notebooks: [],
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
       modal: 'hidden',
-      tagInput: ''
+      tagInput: '',
+      dropdownMenu: 'closed'
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
     this.createFlashcard = this.createFlashcard.bind(this);
     this.handleDifficultyChange = this.handleDifficultyChange.bind(this);
+    this.handleNotebookIdChange = this.handleNotebookIdChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
@@ -126,6 +128,16 @@ class Note extends React.Component {
       note: {
         ...this.state.note,
         noteDifficulty: number
+      }
+    });
+  }
+
+  handleNotebookIdChange(notebookId, notebookName) {
+    this.setState({
+      note: {
+        ...this.state.note,
+        notebookId: notebookId,
+        notebookName: notebookName
       }
     });
   }
@@ -332,7 +344,7 @@ class Note extends React.Component {
       this.setState({
         modal: 'hidden'
       });
-    }, 500);
+    }, 2000);
   }
 
   render() {
@@ -473,7 +485,6 @@ class Note extends React.Component {
         <header className="header-container d-flex flex-row justify-content-between">
           <div className="d-flex flex-row align-items-center col">
             <Link to="/" className="d-flex flex-row align-items-center" style={{ textDecoration: 'none' }}>
-              {/* <i className="fa fa-home theme-green fa-2x header-hamburger-icon"></i> */}
               <img src="/images/code-note-icon.png" alt="Code Note Icon"/>
             </Link>
             <FormGroup className="ml-5 mb-0">
@@ -523,9 +534,9 @@ class Note extends React.Component {
               <div className="difficulty diff-5"
                 onClick={() => this.handleDifficultyChange(5)}></div>
             </div>
-            <FormGroup className="mb-4">
+            {/* <FormGroup className="mb-4">
               <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
-              <Input type="select" name="notebookName" id="notebookName" className="note-input">
+              <Input type="select" name="notebookName" id="notebookName" className="note-input" onChange={() => this.handleNotebookIdChange(event)}>
                 {
                   this.state.notebooks.map(notebook => {
                     // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
@@ -537,7 +548,21 @@ class Note extends React.Component {
                     );
                   })}
               </Input>
-            </FormGroup>
+            </FormGroup> */}
+            <div className="dropdown-container">
+              <div className="dropdown-header">
+                <div className="dropdown-header-title">{this.state.note.notebookName}</div>
+              </div>
+              <ul className="dropdown-list">
+                {
+                  this.state.notebooks.map(notebook => {
+                    return (
+                      <li key={notebook.notebookId} onClick={() => this.handleNotebookIdChange(notebook.notebookId, notebook.notebookName)}>{notebook.notebookName}</li>
+                    );
+                  })
+                }
+              </ul>
+            </div>
             <FormGroup>
               <Label for="noteContent" className="note-font-1">Enter Note:</Label>
               <textarea

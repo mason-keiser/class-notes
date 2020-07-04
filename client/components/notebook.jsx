@@ -13,7 +13,8 @@ export default class Notebooks extends React.Component {
       .then(response => response.json())
       .then(data => {
         this.setState({ student: data });
-      })
+      }
+      )
       .catch(err => console.error('getStudentData() fetch failed:', err));
   }
 
@@ -23,7 +24,7 @@ export default class Notebooks extends React.Component {
     return (
       <div>
         <NotebookHeader studentName={studentName}/>
-        <NoteList notebooks={notebooks}/>
+        <NoteList notebooks={notebooks} notebookId={this.props.match.params.notebookId}/>
       </div>
     );
   }

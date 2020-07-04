@@ -1,7 +1,7 @@
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import './code-playground.css';
+// import './code-playground.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/panda-syntax.css';
 
@@ -64,6 +64,7 @@ class CodePlayground extends Component {
   }
 
   render() {
+    const codeContainerClass = this.props.isOpened ? 'code-playground-container-end' : 'code-playground-container-start';
     const { html, js, css } = this.state;
     const codeMirrorOptions = {
       theme: 'panda-syntax',
@@ -74,10 +75,10 @@ class CodePlayground extends Component {
 
     return (
 
-      <div className="code-playground-container">
+      <div className={codeContainerClass}>
         <section className="playground">
-          <div className='code-editor-header'>
-            <h1>BACK</h1>
+          <div className='code-editor-header' onClick={this.props.codeBackClicked}>
+            <p>&lt; Back</p>
           </div>
           <div className="code-editor html-code">
             <div className="editor-header">HTML</div>

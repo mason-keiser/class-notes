@@ -2,6 +2,7 @@ import React from 'react';
 import NotebookHeader from './notebook-header';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import CodePlayground from './code-playground';
 
 function Modal(props) {
   let modalContent;
@@ -45,7 +46,8 @@ class Note extends React.Component {
       notebooks: [],
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
       modal: 'hidden',
-      tagInput: ''
+      tagInput: '',
+      codeOpened: false
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
@@ -68,6 +70,8 @@ class Note extends React.Component {
     this.flashCardAnswer = this.flashCardAnswer.bind(this);
     this.handleTagInputChange = this.handleTagInputChange.bind(this);
     this.addTag = this.addTag.bind(this);
+    this.codeClicked = this.codeClicked.bind(this);
+    this.codeBackClicked = this.codeBackClicked.bind(this);
   }
 
   componentDidMount() {
@@ -307,6 +311,14 @@ class Note extends React.Component {
       .catch(error => console.error(error));
   }
 
+  codeClicked() {
+    this.setState({ codeOpened: true });
+  }
+
+  codeBackClicked() {
+    this.setState({ codeOpened: false });
+  }
+
   showModal(string) {
     if (string === 'cancel') {
       this.setState({
@@ -469,105 +481,108 @@ class Note extends React.Component {
     }
 
     return note === null ? (null) : (
-      <Form>
-        <header className="header-container d-flex flex-row justify-content-between">
-          <div className="d-flex flex-row align-items-center col">
-            <Link to="/" className="d-flex flex-row align-items-center" style={{ textDecoration: 'none' }}>
-              {/* <i className="fa fa-home theme-green fa-2x header-hamburger-icon"></i> */}
-              <img src="/images/code-note-icon.png" alt="Code Note Icon"/>
-            </Link>
-            <FormGroup className="ml-5 mb-0">
-              <Label for="noteTile"></Label>
-              <input
-                className="header-note-title"
-                type="text" name="noteTile"
-                id="noteTile"
-                placeholder="Enter title here"
-                defaultValue={note.noteTitle}
-                onChange={this.handleTitleChange} />
-            </FormGroup>
-          </div>
-          <div className="d-flex flex-row align-items-center justify-content-end col-md-4">
-            {note.noteTags.map((tag, index) => {
-              if (tag === '') {
-                return;
-              }
-              return <p key={index} className="tag-display">{tag}</p>;
-
-            })}
-            <FormGroup className='tag-group'>
-              <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
-                placeholder='Add a tag' value={this.state.tagInput}
-                onChange={this.handleTagInputChange} onKeyPress={this.addTag}/>
-            </FormGroup>
-            <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
-            <Link to={{ pathname: closeButton }}>
-              <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">
-                <i className="fas fa-times"></i>
-              </Button>
-            </Link>
-          </div>
-        </header>
-        <main className="page-container">
-          <div className="col-6">
-            <div className="d-flex flex-row align-items-center mb-4">
-              <div className="note-font-1">Difficulty:</div>
-              <div className="difficulty diff-1"
-                onClick={() => this.handleDifficultyChange(1)}></div>
-              <div className="difficulty diff-2"
-                onClick={() => this.handleDifficultyChange(2)}></div>
-              <div className="difficulty diff-3"
-                onClick={() => this.handleDifficultyChange(3)}></div>
-              <div className="difficulty diff-4"
-                onClick={() => this.handleDifficultyChange(4)}></div>
-              <div className="difficulty diff-5"
-                onClick={() => this.handleDifficultyChange(5)}></div>
+      <>
+        <CodePlayground codeClicked={this.codeClicked} codeBackClicked={this.codeBackClicked} isOpened={this.state.codeOpened}/>
+        <Form>
+          <header className="header-container d-flex flex-row justify-content-between">
+            <div className="d-flex flex-row align-items-center col">
+              <Link to="/" className="d-flex flex-row align-items-center" style={{ textDecoration: 'none' }}>
+                {/* <i className="fa fa-home theme-green fa-2x header-hamburger-icon"></i> */}
+                <img src="/images/code-note-icon.png" alt="Code Note Icon"/>
+              </Link>
+              <FormGroup className="ml-5 mb-0">
+                <Label for="noteTile"></Label>
+                <input
+                  className="header-note-title"
+                  type="text" name="noteTile"
+                  id="noteTile"
+                  placeholder="Enter title here"
+                  defaultValue={note.noteTitle}
+                  onChange={this.handleTitleChange} />
+              </FormGroup>
             </div>
-            <FormGroup className="mb-4">
-              <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
-              <Input type="select" name="notebookName" id="notebookName" className="note-input">
-                {
-                  this.state.notebooks.map(notebook => {
+            <div className="d-flex flex-row align-items-center justify-content-end col-md-4">
+              {note.noteTags.map((tag, index) => {
+                if (tag === '') {
+                  return;
+                }
+                return <p key={index} className="tag-display">{tag}</p>;
+
+              })}
+              <FormGroup className='tag-group'>
+                <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
+                  placeholder='Add a tag' value={this.state.tagInput}
+                  onChange={this.handleTagInputChange} onKeyPress={this.addTag}/>
+              </FormGroup>
+              <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
+              <Link to={{ pathname: closeButton }}>
+                <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">
+                  <i className="fas fa-times"></i>
+                </Button>
+              </Link>
+            </div>
+          </header>
+          <main className="page-container">
+            <div className="col-6">
+              <div className="d-flex flex-row align-items-center mb-4">
+                <div className="note-font-1">Difficulty:</div>
+                <div className="difficulty diff-1"
+                  onClick={() => this.handleDifficultyChange(1)}></div>
+                <div className="difficulty diff-2"
+                  onClick={() => this.handleDifficultyChange(2)}></div>
+                <div className="difficulty diff-3"
+                  onClick={() => this.handleDifficultyChange(3)}></div>
+                <div className="difficulty diff-4"
+                  onClick={() => this.handleDifficultyChange(4)}></div>
+                <div className="difficulty diff-5"
+                  onClick={() => this.handleDifficultyChange(5)}></div>
+              </div>
+              <FormGroup className="mb-4">
+                <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
+                <Input type="select" name="notebookName" id="notebookName" className="note-input">
+                  {
+                    this.state.notebooks.map(notebook => {
                     // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
                     // return (notebook.notebookId === this.state.note.notebookId)
                     //   ? (<option key={notebook.notebookId} defaultValue>{note.notebookName}</option>)
                     //   : (<option key={notebook.notebookId}>{notebook.notebookName}</option>);
-                    return (
-                      <option key={notebook.notebookId}>{notebook.notebookName}</option>
-                    );
-                  })}
-              </Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="noteContent" className="note-font-1">Enter Note:</Label>
-              <textarea
-                className="form-control note-content note-input"
-                type="textarea"
-                name="noteContent"
-                id="noteContent"
-                defaultValue={note.noteContent}
-                placeholder="Enter note here"
-                onChange={this.handleContentChange}></textarea>
-            </FormGroup>
-            <Modal
-              modal={this.state.modal} />
-          </div>
-          <div className={'col-5 d-flex flex-column h-100'}>
-            <div className="height-10">
-              <Button
-                className="solid-button"
-                onClick={() => this.setState({ element: 'flashcard' })}>Flashcard</Button>
-              <Button
-                className="solid-button ml-4"
-                onClick={() => this.setState({ element: 'resource' })}>Resource</Button>
-              <Button
-                className="solid-button ml-4"
-                onClick={() => this.setState({ element: 'code' })}>Code</Button>
+                      return (
+                        <option key={notebook.notebookId}>{notebook.notebookName}</option>
+                      );
+                    })}
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="noteContent" className="note-font-1">Enter Note:</Label>
+                <textarea
+                  className="form-control note-content note-input"
+                  type="textarea"
+                  name="noteContent"
+                  id="noteContent"
+                  defaultValue={note.noteContent}
+                  placeholder="Enter note here"
+                  onChange={this.handleContentChange}></textarea>
+              </FormGroup>
+              <Modal
+                modal={this.state.modal} />
             </div>
-            {rightColumn}
-          </div>
-        </main>
-      </Form>
+            <div className={'col-5 d-flex flex-column h-100'}>
+              <div className="height-10">
+                <Button
+                  className="solid-button"
+                  onClick={() => this.setState({ element: 'flashcard' })}>Flashcard</Button>
+                <Button
+                  className="solid-button ml-4"
+                  onClick={() => this.setState({ element: 'resource' })}>Resource</Button>
+                <Button
+                  className="solid-button ml-4"
+                  onClick={this.codeClicked}>Code</Button>
+              </div>
+              {rightColumn}
+            </div>
+          </main>
+        </Form>
+      </>
     );
   }
 }

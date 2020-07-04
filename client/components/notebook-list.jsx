@@ -86,7 +86,7 @@ export default class NotebooksList extends React.Component {
               <Label for="newNotebookName" className="note-font-1">Enter New Notebook Name</Label>
               <Input type="text" name="newNotebookName" id="newNotebookName" placeholder="Enter notebook title" className="note-input"
                 onChange={this.notebookNameChange} />
-              <Button className="solid-button-large ml-4" onClick={this.createNotebookName}>Create Notebook</Button>
+              <Button className="solid-button-large mt-3" onClick={this.createNotebookName}>Create Notebook</Button>
             </FormGroup>
             {notebooks.map(notebookItem => {
               if (!(notebookItem.notebookId)) {

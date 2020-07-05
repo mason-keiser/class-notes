@@ -38,7 +38,7 @@ export default class FlashcardsHeader extends React.Component {
             </Link>
           </div>
           <div className="d-flex flex-row justify-content-center col-4">
-            <Link to="/notebook">
+            <Link to="/notebooks-list">
               <Button outline color="success" className="header-outline-button">Notebook</Button>
             </Link>
           </div>

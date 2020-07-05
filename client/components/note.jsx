@@ -2,6 +2,7 @@ import React from 'react';
 import NotebookHeader from './notebook-header';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import CodePlayground from './code-playground';
 
 function Modal(props) {
   let modalContent;
@@ -46,6 +47,7 @@ class Note extends React.Component {
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
       modal: 'hidden',
       tagInput: '',
+      codeOpened: false,
       dropdownMenuOpen: 'false'
     };
     this.deleteNote = this.deleteNote.bind(this);
@@ -70,6 +72,9 @@ class Note extends React.Component {
     this.flashCardAnswer = this.flashCardAnswer.bind(this);
     this.handleTagInputChange = this.handleTagInputChange.bind(this);
     this.addTag = this.addTag.bind(this);
+    this.codeClicked = this.codeClicked.bind(this);
+    this.codeBackClicked = this.codeBackClicked.bind(this);
+    this.handleCodeChange = this.handleCodeChange.bind(this);
   }
 
   componentDidMount() {
@@ -96,7 +101,7 @@ class Note extends React.Component {
           noteContent: '',
           noteDifficulty: 1,
           noteResource: [],
-          noteCode: {},
+          noteCode: { html: '', css: '', js: '' },
           noteTags: ['']
         },
         view: 'createNote',
@@ -326,6 +331,14 @@ class Note extends React.Component {
       .catch(error => console.error(error));
   }
 
+  codeClicked() {
+    this.setState({ codeOpened: true });
+  }
+
+  codeBackClicked() {
+    this.setState({ codeOpened: false });
+  }
+
   showModal(string) {
     if (string === 'cancel') {
       this.setState({
@@ -352,6 +365,15 @@ class Note extends React.Component {
         modal: 'hidden'
       });
     }, 2000);
+  }
+
+  handleCodeChange(code) {
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteCode: code
+      }
+    });
   }
 
   render() {
@@ -497,6 +519,11 @@ class Note extends React.Component {
     }
 
     return note === null ? (null) : (
+
+      <>
+        <CodePlayground codeClicked={this.codeClicked} codeBackClicked={this.codeBackClicked}
+          isOpened={this.state.codeOpened} noteCode={this.state.note.noteCode}
+          handleCodeChange={this.handleCodeChange} noteView={this.state.view}/>
       <Form>
         <header className="header-container d-flex flex-row justify-content-between">
           <div className="d-flex flex-row align-items-center col">
@@ -601,10 +628,23 @@ class Note extends React.Component {
                 className="solid-button ml-4"
                 onClick={() => this.setState({ element: 'code' })}>Code</Button>
             </div>
-            {rightColumn}
-          </div>
-        </main>
-      </Form>
+            <div className={'col-5 d-flex flex-column h-100'}>
+              <div className="height-10">
+                <Button
+                  className="solid-button"
+                  onClick={() => this.setState({ element: 'flashcard' })}>Flashcard</Button>
+                <Button
+                  className="solid-button ml-4"
+                  onClick={() => this.setState({ element: 'resource' })}>Resource</Button>
+                <Button
+                  className="solid-button ml-4"
+                  onClick={this.codeClicked}>Code</Button>
+              </div>
+              {rightColumn}
+            </div>
+          </main>
+        </Form>
+      </>
     );
   }
 }

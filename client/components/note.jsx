@@ -91,7 +91,7 @@ class Note extends React.Component {
     } else {
       this.setState({
         note: {
-          notebookId: 1,
+          notebookId: '',
           noteTitle: '',
           noteContent: '',
           noteDifficulty: 1,
@@ -254,8 +254,9 @@ class Note extends React.Component {
     const noteTitle = this.state.note.noteTitle;
     const noteContent = this.state.note.noteContent;
     const noteTags = this.state.note.noteTags;
-    if (!noteTitle || !noteContent || !noteTags) {
-      alert('Error: A new note must have a title, content, and at least one tag entered before creating it.');
+    const notebookId = this.state.note.notebookId;
+    if (!noteTitle || !noteContent || !noteTags || !notebookId) {
+      alert('Error: A new note must have a title, content, at least one tag entered, and a notebook selected before creating it.');
       return;
     }
     const newNote = this.state.note;
@@ -542,44 +543,31 @@ class Note extends React.Component {
               <div className="difficulty diff-5"
                 onClick={() => this.handleDifficultyChange(5)}></div>
             </div>
-            {/* <FormGroup className="mb-4">
-              <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
-              <Input type="select" name="notebookName" id="notebookName" className="note-input">
-                {
-                  this.state.notebooks.map(notebook => {
-                    // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
-                    // return (notebook.notebookId === this.state.note.notebookId)
-                    //   ? (<option key={notebook.notebookId} defaultValue>{note.notebookName}</option>)
-                    //   : (<option key={notebook.notebookId}>{notebook.notebookName}</option>);
-                    return (
-                      <option key={notebook.notebookId}>{notebook.notebookName}</option>
-                    );
-                  })}
-              </Input>
-            </FormGroup> */}
-            <Label for="dropdown container" className="note-font-1">Select Notebook:</Label>
-            <div className="dropdown-container" id="dropdown-container">
-              <div onClick={() => this.toggleDropdown()} className="dropdown-header">
-                <div className="dropdown-header-title">{this.state.note.notebookName}</div>
-                {dropdownMenuOpen
-                  ? <i className="fa fa-angle-up fa-2x"></i>
-                  : <i className="fa fa-angle-down fa-2x"></i>
-                }
+            <FormGroup>
+              <Label for="dropdown container" className="note-font-1">Select Notebook:</Label>
+              <div className="dropdown-container" id="dropdown-container">
+                <div onClick={() => this.toggleDropdown()} className="dropdown-header">
+                  <div className="dropdown-header-title">{this.state.note.notebookName}</div>
+                  {dropdownMenuOpen
+                    ? <i className="fa fa-angle-up fa-2x"></i>
+                    : <i className="fa fa-angle-down fa-2x"></i>
+                  }
+                </div>
+                <ul className={dropdownClass}>
+                  {
+                    this.state.notebooks.map(notebook => {
+                      return (
+                        <li key={notebook.notebookId}
+                          onClick={() => {
+                            this.handleNotebookIdChange(notebook.notebookId, notebook.notebookName);
+                            this.toggleDropdown();
+                          }}>{notebook.notebookName}</li>
+                      );
+                    })
+                  }
+                </ul>
               </div>
-              <ul className={dropdownClass}>
-                {
-                  this.state.notebooks.map(notebook => {
-                    return (
-                      <li key={notebook.notebookId}
-                        onClick={() => {
-                          this.handleNotebookIdChange(notebook.notebookId, notebook.notebookName);
-                          this.toggleDropdown();
-                        }}>{notebook.notebookName}</li>
-                    );
-                  })
-                }
-              </ul>
-            </div>
+            </FormGroup>
             <FormGroup>
               <Label for="noteContent" className="note-font-1">Enter Note:</Label>
               <textarea

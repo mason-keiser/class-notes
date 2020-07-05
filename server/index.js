@@ -96,7 +96,6 @@ app.get('/api/notes/:noteId', (req, res, next) => {
             res.status(200).json(note);
           })
           .catch(err => next(err));
-
       }
     })
     .catch(err => next(err));

@@ -361,7 +361,14 @@ class Note extends React.Component {
     const dropdownMenuOpen = this.state.dropdownMenuOpen;
     const justifyContent = element ? 'justify-content-between' : 'justify-content-end';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
-    const dropdownClass = this.state.dropdownMenuOpen ? 'dropdown-list dropdown-hidden' : 'dropdown-list dropdown-visible';
+    const dropdownListClass = this.state.dropdownMenuOpen ? 'dropdown-list dropdown-hidden' : 'dropdown-list dropdown-visible';
+    let label;
+    if (this.state.view === 'createNote') {
+      label = 'Select Notebook Name:';
+    }
+    if (this.state.view === 'viewNote') {
+      label = 'Notebook Name:';
+    }
     let elementRow, rightColumn;
     if (view === 'deleteSuccess') {
       return (
@@ -544,28 +551,28 @@ class Note extends React.Component {
                 onClick={() => this.handleDifficultyChange(5)}></div>
             </div>
             <FormGroup>
-              <Label for="dropdown container" className="note-font-1">Select Notebook:</Label>
+              <Label for="dropdown container col-6" className="note-font-1">{label}</Label>
               <div className="dropdown-container" id="dropdown-container">
                 <div onClick={() => this.toggleDropdown()} className="dropdown-header">
                   <div className="dropdown-header-title">{this.state.note.notebookName}</div>
                   {dropdownMenuOpen
-                    ? <i className="fa fa-angle-up fa-2x"></i>
-                    : <i className="fa fa-angle-down fa-2x"></i>
+                    ? <i className="fa fa-angle-down fa-2x"></i>
+                    : <i className="fa fa-angle-up fa-2x"></i>
                   }
                 </div>
-                <ul className={dropdownClass}>
+                <div className={dropdownListClass}>
                   {
                     this.state.notebooks.map(notebook => {
                       return (
-                        <li key={notebook.notebookId}
+                        <div className="dropdown-list-item" key={notebook.notebookId}
                           onClick={() => {
                             this.handleNotebookIdChange(notebook.notebookId, notebook.notebookName);
                             this.toggleDropdown();
-                          }}>{notebook.notebookName}</li>
+                          }}>{notebook.notebookName}</div>
                       );
                     })
                   }
-                </ul>
+                </div>
               </div>
             </FormGroup>
             <FormGroup>

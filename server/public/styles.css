@@ -203,8 +203,14 @@ div.main-page-left > h5:hover, div.search-block:hover, div.main-page-right:hover
 .note-list-item-title {
   color: #24997F;
   background-color: #3F3F3D;
-  font-size: 40px;
+  font-size: 30px;
   padding: 20px;
+}
+
+.note-list-notebook-title {
+ color: #24997F;
+ font-weight: bold;
+ font-size: 50px;
 }
 
 .loading {

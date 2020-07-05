@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, FormGroup, Input } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 function NoteListItem(props) {
   const noteListItem = props.note;
@@ -22,28 +22,21 @@ function NoteListItem(props) {
 export default class NoteList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { notes: [], currentId: null, currentName: '' };
+    this.state = { notes: [], notebookName: '' };
   }
 
   componentDidMount() {
-    this.setState({ currentId: 0 });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.notebooks !== prevProps.notebooks) {
-      fetch(`/api/notebooks/${this.props.notebookId}`)
-        .then(res => res.json())
-        .then(data => this.setState({
-          notes: data,
-          currentId: this.props.notebooks[this.state.currentId].notebookId,
-          currentName: this.props.notebooks[this.state.currentId].notebookName
-        }))
-        .catch(err => console.error('getNotebookName() fetch failed:', err));
-    }
+    fetch(`/api/notebooks/${this.props.notebookId}`)
+      .then(res => res.json())
+      .then(data => this.setState({
+        notes: data,
+        notebookName: data[data.length - 1].notebookName
+      }))
+      .catch(err => console.error('fetch failed:', err));
   }
 
   render() {
-    if (this.state.currentId === null || this.state.currentId === 0) {
+    if (this.state === null) {
       return (
         <div className="page-container loading">
           <h3 className="note-font-2">Loading...</h3>
@@ -63,36 +56,18 @@ export default class NoteList extends React.Component {
       );
     }
     const notes = this.state.notes;
-    const names = this.props.notebooks;
     return (
       <div className = "note-list-container d-flex flex-column " >
         <div className="note-list-container-border">
           <div className="d-flex flex-row align-items-center justify-content-center mb-5 mt-5">
-            <Form className="col-2">
-              <FormGroup className="mb-0">
-                <Input type="select" name="notebookName" id="notebookName"
-                  style={{
-                    color: '#24997F',
-                    fontSize: '18px',
-                    fontWeight: 'bold',
-                    border: '1.5px solid #3F3F3D',
-                    backgroundColor: '#333333',
-                    padding: '0 0 0 15px'
-                  }}>
-                  {
-                    names.map(item => {
-                      return (
-                        <option key={item.notebookId}>{item.notebookName}</option>
-                      );
-                    })
-                  }
-                </Input>
-              </FormGroup>
-            </Form>
+            <p className="note-list-notebook-title">{this.state.notebookName}</p>
           </div>
           <div className="col-12 list-container d-flex flex-row flex-wrap justify-content-around ">
             {
               notes.map(item => {
+                if (!item.noteId) {
+                  return;
+                }
                 return (
                   <NoteListItem
                     key={item.noteId}

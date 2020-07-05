@@ -109,14 +109,26 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
     return res.status(400).json({ error: 'notebookId must be a positive integer' });
   }
   const sql = `
-  select "notes"."noteTitle", "notes"."noteContent","notes"."noteId"
+  select "notes"."noteTitle", "notes"."noteContent", "notes"."noteId"
   from "notes"
   join "notebooks" using ("notebookId")
   where "notebookId" = $1
-  order by "notes"."noteId"`;
-
+  order by "notes"."noteId"
+  `;
   db.query(sql, [notebookId])
-    .then(result => res.status(200).json(result.rows))
+    .then(result => {
+      const notesInfo = result.rows;
+      const notebookNameSQL = `
+    select "notebookName"
+    from "notebooks"
+    where "notebookId" = $1
+    `;
+      db.query(notebookNameSQL, [notebookId])
+        .then(result => {
+          notesInfo.push({ notebookName: result.rows[0].notebookName });
+          res.status(200).json(notesInfo);
+        });
+    })
     .catch(err => next(err));
 });
 

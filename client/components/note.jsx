@@ -72,6 +72,7 @@ class Note extends React.Component {
     this.addTag = this.addTag.bind(this);
     this.codeClicked = this.codeClicked.bind(this);
     this.codeBackClicked = this.codeBackClicked.bind(this);
+    this.handleCodeChange = this.handleCodeChange.bind(this);
   }
 
   componentDidMount() {
@@ -347,6 +348,15 @@ class Note extends React.Component {
     }, 500);
   }
 
+  handleCodeChange(code) {
+    this.setState({
+      note: {
+        ...this.state.note,
+        noteCode: code
+      }
+    });
+  }
+
   render() {
     const note = this.state.note;
     const view = this.state.view;
@@ -483,7 +493,8 @@ class Note extends React.Component {
     return note === null ? (null) : (
       <>
         <CodePlayground codeClicked={this.codeClicked} codeBackClicked={this.codeBackClicked}
-          isOpened={this.state.codeOpened} noteCode={this.state.note.noteCode}/>
+          isOpened={this.state.codeOpened} noteCode={this.state.note.noteCode}
+          handleCodeChange={this.handleCodeChange} noteView={this.state.view}/>
         <Form>
           <header className="header-container d-flex flex-row justify-content-between">
             <div className="d-flex flex-row align-items-center col">

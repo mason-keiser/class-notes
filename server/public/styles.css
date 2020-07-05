@@ -758,7 +758,7 @@ div.search-form > h3 {
   position: absolute;
    top: 0;
   left: 200vh;
-  transition: left 1s ease-out;
+  transition: left 0.6s ease-out;
   z-index: 2;
 }
 
@@ -767,7 +767,7 @@ div.search-form > h3 {
   left: 0;
   top: 0;
   z-index: 2;
-  transition: left 1s ease-out;
+  transition: left 0.6s ease-out;
 }
 
 .playground {
@@ -782,12 +782,23 @@ div.search-form > h3 {
 }
 
 .code-editor-header{
+  background-color: #292A2B;
   color: #24997F;
-  margin-left: 15px;
+  padding: 5px 15px;
 }
 
 .code-editor-header > p{
-  margin: 0;
+  /* margin: 0; */
+  color: #24997F;
+  border: 1px solid #24997F;
+  padding: 3px 5px;
+  margin: auto 5px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.code-editor-header > p:nth-child(2){
+padding: 3px 20px;
 }
 
 *.code-editor {

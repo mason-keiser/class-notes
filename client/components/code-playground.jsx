@@ -14,9 +14,13 @@ class CodePlayground extends Component {
     this.state = {
       html: '',
       css: '',
-      js: ''
+      js: '',
+      originalCode: ''
     };
+
     this.runCode = this.runCode.bind(this);
+    this.clearCode = this.clearCode.bind(this);
+    this.makeClearButtonText = this.makeClearButtonText.bind(this);
   }
 
   componentDidUpdate() {
@@ -24,12 +28,29 @@ class CodePlayground extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.noteCode);
     this.setState({
       html: this.props.noteCode.html,
       css: this.props.noteCode.css,
-      js: this.props.noteCode.js
+      js: this.props.noteCode.js,
+      originalCode: this.props.noteCode
     });
+  }
+
+  clearCode() {
+    this.setState({
+      html: this.state.originalCode.html,
+      css: this.state.originalCode.css,
+      js: this.state.originalCode.js
+    });
+
+  }
+
+  makeClearButtonText() {
+    if (this.props.noteView === 'createNote') {
+      return 'Clear';
+    } else {
+      return 'Revert Back';
+    }
   }
 
   runCode() {
@@ -78,8 +99,10 @@ class CodePlayground extends Component {
 
       <div className={codeContainerClass}>
         <section className="playground">
-          <div className='code-editor-header' onClick={this.props.codeBackClicked}>
-            <p>&lt; Back</p>
+          <div className='code-editor-header d-flex justify-content-between'>
+            <p onClick={this.props.codeBackClicked}>&lt; Back</p>
+            <p onClick={this.clearCode}>{this.makeClearButtonText()}</p>
+            <p onClick={() => this.props.handleCodeChange(this.state)}>Attach to Note</p>
           </div>
           <div className="code-editor html-code">
             <div className="editor-header">HTML</div>
@@ -102,6 +125,7 @@ class CodePlayground extends Component {
                 mode: 'css',
                 ...codeMirrorOptions
               }}
+              id="css"
               onBeforeChange={(editor, data, css) => {
                 this.setState({ css });
               }}

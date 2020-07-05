@@ -102,7 +102,14 @@ class CodePlayground extends Component {
           <div className='code-editor-header d-flex justify-content-between'>
             <p onClick={this.props.codeBackClicked}>&lt; Back</p>
             <p onClick={this.clearCode}>{this.makeClearButtonText()}</p>
-            <p onClick={() => this.props.handleCodeChange(this.state)}>Attach to Note</p>
+            <p onClick={() => {
+              const codeData = {
+                html: this.state.html,
+                css: this.state.css,
+                js: this.state.js
+              };
+              this.props.handleCodeChange(codeData);
+            }}>Attach to Note</p>
           </div>
           <div className="code-editor html-code">
             <div className="editor-header">HTML</div>

@@ -399,7 +399,7 @@ class Note extends React.Component {
           <div className="page-container">
             <div className="note-delete">
               <h3>Your note has been deleted.</h3>
-              <Link to="/notebook" className="notebooks-link">
+              <Link to={`/notebook/${this.state.note.notebookId}`} className="notebooks-link">
                 <Button className="solid-button mt-4">Back</Button>
               </Link>
             </div>

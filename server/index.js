@@ -61,9 +61,10 @@ app.get('/api/students/:studentId', (req, res, next) => {
 
 app.get('/api/notes/:noteId', (req, res, next) => {
   const sql = `
-  SELECT *
+  SELECT "notebooks"."notebookName", "notes".*
   FROM  "notes"
-  WHERE "noteId" = $1
+  JOIN "notebooks" using ("notebookId")
+  WHERE "noteId" = $1;
   `;
   const noteParam = [req.params.noteId];
   const noteId = parseInt(req.params.noteId);

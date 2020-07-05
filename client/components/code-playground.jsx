@@ -1,7 +1,6 @@
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-// import './code-playground.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/panda-syntax.css';
 
@@ -13,7 +12,6 @@ class CodePlayground extends Component {
   constructor() {
     super();
     this.state = {
-      id: '',
       html: '',
       css: '',
       js: ''
@@ -26,8 +24,11 @@ class CodePlayground extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.noteCode);
     this.setState({
-      // id: pushid(),
+      html: this.props.noteCode.html,
+      css: this.props.noteCode.css,
+      js: this.props.noteCode.js
     });
   }
 

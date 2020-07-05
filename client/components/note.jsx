@@ -98,7 +98,7 @@ class Note extends React.Component {
           noteContent: '',
           noteDifficulty: 1,
           noteResource: [],
-          noteCode: {},
+          noteCode: { html: '', css: '', js: '' },
           noteTags: ['']
         },
         view: 'createNote',
@@ -482,7 +482,8 @@ class Note extends React.Component {
 
     return note === null ? (null) : (
       <>
-        <CodePlayground codeClicked={this.codeClicked} codeBackClicked={this.codeBackClicked} isOpened={this.state.codeOpened}/>
+        <CodePlayground codeClicked={this.codeClicked} codeBackClicked={this.codeBackClicked}
+          isOpened={this.state.codeOpened} noteCode={this.state.note.noteCode}/>
         <Form>
           <header className="header-container d-flex flex-row justify-content-between">
             <div className="d-flex flex-row align-items-center col">

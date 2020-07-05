@@ -23,7 +23,7 @@ export default class Notebooks extends React.Component {
     return (
       <div>
         <NotebookHeader studentName={studentName}/>
-        <NoteList notebooks={notebooks}/>
+        <NoteList notebooks={notebooks} notebookId={this.props.match.params.notebookId}/>
       </div>
     );
   }

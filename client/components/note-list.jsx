@@ -31,7 +31,7 @@ export default class NoteList extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.notebooks !== prevProps.notebooks) {
-      fetch(`/api/notebooks/${this.props.notebooks[this.state.currentId].notebookId}`)
+      fetch(`/api/notebooks/${this.props.notebookId}`)
         .then(res => res.json())
         .then(data => this.setState({
           notes: data,

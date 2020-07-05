@@ -47,13 +47,15 @@ class Note extends React.Component {
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
       modal: 'hidden',
       tagInput: '',
-      codeOpened: false
+      codeOpened: false,
+      dropdownMenuOpen: 'false'
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
     this.createFlashcard = this.createFlashcard.bind(this);
     this.handleDifficultyChange = this.handleDifficultyChange.bind(this);
+    this.handleNotebookIdChange = this.handleNotebookIdChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.createNewNote = this.createNewNote.bind(this);
@@ -94,7 +96,7 @@ class Note extends React.Component {
     } else {
       this.setState({
         note: {
-          notebookId: 1,
+          notebookId: '',
           noteTitle: '',
           noteContent: '',
           noteDifficulty: 1,
@@ -132,6 +134,22 @@ class Note extends React.Component {
         ...this.state.note,
         noteDifficulty: number
       }
+    });
+  }
+
+  handleNotebookIdChange(notebookId, notebookName) {
+    this.setState({
+      note: {
+        ...this.state.note,
+        notebookId: notebookId,
+        notebookName: notebookName
+      }
+    });
+  }
+
+  toggleDropdown() {
+    this.setState({
+      dropdownMenuOpen: !this.state.dropdownMenuOpen
     });
   }
 
@@ -241,8 +259,9 @@ class Note extends React.Component {
     const noteTitle = this.state.note.noteTitle;
     const noteContent = this.state.note.noteContent;
     const noteTags = this.state.note.noteTags;
-    if (!noteTitle || !noteContent || !noteTags) {
-      alert('Error: A new note must have a title, content, and at least one tag entered before creating it.');
+    const notebookId = this.state.note.notebookId;
+    if (!noteTitle || !noteContent || !noteTags || !notebookId) {
+      alert('Error: A new note must have a title, content, at least one tag entered, and a notebook selected before creating it.');
       return;
     }
     const newNote = this.state.note;
@@ -345,7 +364,7 @@ class Note extends React.Component {
       this.setState({
         modal: 'hidden'
       });
-    }, 500);
+    }, 2000);
   }
 
   handleCodeChange(code) {
@@ -361,8 +380,17 @@ class Note extends React.Component {
     const note = this.state.note;
     const view = this.state.view;
     const element = this.state.element;
+    const dropdownMenuOpen = this.state.dropdownMenuOpen;
     const justifyContent = element ? 'justify-content-between' : 'justify-content-end';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
+    const dropdownListClass = this.state.dropdownMenuOpen ? 'dropdown-list dropdown-hidden' : 'dropdown-list dropdown-visible';
+    let label;
+    if (this.state.view === 'createNote') {
+      label = 'Select Notebook Name:';
+    }
+    if (this.state.view === 'viewNote') {
+      label = 'Notebook Name:';
+    }
     let elementRow, rightColumn;
     if (view === 'deleteSuccess') {
       return (
@@ -388,13 +416,13 @@ class Note extends React.Component {
               <Label for="flashcardQuestion" className="note-font-1">Enter Question:</Label>
               <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion"
                 className="note-input" value={this.state.flashcard.fcQuestion}
-                onChange={this.flashCardQuestion}/>
+                onChange={this.flashCardQuestion} />
             </FormGroup>
             <FormGroup className="mb-4">
               <Label for="flashcardAnswer" className="note-font-1">Enter Answer:</Label>
               <Input type="textarea" name="flashcardAnswer" id="flashcardAnswer"
                 className="note-input" value={this.state.flashcard.fcAnswer}
-                onChange={this.flashCardAnswer}/>
+                onChange={this.flashCardAnswer} />
             </FormGroup>
             <div className="d-flex flex-row align-items-center justify-content-between">
               <FormGroup className="mb-5 flashcard-select-tag">
@@ -491,92 +519,114 @@ class Note extends React.Component {
     }
 
     return note === null ? (null) : (
+
       <>
         <CodePlayground codeClicked={this.codeClicked} codeBackClicked={this.codeBackClicked}
           isOpened={this.state.codeOpened} noteCode={this.state.note.noteCode}
           handleCodeChange={this.handleCodeChange} noteView={this.state.view}/>
-        <Form>
-          <header className="header-container d-flex flex-row justify-content-between">
-            <div className="d-flex flex-row align-items-center col">
-              <Link to="/" className="d-flex flex-row align-items-center" style={{ textDecoration: 'none' }}>
-                {/* <i className="fa fa-home theme-green fa-2x header-hamburger-icon"></i> */}
-                <img src="/images/code-note-icon.png" alt="Code Note Icon"/>
-              </Link>
-              <FormGroup className="ml-5 mb-0">
-                <Label for="noteTile"></Label>
-                <input
-                  className="header-note-title"
-                  type="text" name="noteTile"
-                  id="noteTile"
-                  placeholder="Enter title here"
-                  defaultValue={note.noteTitle}
-                  onChange={this.handleTitleChange} />
-              </FormGroup>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-end col-md-4">
-              {note.noteTags.map((tag, index) => {
-                if (tag === '') {
-                  return;
-                }
-                return <p key={index} className="tag-display">{tag}</p>;
+      <Form>
+        <header className="header-container d-flex flex-row justify-content-between">
+          <div className="d-flex flex-row align-items-center col">
+            <Link to="/" className="d-flex flex-row align-items-center" style={{ textDecoration: 'none' }}>
+              <img src="/images/code-note-icon.png" alt="Code Note Icon" />
+            </Link>
+            <FormGroup className="ml-5 mb-0">
+              <Label for="noteTile"></Label>
+              <input
+                className="header-note-title"
+                type="text" name="noteTile"
+                id="noteTile"
+                placeholder="Enter title here"
+                defaultValue={note.noteTitle}
+                onChange={this.handleTitleChange} />
+            </FormGroup>
+          </div>
+          <div className="d-flex flex-row align-items-center justify-content-end col-md-4">
+            {note.noteTags.map((tag, index) => {
+              if (tag === '') {
+                return;
+              }
+              return <p key={index} className="tag-display">{tag}</p>;
 
-              })}
-              <FormGroup className='tag-group'>
-                <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
-                  placeholder='Add a tag' value={this.state.tagInput}
-                  onChange={this.handleTagInputChange} onKeyPress={this.addTag}/>
-              </FormGroup>
-              <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
-              <Link to={{ pathname: closeButton }}>
-                <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">
-                  <i className="fas fa-times"></i>
-                </Button>
-              </Link>
+            })}
+            <FormGroup className='tag-group'>
+              <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
+                placeholder='Add a tag' value={this.state.tagInput}
+                onChange={this.handleTagInputChange} onKeyPress={this.addTag} />
+            </FormGroup>
+            <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
+            <Link to={{ pathname: closeButton }}>
+              <Button className="d-flex flex-row align-items-center justify-content-center close-page-button ml-4">
+                <i className="fas fa-times"></i>
+              </Button>
+            </Link>
+          </div>
+        </header>
+        <main className="page-container">
+          <div className="col-6">
+            <div className="d-flex flex-row align-items-center mb-4">
+              <div className="note-font-1">Difficulty:</div>
+              <div className="difficulty diff-1"
+                onClick={() => this.handleDifficultyChange(1)}></div>
+              <div className="difficulty diff-2"
+                onClick={() => this.handleDifficultyChange(2)}></div>
+              <div className="difficulty diff-3"
+                onClick={() => this.handleDifficultyChange(3)}></div>
+              <div className="difficulty diff-4"
+                onClick={() => this.handleDifficultyChange(4)}></div>
+              <div className="difficulty diff-5"
+                onClick={() => this.handleDifficultyChange(5)}></div>
             </div>
-          </header>
-          <main className="page-container">
-            <div className="col-6">
-              <div className="d-flex flex-row align-items-center mb-4">
-                <div className="note-font-1">Difficulty:</div>
-                <div className="difficulty diff-1"
-                  onClick={() => this.handleDifficultyChange(1)}></div>
-                <div className="difficulty diff-2"
-                  onClick={() => this.handleDifficultyChange(2)}></div>
-                <div className="difficulty diff-3"
-                  onClick={() => this.handleDifficultyChange(3)}></div>
-                <div className="difficulty diff-4"
-                  onClick={() => this.handleDifficultyChange(4)}></div>
-                <div className="difficulty diff-5"
-                  onClick={() => this.handleDifficultyChange(5)}></div>
-              </div>
-              <FormGroup className="mb-4">
-                <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
-                <Input type="select" name="notebookName" id="notebookName" className="note-input">
+            <FormGroup>
+              <Label for="dropdown container col-6" className="note-font-1">{label}</Label>
+              <div className="dropdown-container" id="dropdown-container">
+                <div onClick={() => this.toggleDropdown()} className="dropdown-header">
+                  <div className="dropdown-header-title">{this.state.note.notebookName}</div>
+                  {dropdownMenuOpen
+                    ? <i className="fa fa-angle-down fa-2x"></i>
+                    : <i className="fa fa-angle-up fa-2x"></i>
+                  }
+                </div>
+                <div className={dropdownListClass}>
                   {
                     this.state.notebooks.map(notebook => {
-                    // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
-                    // return (notebook.notebookId === this.state.note.notebookId)
-                    //   ? (<option key={notebook.notebookId} defaultValue>{note.notebookName}</option>)
-                    //   : (<option key={notebook.notebookId}>{notebook.notebookName}</option>);
                       return (
-                        <option key={notebook.notebookId}>{notebook.notebookName}</option>
+                        <div className="dropdown-list-item" key={notebook.notebookId}
+                          onClick={() => {
+                            this.handleNotebookIdChange(notebook.notebookId, notebook.notebookName);
+                            this.toggleDropdown();
+                          }}>{notebook.notebookName}</div>
                       );
-                    })}
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <Label for="noteContent" className="note-font-1">Enter Note:</Label>
-                <textarea
-                  className="form-control note-content note-input"
-                  type="textarea"
-                  name="noteContent"
-                  id="noteContent"
-                  defaultValue={note.noteContent}
-                  placeholder="Enter note here"
-                  onChange={this.handleContentChange}></textarea>
-              </FormGroup>
-              <Modal
-                modal={this.state.modal} />
+                    })
+                  }
+                </div>
+              </div>
+            </FormGroup>
+            <FormGroup>
+              <Label for="noteContent" className="note-font-1">Enter Note:</Label>
+              <textarea
+                className="form-control note-content note-input"
+                type="textarea"
+                name="noteContent"
+                id="noteContent"
+                defaultValue={note.noteContent}
+                placeholder="Enter note here"
+                onChange={this.handleContentChange}></textarea>
+            </FormGroup>
+            <Modal
+              modal={this.state.modal} />
+          </div>
+          <div className={'col-5 d-flex flex-column h-100'}>
+            <div className="height-10">
+              <Button
+                className="solid-button"
+                onClick={() => this.setState({ element: 'flashcard' })}>Flashcard</Button>
+              <Button
+                className="solid-button ml-4"
+                onClick={() => this.setState({ element: 'resource' })}>Resource</Button>
+              <Button
+                className="solid-button ml-4"
+                onClick={() => this.setState({ element: 'code' })}>Code</Button>
             </div>
             <div className={'col-5 d-flex flex-column h-100'}>
               <div className="height-10">

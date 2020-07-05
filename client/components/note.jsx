@@ -377,12 +377,15 @@ class Note extends React.Component {
   }
 
   render() {
+    if (this.state.note === null) {
+      return null;
+    }
     const note = this.state.note;
     const view = this.state.view;
     const element = this.state.element;
     const dropdownMenuOpen = this.state.dropdownMenuOpen;
     const justifyContent = element ? 'justify-content-between' : 'justify-content-end';
-    const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
+    const closeButton = this.state.view === 'viewNote' ? `/notebook/${note.notebookId}` : '/';
     const dropdownListClass = this.state.dropdownMenuOpen ? 'dropdown-list dropdown-hidden' : 'dropdown-list dropdown-visible';
     let label;
     if (this.state.view === 'createNote') {

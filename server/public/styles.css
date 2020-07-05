@@ -606,6 +606,9 @@ div.search-form > h3 {
   margin-bottom: 0;
 }
 
+/* note dropdown */
+
+
 
 /* note modal */
 .note-modal {
@@ -613,13 +616,13 @@ div.search-form > h3 {
   background: rgba(0, 0, 0, 0.6);
 }
 
-.modal-hidden {
+.modal-hidden, .dropdown-hidden {
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s .3s, opacity .3s linear;
 }
 
-.modal-visible {
+.modal-visible, .dropdown-visible {
   visibility: visible;
   opacity: 1;
   transition: opacity .1s linear;

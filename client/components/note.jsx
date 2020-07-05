@@ -46,7 +46,7 @@ class Note extends React.Component {
       flashcard: { fcTags: [''], fcDeckId: null, fcQuestion: '', fcAnswer: '' },
       modal: 'hidden',
       tagInput: '',
-      dropdownMenu: 'closed'
+      dropdownMenuOpen: 'false'
     };
     this.deleteNote = this.deleteNote.bind(this);
     this.editNote = this.editNote.bind(this);
@@ -139,6 +139,12 @@ class Note extends React.Component {
         notebookId: notebookId,
         notebookName: notebookName
       }
+    });
+  }
+
+  toggleDropdown() {
+    this.setState({
+      dropdownMenuOpen: !this.state.dropdownMenuOpen
     });
   }
 
@@ -351,8 +357,10 @@ class Note extends React.Component {
     const note = this.state.note;
     const view = this.state.view;
     const element = this.state.element;
+    const dropdownMenuOpen = this.state.dropdownMenuOpen;
     const justifyContent = element ? 'justify-content-between' : 'justify-content-end';
     const closeButton = this.state.view === 'viewNote' ? '/notebook' : '/';
+    const dropdownClass = this.state.dropdownMenuOpen ? 'dropdown-list dropdown-hidden' : 'dropdown-list dropdown-visible';
     let elementRow, rightColumn;
     if (view === 'deleteSuccess') {
       return (
@@ -378,13 +386,13 @@ class Note extends React.Component {
               <Label for="flashcardQuestion" className="note-font-1">Enter Question:</Label>
               <Input type="textarea" name="flashcardQuestion" id="flashcardQuestion"
                 className="note-input" value={this.state.flashcard.fcQuestion}
-                onChange={this.flashCardQuestion}/>
+                onChange={this.flashCardQuestion} />
             </FormGroup>
             <FormGroup className="mb-4">
               <Label for="flashcardAnswer" className="note-font-1">Enter Answer:</Label>
               <Input type="textarea" name="flashcardAnswer" id="flashcardAnswer"
                 className="note-input" value={this.state.flashcard.fcAnswer}
-                onChange={this.flashCardAnswer}/>
+                onChange={this.flashCardAnswer} />
             </FormGroup>
             <div className="d-flex flex-row align-items-center justify-content-between">
               <FormGroup className="mb-5 flashcard-select-tag">
@@ -485,7 +493,7 @@ class Note extends React.Component {
         <header className="header-container d-flex flex-row justify-content-between">
           <div className="d-flex flex-row align-items-center col">
             <Link to="/" className="d-flex flex-row align-items-center" style={{ textDecoration: 'none' }}>
-              <img src="/images/code-note-icon.png" alt="Code Note Icon"/>
+              <img src="/images/code-note-icon.png" alt="Code Note Icon" />
             </Link>
             <FormGroup className="ml-5 mb-0">
               <Label for="noteTile"></Label>
@@ -509,7 +517,7 @@ class Note extends React.Component {
             <FormGroup className='tag-group'>
               <Input type="text" name="noteTags" id="noteTags" className="col tag-input"
                 placeholder='Add a tag' value={this.state.tagInput}
-                onChange={this.handleTagInputChange} onKeyPress={this.addTag}/>
+                onChange={this.handleTagInputChange} onKeyPress={this.addTag} />
             </FormGroup>
             <div className={`diff-status ml-4 diff-${note.noteDifficulty}`}></div>
             <Link to={{ pathname: closeButton }}>
@@ -536,7 +544,7 @@ class Note extends React.Component {
             </div>
             {/* <FormGroup className="mb-4">
               <Label for="notebookName" className="note-font-1">Select Notebook:</Label>
-              <Input type="select" name="notebookName" id="notebookName" className="note-input" onChange={() => this.handleNotebookIdChange(event)}>
+              <Input type="select" name="notebookName" id="notebookName" className="note-input">
                 {
                   this.state.notebooks.map(notebook => {
                     // need to find a way to set current notebookName as  default value.  the below method isn't working as intended.
@@ -549,15 +557,24 @@ class Note extends React.Component {
                   })}
               </Input>
             </FormGroup> */}
-            <div className="dropdown-container">
-              <div className="dropdown-header">
+            <Label for="dropdown container" className="note-font-1">Select Notebook:</Label>
+            <div className="dropdown-container" id="dropdown-container">
+              <div onClick={() => this.toggleDropdown()} className="dropdown-header">
                 <div className="dropdown-header-title">{this.state.note.notebookName}</div>
+                {dropdownMenuOpen
+                  ? <i className="fa fa-angle-up fa-2x"></i>
+                  : <i className="fa fa-angle-down fa-2x"></i>
+                }
               </div>
-              <ul className="dropdown-list">
+              <ul className={dropdownClass}>
                 {
                   this.state.notebooks.map(notebook => {
                     return (
-                      <li key={notebook.notebookId} onClick={() => this.handleNotebookIdChange(notebook.notebookId, notebook.notebookName)}>{notebook.notebookName}</li>
+                      <li key={notebook.notebookId}
+                        onClick={() => {
+                          this.handleNotebookIdChange(notebook.notebookId, notebook.notebookName);
+                          this.toggleDropdown();
+                        }}>{notebook.notebookName}</li>
                     );
                   })
                 }

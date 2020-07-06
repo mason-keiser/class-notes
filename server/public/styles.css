@@ -381,7 +381,7 @@ textarea.note-content {
   flex-direction: column;
 }
 
-.flashcard-left-container {
+.flashcard-left-container, .notebook-list-container {
   max-height: 95%;
   overflow-y: auto;
 }

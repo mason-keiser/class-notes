@@ -137,7 +137,7 @@ app.get('/api/notebooks/:notebookId', (req, res, next) => {
 
 app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
   const studentId = parseInt(req.params.studentId);
-  const noteParam = [req.params.studentId];
+  const studentIdParam = [req.params.studentId];
   if (!Number.isInteger(studentId) || studentId <= 0) {
     return res.status(400).json({ error: 'studentId must be a positive integer' });
   }
@@ -146,7 +146,7 @@ app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
   from "notebooks"
   where "studentId" = $1;
   `;
-  db.query(sql, noteParam)
+  db.query(sql, studentIdParam)
     .then(result => {
       const notebooksInfo = result.rows;
       notebooksInfo.map(notebook => {
@@ -156,12 +156,12 @@ app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
         next(new ClientError(`Cannot find student with "studentId" ${studentId}`, 404));
       } else {
         const notesSQL = `
-        select "notebooks"."notebookId", "notes"."noteId"
+        select "notes"."noteId", "notebooks"."notebookId"
         from "notes"
         join "notebooks" using ("notebookId")
         where "studentId" = $1
         `;
-        db.query(notesSQL, noteParam)
+        db.query(notesSQL, studentIdParam)
           .then(result => {
             const countIncrementor = result.rows;
             for (var notebooksIndex = 0; notebooksIndex < notebooksInfo.length; notebooksIndex++) {
@@ -176,7 +176,7 @@ app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
               from "students"
               where "students"."studentId" = $1;
               `;
-            db.query(nameSQL, noteParam)
+            db.query(nameSQL, studentIdParam)
               .then(result => {
                 notebooksInfo.push({ firstName: result.rows[0].firstName });
                 res.status(200).json(notebooksInfo);

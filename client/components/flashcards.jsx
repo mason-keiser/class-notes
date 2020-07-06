@@ -95,7 +95,7 @@ export default class Flashcards extends React.Component {
       <>
         <FlashcardsHeader studentName={flashcardDecksInfo[flashcardDecksInfo.length - 1].firstName} />
         <main className="page-container-footer d-flex justify-content-between">
-          <div className="col-4">
+          <div className="col-4 flashcard-left-container">
             {flashcardDecksInfo.map(flashcardDeck => {
               if (!(flashcardDeck.fcDeckId)) {
                 return;

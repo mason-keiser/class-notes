@@ -142,9 +142,9 @@ app.get('/api/notebooks/notes/:studentId', (req, res, next) => {
     return res.status(400).json({ error: 'studentId must be a positive integer' });
   }
   const sql = `
-  select "notebooks"."notebookId", "notebooks"."notebookName"
+  select "notebookId", "notebookName"
   from "notebooks"
-  where "notebooks"."studentId" = $1;
+  where "studentId" = $1;
   `;
   db.query(sql, noteParam)
     .then(result => {

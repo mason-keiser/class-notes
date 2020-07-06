@@ -80,14 +80,16 @@ export default class NotebooksList extends React.Component {
     return (
       <>
         <NotebookHeader studentName={notebooks[notebooks.length - 1].firstName} />
-        <main className="page-container-footer d-flex justify-content-between">
-          <div className="col-4">
+        <main className="page-container-footer notebooks-list-container d-flex justify-content-around">
+          <div className="notebook-list-form-container col-3">
             <FormGroup className="newNotebookName mb-5">
               <Label for="newNotebookName" className="note-font-1">Enter New Notebook Name</Label>
               <Input type="text" name="newNotebookName" id="newNotebookName" placeholder="Enter notebook title" className="note-input"
                 onChange={this.notebookNameChange} />
               <Button className="solid-button-large mt-3" onClick={this.createNotebookName}>Create Notebook</Button>
             </FormGroup>
+          </div>
+          <div className="col-5 flashcard-left-container">
             {notebooks.map(notebookItem => {
               if (!(notebookItem.notebookId)) {
                 return;
@@ -98,7 +100,7 @@ export default class NotebooksList extends React.Component {
                   <div className="d-flex flex-column justify-content-between">
                     <div className="d-flex flex-row align-items-center">
                       <h2>{notebookItem.notebookName}</h2>
-                      <h4 className="ml-5">{notebookItem.noteCount + 'notes'}</h4>
+                      <h4 className="ml-5">{notebookItem.noteCount + ' notes'}</h4>
                     </div>
                     <div className="flashcard-button-container d-flex">
                       <Link to={{ pathname: `/notebook/${notebookItem.notebookId}` }}>

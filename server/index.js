@@ -631,7 +631,8 @@ app.post('/api/flashcards/create', (req, res, next) => {
   const fcValues = [
     fcQuestion,
     fcAnswer,
-    fcDeckId];
+    fcDeckId
+  ];
 
   const tagsArray = [];
 

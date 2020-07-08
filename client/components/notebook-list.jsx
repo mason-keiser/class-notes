@@ -89,13 +89,13 @@ export default class NotebooksList extends React.Component {
               <Button className="solid-button-large mt-3" onClick={this.createNotebookName}>Create Notebook</Button>
             </FormGroup>
           </div>
-          <div className="col-5 flashcard-left-container">
+          <div className="col-5 notebook-list-container">
             {notebooks.map(notebookItem => {
               if (!(notebookItem.notebookId)) {
                 return;
               }
               return (
-                <div key={notebookItem.notebookId} id={notebookItem.notebookId}
+                <div key={notebookItem.notebookId}
                   className="d-flex flex-row flashcard-general-info mb-5">
                   <div className="d-flex flex-column justify-content-between">
                     <div className="d-flex flex-row align-items-center">

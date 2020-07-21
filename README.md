@@ -50,3 +50,5 @@ pgweb --db=class-notes
 ```
 npm run dev
 ```
+# Preview
+![](server/public/images/cn.png)

@@ -1,5 +1,7 @@
 # class-notes
 A web application for students who want to organize there Zoom recordings, class notes, and assignments in one place with their class/cohort-mates
+
+* Link: https://code-notes.masonkeiser.com/
 # Technologies Used
 * React.js
 * Node.js
@@ -10,8 +12,6 @@ A web application for students who want to organize there Zoom recordings, class
 * CSS 3
 * Bootstrap 4
 * AWS EC2
-# Live Demo
-Link: https://code-notes.masonkeiser.com/
 # Development
 ## System Requirements
 * Node.js 10 or higher
